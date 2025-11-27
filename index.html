@@ -1,0 +1,2493 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GPACK</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; font-size: 12px; color: #1e293b; }
+        .lang-select { padding: 2px 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 11px; background: white; color: #64748b; cursor: pointer; outline: none; }
+        .card { background: white; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; }
+        .card-header { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; font-weight: 700; color: #334155; font-size: 12px; }
+        select, input { font-size: 12px; }
+        .input-std { width: 100%; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 8px; background: white; height: 30px; transition: all 0.2s; }
+        .input-std:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 1px rgba(59,130,246,0.1); }
+        .limit-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+        .limit-row label { font-size: 10px; font-weight: 600; color: #64748b; }
+        .limit-row input { width: 60px; text-align: right; }
+        .plan-card { background: white; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 15px; break-inside-avoid; overflow: hidden; }
+        
+        .tab-btn { transition: all 0.2s; padding: 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; border-bottom: 3px solid transparent; }
+        .tab-active { border-bottom: 3px solid #2563eb; color: #2563eb; background-color: #ffffff; }
+        .tab-inactive { border-bottom: 3px solid transparent; color: #64748b; background-color: #f1f5f9; }
+        .tab-inactive:hover { background: #e2e8f0; color: #334155; }
+        
+        .badge-count { font-size: 11px; padding: 2px 6px; border-radius: 99px; font-weight: bold; }
+        .compact-label { font-size: 9px; font-weight: 700; color: #64748b; display: block; margin-bottom: 2px; text-transform: uppercase; }
+
+        #fixedCalcButtonArea {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background-color: #ffffff; border-top: 1px solid #e2e8f0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05); padding: 8px 0; z-index: 999;
+        }
+        
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #f8fafc; z-index: 10000; display: flex; flex-col;
+            align-items: center; justify-content: center;
+        }
+        .login-box {
+            background: white; padding: 2rem; border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;
+            width: 100%; max-width: 350px; text-align: center;
+        }
+        
+        /* İmza Stili */
+        .coded-by {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: #94a3b8;
+            opacity: 0.5;
+            z-index: 10001;
+            pointer-events: none;
+            font-weight: 500;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        /* Editable Input Style */
+        .editable-input {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            text-align: right;
+            width: 60px; 
+            box-sizing: border-box;
+            transition: all 0.1s;
+        }
+        .editable-input:focus {
+            background: white;
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 1px rgba(59,130,246,0.1);
+        }
+        .editable-input-sm {
+            width: 55px;
+            padding: 1px 3px;
+            font-size: 10px;
+        }
+        .editable-input-lg {
+            width: 70px;
+        }
+        
+        /* V2.11 Logo Stili (Mühendis Koyun teması) */
+        .logo-box {
+            background: #fefcf5; 
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            color: #64748b; 
+        }
+        .logo-icon {
+            color: #d1d5db; 
+            font-size: 20px;
+        }
+
+
+        @media print {
+            .no-print { display: none !important; }
+            #mainAppContent { display: block !important; }
+            body { padding: 0; background: white; }
+            .plan-card { border: 2px solid #000; box-shadow: none; }
+            #fixedCalcButtonArea { display: none !important; }
+            .coded-by { display: none; }
+        }
+    </style>
+</head>
+<body class="pb-20 text-slate-800">
+
+    <div class="coded-by">Coded by Emrah Sengul</div>
+
+    <div id="loginOverlay">
+        <div class="login-box">
+            <div class="mb-6">
+                <div class="logo-box w-12 h-12 rounded-full mx-auto flex items-center justify-center shadow mb-3 text-xl relative">
+                    <i class="fas fa-drafting-compass logo-icon absolute"></i>
+                    <i class="fas fa-hard-hat text-yellow-500 text-3xl absolute top-[-5px] left-[50%] transform -translate-x-1/2 -rotate-12 opacity-80"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-slate-800 leading-tight" data-key="app_title">GPACK</h1>
+                <p class="text-xs text-slate-500 font-bold tracking-wider mt-1" data-key="app_desc">GRP Pipe & Fittings Packing Tool</p>
+            </div>
+            <div class="space-y-3 text-left">
+                <div>
+                    <label class="compact-label" data-key="lbl_username">KULLANICI ADI</label>
+                    <input type="text" id="loginUser" class="input-std h-9" placeholder="...">
+                </div>
+                <div>
+                    <label class="compact-label" data-key="lbl_password">ŞİFRE</label>
+                    <input type="password" id="loginPass" class="input-std h-9" placeholder="...">
+                </div>
+                <button onclick="checkLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded text-xs transition mt-2" data-key="btn_login">GİRİŞ YAP</button>
+            </div>
+            <div class="mt-6 border-t border-slate-100 pt-4">
+                <select onchange="changeLanguage(this.value)" class="lang-select px-2 py-1">
+                    <option value="tr">Türkçe</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainAppContent" class="hidden">
+        <div class="container mx-auto max-w-7xl p-2 md:p-4 mb-20"> 
+            <div class="no-print mb-4 bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <div class="bg-slate-800 text-white w-8 h-8 rounded flex items-center justify-center shadow"><i class="fas fa-cubes"></i></div>
+                    <div>
+                        <h1 class="text-lg font-bold text-slate-800 leading-tight" data-key="app_title">GPACK</h1>
+                        <p class="text-[10px] text-slate-500 font-bold" data-key="app_desc">GRP Pipe & Fittings Packing Tool</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <select id="langSelectMain" onchange="changeLanguage(this.value)" class="lang-select">
+                        <option value="tr">TR</option>
+                        <option value="en">EN</option>
+                    </select>
+                    <button onclick="downloadReport('pdf')" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold border border-red-700"><i class="fas fa-file-pdf mr-1"></i> <span data-key="btn_pdf">PDF</span></button>
+                    <button onclick="downloadReport('word')" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-[10px] font-bold"><i class="fas fa-file-word mr-1"></i> <span data-key="btn_word">WORD</span></button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 no-print">
+                <div class="lg:col-span-3 space-y-3">
+                    <div class="card sticky top-4">
+                        <div class="card-header"><span data-key="sec_settings">SEVKİYAT AYARLARI</span> <i class="fas fa-truck text-slate-400"></i></div>
+                        <div class="p-3 space-y-3">
+                            <div><label class="compact-label" data-key="lbl_user">KULLANICI ADI</label><input id="txtUser" type="text" class="input-std font-bold text-blue-700 bg-blue-50/50" value="" readonly></div>
+                            <div><label class="compact-label" data-key="lbl_project">PROJE REFERANSI</label><input id="txtProject" type="text" class="input-std" placeholder="..."></div>
+                            <div><label class="compact-label" data-key="lbl_vehicle">ARAÇ TİPİ</label><select id="transportType" onchange="loadTransportLimits()" class="input-std font-semibold text-blue-900"></select></div>
+                            <div>
+                                <button onclick="toggleElement('limitSettings', 'limitIcon')" class="w-full py-1.5 px-2 bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-600 rounded text-[10px] font-bold flex items-center justify-between transition">
+                                    <span data-key="lbl_limits">ARAÇ LİMİTLERİ</span><i id="limitIcon" class="fas fa-chevron-down"></i>
+                                </button>
+                                <div id="limitSettings" class="hidden mt-2 bg-slate-50 p-2 rounded border border-slate-200">
+                                    <div class="limit-row"><label data-key="lim_l">BOY (m)</label><input type="number" id="maxL" class="input-std h-6 text-[10px]"></div>
+                                    <div class="limit-row"><label data-key="lim_w">EN (m)</label><input type="number" id="maxW" class="input-std h-6 text-[10px]"></div>
+                                    <div class="limit-row"><label data-key="lim_h">YÜK (m)</label><input type="number" id="maxH" class="input-std h-6 text-[10px]"></div>
+                                    <div class="limit-row"><label data-key="lim_kg" id="lblMaxKg">KAPASİTE (Ton)</label><input type="number" id="maxWeight" class="input-std h-6 text-[10px] font-bold text-blue-700"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="toggleElement('palletSettings', 'palletIcon')" class="w-full py-1.5 px-2 bg-teal-100 border border-teal-200 hover:bg-teal-200 text-teal-600 rounded text-[10px] font-bold flex items-center justify-between transition">
+                                    <span data-key="lbl_pallet_dims">PALET ÖLÇÜLERİ (m)</span><i id="palletIcon" class="fas fa-chevron-down"></i>
+                                </button>
+                                <div id="palletSettings" class="hidden mt-2 bg-teal-50 p-2 rounded border border-teal-200">
+                                    <div class="limit-row"><label data-key="lim_l">BOY (L)</label><input type="number" id="palletL" class="input-std h-6 text-[10px]" value="1.1"></div>
+                                    <div class="limit-row"><label data-key="lim_w">EN (W)</label><input type="number" id="palletW" class="input-std h-6 text-[10px]" value="1.1"></div>
+                                    <div class="limit-row"><label data-key="lim_h">YÜKSEKLİK (H)</label><input type="number" id="palletH" class="input-std h-6 text-[10px] font-bold text-teal-700" value="0.14"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-9 flex flex-col">
+                    <div class="card flex-1 flex flex-col min-h-[500px]">
+                        <div class="flex border-b border-slate-200 bg-white">
+                            <button onclick="switchTab('pipe')" id="tabPipe" class="tab-btn tab-active flex-1 flex items-center justify-center gap-2">
+                                <i class="fas fa-circle-notch"></i> <span data-key="tab_list_pipe">BORU EKLE</span> <span id="cntPipeBadge" class="bg-blue-100 text-blue-800 badge-count ml-1">0</span>
+                            </button>
+                            <button onclick="switchTab('fit')" id="tabFit" class="tab-btn tab-inactive flex-1 flex items-center justify-center gap-2">
+                                <i class="fas fa-shapes"></i> <span data-key="tab_list_fit">FITTING EKLE</span> <span id="cntFitBadge" class="bg-teal-100 text-teal-800 badge-count ml-1">0</span>
+                            </button>
+                        </div>
+
+                        <div id="pipeContent" class="flex-1 flex flex-col">
+                            <div class="p-3 bg-blue-50/50 border-b border-blue-100 shadow-sm z-10">
+                                <div class="flex flex-wrap gap-2 items-end">
+                                    <div class="w-24"><label class="compact-label text-blue-800" data-key="lbl_dn">DN</label><select id="pipeDN" class="input-std font-bold text-blue-900"></select></div>
+                                    <div class="w-20"><label class="compact-label text-blue-800" data-key="lbl_pn">PN</label><select id="pipePN" class="input-std"><option value="1">PN1</option><option value="6">PN6</option><option value="10" selected>PN10</option><option value="16">PN16</option><option value="20">PN20</option><option value="25">PN25</option><option value="32">PN32</option></select></div>
+                                    <div class="w-24"><label class="compact-label text-blue-800" data-key="lbl_sn">SN</label><select id="pipeSN" class="input-std"><option value="2500">SN2500</option><option value="5000">SN5000</option><option value="10000" selected>SN10000</option><option value="15000">SN15000</option><option value="20000">SN20000</option><option value="25000">SN25000</option></select></div>
+                                    <div class="w-20"><label class="compact-label text-blue-800" data-key="lbl_len">Boy(m)</label><input type="number" id="pipeLen" value="12" class="input-std text-center"></div>
+                                    <div class="w-24"><label class="compact-label text-blue-800" data-key="lbl_total">Toplam(m)</label><input type="number" id="pipeTotal" value="120" class="input-std font-bold text-blue-700 text-center"></div>
+                                    <div class="flex items-center h-[30px] px-3 bg-white border border-blue-200 rounded"><label class="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" id="pipeCpl" class="w-3.5 h-3.5 accent-blue-600" checked><span class="text-[11px] font-bold text-blue-700" data-key="opt_cpl">Manşonlu</span></label></div>
+                                    <button onclick="addPipeToList()" class="ml-auto px-5 h-[30px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded text-xs shadow-sm flex items-center gap-1 transition">
+                                        <i class="fas fa-plus"></i> <span data-key="btn_add_pipe">EKLE</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex-1 overflow-y-auto bg-white relative">
+                                <div class="absolute inset-0 overflow-auto">
+                                    <table class="w-full text-left text-xs border-collapse">
+                                        <thead class="bg-blue-50 text-slate-600 border-b border-blue-100 sticky top-0 z-10"><tr><th class="p-2 pl-3 font-semibold" data-key="th_desc">Tanım</th><th class="p-2 text-center font-semibold" data-key="th_len">Boy(m)</th><th class="p-2 text-right font-semibold" data-key="th_total">Miktar(m)</th><th class="p-2 text-center" data-key="lbl_weight">Birim Kg</th><th class="p-2 w-8"></th></tr></thead>
+                                        <tbody id="tbodyPipe" class="divide-y divide-blue-50 bg-white"></tbody>
+                                    </table>
+                                    <div id="pipeEmptyState" class="p-10 text-center text-blue-400 flex flex-col items-center justify-center h-full"><i class="fas fa-arrow-up text-3xl mb-3 opacity-50"></i><span class="text-xs font-semibold">Liste boş. Yukarıdan boru ekleyin.</span></div>
+                                </div>
+                            </div>
+                             <div class="p-2 bg-blue-50 border-t border-blue-100 flex justify-between items-center px-3"><span class="text-[10px] text-blue-500 font-bold"><span id="cntPipe">0</span> kayıt</span><button onclick="clearPipes()" class="text-[10px] text-red-500 hover:text-red-700 font-bold px-2 py-1">Temizle</button></div>
+                        </div>
+
+                        <div id="fitContent" class="flex-1 flex flex-col hidden">
+                            <div class="p-3 bg-teal-50/50 border-b border-teal-100 shadow-sm z-10">
+                                <div class="flex gap-4">
+                                    <div class="hidden md:flex flex-col items-center justify-center bg-white border border-teal-200 rounded-lg w-24 h-24 shadow-sm p-2 shrink-0">
+                                        <div id="fitPreviewImg" class="w-full h-full flex items-center justify-center text-teal-600 opacity-80"></div>
+                                        <span class="text-[9px] font-bold text-teal-800 mt-1 uppercase" id="fitPreviewLabel">BEND</span>
+                                    </div>
+
+                                    <div class="flex-1">
+                                        <div class="flex flex-wrap gap-2 items-end mb-2 border-b border-teal-100 pb-2">
+                                            <div class="flex-1 min-w-[120px]">
+                                                <label class="compact-label text-teal-800" data-key="lbl_type">Tip</label>
+                                                <select id="fitType" onchange="renderFitDynamic()" class="input-std font-bold text-teal-800 py-0"></select>
+                                            </div>
+                                            <div class="w-20">
+                                                <label class="compact-label text-teal-800" data-key="lbl_pn">PN</label>
+                                                <select id="fitPN" class="input-std py-0" onchange="fillDim()"><option value="1">PN1</option><option value="6">PN6</option><option value="10" selected>PN10</option><option value="16">PN16</option><option value="20">PN20</option><option value="25">PN25</option><option value="32">PN32</option></select></div>
+                                            <div class="w-20" id="divFitSN">
+                                                <label class="compact-label text-teal-800" data-key="lbl_sn">SN</label>
+                                                <select id="fitSN" class="input-std py-0"><option value="5000">5000</option><option value="10000" selected>10000</option><option value="15000">15000</option><option value="20000">20000</option><option value="25000">SN25000</option></select>
+                                            </div>
+                                            <div class="w-16">
+                                                <label class="compact-label text-teal-800" data-key="lbl_qty">Adet</label>
+                                                <input type="number" id="fitQty" value="1" class="input-std font-bold text-center py-0">
+                                            </div>
+                                            <div class="w-24">
+                                                <label class="compact-label text-teal-800" data-key="lbl_pack">Paketleme</label>
+                                                <select id="fitPackSelect" class="input-std py-0 font-bold text-teal-700"><option value="Pallet" data-key="opt_pallet" selected>Paletli</option><option value="Loose" data-key="opt_loose">Dökme</option></select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex flex-wrap gap-2 items-end">
+                                            <div id="fitDynamic" class="flex flex-wrap gap-2 items-end"></div>
+                                            <div id="fitOptions" class="flex flex-wrap gap-2 items-end"></div> 
+                                            <button onclick="addFitToList()" class="ml-auto px-5 h-[30px] bg-teal-600 hover:bg-teal-700 text-white font-bold rounded text-xs shadow-sm flex items-center gap-1 transition">
+                                                <i class="fas fa-plus"></i> <span data-key="btn_add_fit">EKLE</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex-1 overflow-y-auto bg-white relative">
+                                <div class="absolute inset-0 overflow-auto">
+                                    <table class="w-full text-left text-xs border-collapse">
+                                        <thead class="bg-teal-50 text-slate-600 border-b border-teal-100 sticky top-0 z-10"><tr><th class="p-2 pl-3 font-semibold" data-key="th_desc">Tanım</th><th class="p-2 font-semibold" data-key="th_det">Detay</th><th class="p-2 text-center font-semibold" data-key="th_pack">Paket</th><th class="p-2 text-center font-semibold" data-key="th_dim">Ölçü (mm)</th><th class="p-2 text-center font-semibold" data-key="th_qty">Adet</th><th class="p-2 text-center font-semibold">Kg</th><th class="p-2 w-8"></th></tr></thead>
+                                        <tbody id="tbodyFit" class="divide-y divide-teal-50 bg-white"></tbody>
+                                    </table>
+                                    <div id="fitEmptyState" class="p-10 text-center text-teal-400 flex flex-col items-center justify-center h-full"><i class="fas fa-arrow-up text-3xl mb-3 opacity-50"></i><span class="text-xs font-semibold">Liste boş. Yukarıdan fitting ekleyin.</span></div>
+                                </div>
+                            </div>
+                            <div class="p-2 bg-teal-50 border-t border-teal-100 flex justify-between items-center px-3"><span class="text-[10px] text-teal-500 font-bold"><span id="cntFit">0</span> kayıt</span><button onclick="clearFits()" class="text-[10px] text-red-500 hover:text-red-700 font-bold px-2 py-1">Temizle</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultArea" class="hidden mt-6">
+                <div class="mb-4 p-3 bg-slate-100 border border-slate-200 rounded text-slate-500 text-[10px] leading-relaxed">
+                    <strong class="block mb-1 text-slate-600" data-key="lbl_assumptions">HESAPLAMA VARSAYIMLARI:</strong>
+                    <ul class="list-disc pl-4 space-y-0.5">
+                        <li data-key="note_1">Boru ve fittingler için standart katalog ölçüleri esas alınmıştır.</li>
+                        <li data-key="note_2">Fitting ağırlık hesaplamalarına laminasyon ağırlıkları dahil edilmemiştir.</li>
+                        <li data-key="note_3">Araç başı ağırlık verileri; yüklenen ürünlerin, araç kapasitesine (tonaj) olan doluluk oranını ifade etmektedir.</li>
+                        <li data-key="note_4">Boru ve fitting ağırlıkları standart olarak hesaplanmıştır ve üreticiye göre farklılık gösterebilir.</li>
+                        <li data-key="note_5_rev">Paletli ürünler için palet ölçüleri 1.1x ve %15 hacim artışı öngörülmüştür. Dökme parçalar için 0.90x pratik hacim faktörü uygulanmıştır.</li>
+                    </ul>
+                </div>
+                
+                <div class="flex items-center gap-2 mb-3"><div class="h-px flex-1 bg-slate-300"></div><span class="text-xs font-bold text-slate-500 uppercase tracking-wider" data-key="res_title">Yükleme Planı Sonuçları</span><div class="h-px flex-1 bg-slate-300"></div></div>
+                <div id="planContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 print:block"></div>
+            </div>
+            
+            <div class="mt-8 text-center text-slate-400 no-print flex flex-col items-center gap-1"><div class="font-bold tracking-widest text-[10px] uppercase" data-key="app_ver">GPACK | GRP Pipe & Fittings Packing Tool</div></div>
+        </div>
+        
+        <div id="fixedCalcButtonArea" class="no-print">
+            <div class="container mx-auto max-w-7xl p-2 md:p-4">
+                <button onclick="calculateAll()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 rounded shadow flex items-center justify-center gap-2 text-xs transition active:scale-[0.98]">
+                    <i class="fas fa-calculator text-yellow-400"></i> <span data-key="btn_calc">HESAPLA & PLAN OLUŞTUR</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="spoolModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[10000] flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-blue-600 text-white rounded-t-lg">
+                <h3 class="font-bold text-lg"><i class="fas fa-route mr-2"></i> <span data-key="spool_title">SPOOL OLUŞTURMA MODÜLÜ</span></h3>
+                <button onclick="toggleElement('spoolModal')" class="text-white opacity-70 hover:opacity-100 transition"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-blue-50/50 text-blue-800"><span data-key="spool_base_data">TEMEL SPOOL BİLGİLERİ</span> <i class="fas fa-info-circle"></i></div>
+                    <div class="p-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                        <div><label class="compact-label text-blue-800" data-key="spool_name">SPOOL ADI</label><input type="text" id="spoolName" class="input-std h-[30px]" placeholder="SP-101"></div>
+                        <div><label class="compact-label text-blue-800" data-key="lbl_dn">DN</label><select id="spoolDN" class="input-std font-bold text-blue-900 h-[30px]"></select></div>
+                        <div><label class="compact-label text-blue-800" data-key="lbl_pn">PN</label><select id="spoolPN" class="input-std h-[30px]"><option value="1">PN1</option><option value="6">PN6</option><option value="10" selected>PN10</option><option value="12">PN12</option><option value="16">PN16</option><option value="20">PN20</option><option value="25">PN25</option></select></div>
+                        <div><label class="compact-label text-blue-800" data-key="lbl_sn">SN</label><select id="spoolSN" class="input-std h-[30px]"><option value="5000">SN5000</option><option value="10000" selected>SN10000</option><option value="15000">SN15000</option><option value="20000">SN20000</option><option value="25000">SN25000</option></select></div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-teal-50/50 text-teal-800"><span data-key="spool_add_comp">BİLEŞEN EKLE</span> <i class="fas fa-plus-circle"></i></div>
+                    <div class="p-3 space-y-3">
+                        <div class="flex flex-wrap gap-2 items-end">
+                            <div class="w-32"><label class="compact-label text-teal-800" data-key="lbl_type">Tip</label><select id="spoolCompType" onchange="renderSpoolCompFields()" class="input-std font-bold text-teal-800 py-0 h-[30px]"></select></div>
+                            <div id="spoolCompDynamic" class="flex flex-wrap gap-2 items-end flex-1"></div>
+                            <button onclick="addSpoolComponent()" class="ml-auto px-4 h-[30px] bg-teal-600 hover:bg-teal-700 text-white font-bold rounded text-xs shadow-sm flex items-center gap-1 transition">
+                                <i class="fas fa-level-down-alt"></i> <span data-key="btn_add_comp">EKLE</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-red-50/50 text-red-800"><span data-key="spool_comp_list">SPOOL BİLEŞEN LİSTESİ</span> <i class="fas fa-list"></i></div>
+                    <div class="overflow-y-auto max-h-60">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-red-50 text-slate-600 sticky top-0"><tr><th class="p-2 pl-3">#</th><th class="p-2" data-key="th_desc">Tanım</th><th class="p-2" data-key="th_dim">Boyut/Ölçü</th><th class="p-2">Kg (Tahmini)</th><th class="p-2 w-8"></th></tr></thead>
+                            <tbody id="tbodySpoolComp" class="divide-y divide-red-50"></tbody>
+                        </table>
+                    </div>
+                    <div id="spoolEndOptions" class="p-3 border-t border-red-100 bg-red-50/50 flex flex-wrap gap-4 items-center">
+                        <span class="text-red-800 font-bold" data-key="spool_end_opts">UÇ VE BRANŞ BAĞLANTI TİPLERİ:</span>
+                        <div id="spoolStartEnd" class="flex items-center gap-2"></div>
+                        <div id="spoolTeeEnds" class="flex items-center gap-2"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header bg-slate-50/50 text-slate-700"><span data-key="spool_visual_2d">2D MONTAJ AKIŞI (Basit Temsil)</span> <i class="fas fa-bezier-curve"></i></div>
+                    <div id="spoolVisualization" class="p-3 min-h-[100px] bg-slate-50 overflow-x-auto whitespace-nowrap text-xs flex items-center gap-1 border-b border-slate-100">
+                        <span class="text-slate-400">Spool'u oluşturmaya başlayın.</span>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="p-3 border-t border-slate-200 flex justify-end gap-2">
+                <button onclick="resetSpool()" class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded text-xs transition"><i class="fas fa-sync mr-1"></i> <span data-key="btn_reset">TEMİZLE</span></button>
+                <button onclick="saveSpool()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded text-xs transition"><i class="fas fa-check-circle mr-1"></i> <span data-key="btn_save_spool">SPOOL'U LİSTEYE EKLE</span></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        
+        // --- TRANSLATIONS (KISALTILMIŞ + YENİ EKLENENLER) ---
+        const TRANSLATIONS={
+            tr:{
+                app_title:"GPACK",app_desc:"GRP Pipe & Fittings Packing Tool",btn_pdf:"PDF",btn_word:"WORD",
+                sec_settings:"SEVKİYAT AYARLARI",lbl_user:"KULLANICI",lbl_project:"PROJE REFERANSI",lbl_vehicle:"ARAÇ TİPİ",lbl_limits:"ARAÇ LİMİTLERİ",
+                lim_l:"BOY (m)",lim_w:"EN (m)",lim_h:"YÜKSEKLİK (m)",lim_kg:"KAPASİTE (Ton)",
+                lbl_pallet_dims:"PALET ÖLÇÜLERİ (m)", 
+                tab_list_pipe:"BORU EKLE",tab_list_fit:"FITTING EKLE",
+                lbl_dn:"ÇAP (DN)",lbl_pn:"PN",lbl_sn:"SN",opt_cpl:"Manşonlu",opt_plain:"Düz Uç",lbl_len:"BORU BOYU (m)",lbl_total:"TOPLAM (m)",btn_add_pipe:"EKLE",
+                fit_plan_title:"YÜKLEME DETAYI",lbl_type:"PARÇA TİPİ",lbl_pack:"PAKETLEME",opt_loose:"Dökme",opt_pallet:"Paletli",lbl_qty:"ADET",btn_add_fit:"EKLE",
+                sec_list:"ÜRETİM LİSTESİ",btn_clear:"SİL",
+                th_desc:"Tanım",th_len:"Boy",th_total:"Miktar",th_det:"Detail",th_pack:"Pack",th_dim:"Ölçü",th_qty:"Adet",
+                btn_calc:"HESAPLA & PLAN OLUŞTUR",res_title:"Yükleme Planı Sonuçları",
+                sec_res_pipe:"BÖLÜM 1: BORU SEVKİYATI",sec_res_fit:"BÖLÜM 2: FITTING SEVKİYATI",
+                type_tee:"TEE",type_bend:"Dirsek",type_red:"Redüksiyon",type_flg:"Flanş",type_cpl:"Manşon",type_custom:"Özel Parça", type_spool:"Spool Oluştur", type_pipe:"Boru", // type_pipe düzeltildi
+                opt_empty:"Boş", // Yok -> Boş
+                dim_main:"ÇAP", dim_in:"Giriş", dim_out:"Çıkış", dim_br:"Branş", dim_len:"Boy", dim_h:"Branş Uz.", dim_ang:"Açı", dim_arm:"Kol", dim_ang_rot:"Montaj Açısı (Rot)", 
+                lbl_opt_in:"Giriş Opsiyonu", lbl_opt_out:"Çıkış Opsiyonu", lbl_opt_br:"Branş Opsiyonu",
+                truck:"ARAÇ",tr_std:"Standart Tır (13.60m)",tr_40hc:"40\" HC",tr_40ot:"40\" OT",tr_20dc:"20\" DC",tr_low:"Lowbed Tır",
+                err_limits_exceeded: "UYARI: Limit aşımı.", lbl_weight: "Birim Kg",
+                lbl_username:"KULLANICI ADI", lbl_password:"ŞİFRE", btn_login:"GİRİŞ YAP", app_ver:"GPACK | GRP Pipe & Fittings Packing Tool",
+                lbl_assumptions: "HESAPLAMA VARSAYIMLARI:",
+                note_1: "Boru ve fittingler için standart katalog ölçüleri esas alınmıştır.",
+                note_2: "Fitting ağırlık hesaplamalarına laminasyon ağırlıkları dahil edilmemiştir.",
+                note_3: "Araç başı ağırlık verileri; yüklenen ürünlerin, araç kapasitesine (tonaj) olan doluluk oranını ifade etmektedir.",
+                note_4: "Boru ve fitting ağırlıkları standart olarak hesaplanmıştır ve üreticiye göre farklılık gösterebilir.",
+                note_5_rev: 'Paletli ürünler için palet ölçüleri (<span id="palLDisp">1.1</span>x<span id="palWDisp">1.1</span>m taban) ve %15 hacim artışı öngörülmüştür. Dökme parçalar için $\\mathbf{0.90}$ pratik hacim faktörü uygulanmıştır.', 
+                res_summary: "SEVKİYAT ÖZETİ",
+                lbl_tot_truck: "TOPLAM ARAÇ", lbl_tot_weight: "TOPLAM AĞIRLIK", lbl_avg_weight: "ORT. AĞIRLIK/ARAÇ",
+                lbl_pipe_trucks: "BORU", lbl_fit_trucks: "FITTING", lbl_vol: "Hacim",
+                rep_title: "SEVKİYAT YÜKLEME RAPORU", rep_by: "Raporlayan", rep_date: "Tarih", rep_v_type: "Araç Tipi",
+                rep_gen_list: "1. GENEL ÜRÜN LİSTESİ", rep_desc: "Ürün Tanımı", rep_unit: "Birim", rep_qty: "Miktar",
+                rep_load_det: "2. YÜKLEME DETAYLARI", rep_nesting: "BORU YERLEŞİM (NESTING):", rep_part_list: "PARÇA LİSTESİ:",
+                rep_size: "Boyut", rep_pack: "Paket", rep_work_order: "YÜKLEME İŞ EMİRİ:",
+                step_floor: "ADIM 1: PALETLİ YÜKLERİN YERLEŞİMİ", step_loose: "ADIM 2: DÖKME PARÇALARIN YERLEŞİMİ",
+                lbl_pkg_content: "PAKET İÇERİĞİ (TOPLAM METRAJ):",
+                lbl_custom_name: "Parça Adı", 
+                lbl_dim_l: "Boy(mm)", 
+                lbl_dim_w: "En(mm)", 
+                lbl_dim_h: "Yük(mm)", 
+                lbl_weight_u: "Birim Kg",
+                lbl_floor_area: "Taban Alanı", 
+                // SPOOL EKLENEN ÇEVİRİLER
+                spool_title: "SPOOL OLUŞTURMA MODÜLÜ", spool_base_data: "TEMEL SPOOL BİLGİLERİ", spool_name: "SPOOL ADI", spool_visual_2d: "2D MONTAJ AKIŞI (Basit Temsil)", spool_add_comp: "BİLEŞEN EKLE", btn_add_comp: "EKLE", spool_comp_list: "SPOOL BİLEŞEN LİSTESİ", btn_reset: "TEMİZLE", btn_save_spool: "SPOOL'U LİSTEYE EKLE", dim_ang_rot: "Montaj Açısı (Rot)", spool_end_opts: "Uç Opsiyonları", // Düzeltildi
+                spool_click_detail: "Detay için tıkla", spool_comp: "parça", spool_detail_parts: "Spool Bileşenleri:",
+            },
+            en:{
+                app_title:"GPACK",app_desc:"GRP Pipe & Fittings Packing Tool",btn_pdf:"PDF",btn_word:"WORD",
+                sec_settings:"SHIPMENT SETTINGS",lbl_user:"USER",lbl_project:"PROJECT REFERENCE",lbl_vehicle:"VEHICLE TYPE",lbl_limits:"VEHICLE LIMITS",
+                lim_l:"LENGTH (m)",lim_w:"WIDTH (m)",lim_h:"HEIGHT (m)",lim_kg:"CAPACITY (Ton)",
+                lbl_pallet_dims:"PALLET DIMENSIONS (m)", 
+                tab_list_pipe:"ADD PIPE",tab_list_fit:"ADD FITTING",
+                lbl_dn:"DIAMETER (DN)",lbl_pn:"PN",lbl_sn:"SN",opt_cpl:"Coupling",opt_plain:"Plain End",lbl_len:"PIPE LEN (m)",lbl_total:"TOTAL (m)",btn_add_pipe:"ADD",
+                fit_plan_title:"LOADING DETAILS",lbl_type:"ITEM TYPE",lbl_pack:"PACKAGING",opt_loose:"Loose",opt_pallet:"Pallet",lbl_qty:"QTY",btn_add_fit:"ADD",
+                sec_list:"PRODUCTION LIST",btn_clear:"CLEAR",
+                th_desc:"Desc",th_len:"Len",th_total:"Total",th_det:"Detail",th_pack:"Pack",th_dim:"Dim",th_qty:"Qty",
+                btn_calc:"CALCULATE & PLAN",res_title:"Loading Plan Results",
+                sec_res_pipe:"SECTION 1: PIPE SHIPMENT",sec_res_fit:"SECTION 2: FITTING SHIPMENT",
+                type_tee:"TEE",type_bend:"Elbow",type_red:"Reducer",type_flg:"Flange",type_cpl:"Coupling",type_custom:"Custom Item", type_spool:"Create Spool", type_pipe:"Pipe", // type_pipe düzeltildi
+                opt_empty:"None", // Yok -> None
+                dim_main:"DIAMETER", dim_in:"Inlet", dim_out:"Outlet", dim_br:"Branch", dim_len:"Len", dim_h:"Branch Len", dim_ang:"Angle", dim_arm:"Arm", dim_ang_rot:"Assembly Angle (Rot)", 
+                lbl_opt_in:"Inlet Option", lbl_opt_out:"Outlet Option", lbl_opt_br:"Branch Option",
+                truck:"TRUCK",tr_std:"Standard Truck (13.60m)",tr_40hc:"40\" HC",tr_40ot:"40\" OT",tr_20dc:"20\" DC",tr_low:"Lowbed Truck",
+                err_limits_exceeded: "WARNING: Limit Exceeded", lbl_weight: "Unit Kg",
+                lbl_username:"USERNAME", lbl_password:"PASSWORD", btn_login:"LOGIN", app_ver:"GPACK | GRP Pipe & Fittings Packing Tool",
+                lbl_assumptions: "CALCULATION ASSUMPTIONS:",
+                note_1: "Standard catalog dimensions are used for pipes and fittings.",
+                note_2: "Lamination weights are excluded from fitting weight calculations.",
+                note_3: "Vehicle weight data indicates the occupancy ratio relative to vehicle capacity (tonnage).",
+                note_4: "Pipe and fitting weights are calculated as standard and may vary by manufacturer.",
+                note_5_rev: 'Palletized products assume pallet dimensions (<span id="palLDisp">1.1</span>x<span id="palWDisp">1.1</span>m base) and a 15% volume increase. Loose parts assume a $\\mathbf{0.90}$ practical volume factor.', 
+                res_summary: "SHIPMENT SUMMARY",
+                lbl_tot_truck: "TOTAL TRUCKS", lbl_tot_weight: "TOTAL WEIGHT", lbl_avg_weight: "AVG WEIGHT/TRUCK",
+                lbl_pipe_trucks: "PIPE", lbl_fit_trucks: "FITTING", lbl_vol: "Volume",
+                rep_title: "SHIPMENT LOADING REPORT", rep_by: "Reported By", rep_date: "Date", rep_v_type: "Vehicle Type",
+                rep_gen_list: "1. GENERAL PRODUCT LIST", rep_desc: "Description", rep_unit: "Unit", rep_qty: "Qty",
+                rep_load_det: "2. LOADING DETAILS", rep_nesting: "PIPE NESTING LAYOUT:", rep_part_list: "PARTS LIST:",
+                rep_size: "Size", rep_pack: "Pack", rep_work_order: "LOADING INSTRUCTIONS:",
+                step_floor: "STEP 1: PALLET LOADING", step_loose: "STEP 2: LOOSE ITEMS LOADING",
+                lbl_pkg_content: "PACKAGE CONTENT (TOTAL LENGTH):",
+                lbl_custom_name: "Item Name", 
+                lbl_dim_l: "Length(mm)", 
+                lbl_dim_w: "Width(mm)", 
+                lbl_dim_h: "Height(mm)", 
+                lbl_weight_u: "Unit Kg",
+                lbl_floor_area: "Floor Area", 
+                // SPOOL EKLENEN ÇEVİRİLER
+                spool_title: "SPOOL CREATION MODULE", spool_base_data: "SPOOL BASE DATA", spool_name: "SPOOL NAME", spool_visual_2d: "2D ASSEMBLY FLOW (Simple Representation)", spool_add_comp: "ADD COMPONENT", btn_add_comp: "ADD", spool_comp_list: "SPOOL COMPONENT LIST", btn_reset: "CLEAR", btn_save_spool: "ADD SPOOL TO LIST", dim_ang_rot: "Assembly Angle (Rot)", spool_end_opts: "End Options", // Düzeltildi
+                spool_click_detail: "Click for detail", spool_comp: "parts", spool_detail_parts: "Spool Components:",
+            }
+        };
+        let currentLang='tr'; 
+        function t(key){return TRANSLATIONS[currentLang][key]||key}
+
+        // --- VISUAL ASSETS (SVG) ---
+        const FIT_ICONS = {
+            TEE: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M10 35 H35 V10 H65 V35 H90 V65 H10 Z" stroke="currentColor" stroke-width="2" fill="none"/></svg>`,
+            BEND: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M20 90 V50 A 30 30 0 0 1 50 20 H90 V50 H60 A 10 10 0 0 0 50 60 V90 Z" stroke="currentColor" stroke-width="2" fill="none"/></svg>`,
+            RED: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M25 25 H75 L 60 75 H40 Z" stroke="currentColor" stroke-width="2" fill="none"/><line x1="25" y1="25" x2="75" y2="25" stroke="currentColor" stroke-width="2"/><line x1="40" y1="75" x2="60" y2="75" stroke="currentColor" stroke-width="2"/></svg>`,
+            FLG: `<svg viewBox="0 0 100 100" fill="currentColor"><circle cx="50" cy="50" r="35" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="50" cy="50" r="15" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="50" cy="25" r="3" fill="currentColor"/><circle cx="50" cy="75" r="3" fill="currentColor"/><circle cx="25" cy="50" r="3" fill="currentColor"/><circle cx="75" cy="50" r="3" fill="currentColor"/></svg>`,
+            CPL: `<svg viewBox="0 0 100 100" fill="currentColor"><rect x="20" y="30" width="60" height="40" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="50" y1="30" x2="50" y2="70" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/></svg>`,
+            CUSTOM: `<i class="fas fa-boxes text-5xl opacity-80"></i>`
+        };
+        
+        // --- LOGIN LOGIC DÜZELTİLDİ ---
+        function checkLogin() {
+            const u = document.getElementById('loginUser').value.trim();
+            const p = document.getElementById('loginPass').value.trim();
+            
+            // Kullanıcı adı trimlenmiş olarak kontrol edilir
+            if(!u) return alert(t("Kullanıcı adı giriniz."));
+
+            // Şifre hesaplama mantığı (Türkçe karakterler dahil)
+            const turkishVowels = (u.match(/[aeiouıüöçğşAEIOUİÜÖÇĞŞ]/g) || []).length;
+            const consonants = u.length - turkishVowels;
+            const correctPass = `${turkishVowels}0${consonants}0${u.length}`;
+
+            if(p === correctPass) {
+                // Başarılı giriş: Overlay'i gizle, Ana içeriği göster
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainAppContent').classList.remove('hidden');
+                document.getElementById('txtUser').value = u.toUpperCase();
+                
+                // İlk yükleme ayarlarını yap
+                if(typeof populatePipeDN === 'function') populatePipeDN();
+                if(typeof populateFitTypeOptions === 'function') populateFitTypeOptions();
+                if(typeof populateVehicleOptions === 'function') populateVehicleOptions();
+
+            } else {
+                alert(t("Hatalı şifre!"));
+            }
+        }
+
+        // --- DN / AĞIRLIK / TAŞIMA VERİ TABANLARI ---
+        const REAL_ODS={100:110,150:160,200:210,250:260,300:324,350:376.4,400:427.3,450:475.8,500:530.3,600:633,700:718.5,800:820.5,900:924,1000:1026.5,1100:1125.5,1200:1229,1300:1331.5,1400:1433.5,1500:1536.5,1600:1638.5,1700:1739.5,1800:1841.5,1900:1944.5,2000:2046,2100:2148.5,2200:2250.5,2300:2354,2400:2454,2500:2553.5,2600:2657.5,2700:2758.5,2800:2858.5,2900:2962.5,3000:3065,3100:3166.5,3200:3269,3300:3370.5,3400:3473,3500:3574.5,3600:3676.5,3700:3778.5,3800:3880.5,3900:3982.5,4000:4085};
+        const GRP_WEIGHT_DB = {
+            // SPOOL DN'leri için tahmini ağırlıklar eklendi
+            100: 5, 150: 7, 200: 9, 250: 12, 
+            300: 16, 350: 21, 400: 27, 450: 34, 500: 42, 600: 61,
+            700: 82, 800: 107, 900: 136, 1000: 165, 1200: 240,
+            1400: 330, 1600: 430, 1800: 550, 2000: 680, 2100: 750, 
+            2200: 820,
+            2400: 975, 2600: 1150, 2800: 1330, 3000: 1530, 4000: 2700
+        };
+        const TRANSPORT_KEYS=['tr_std','tr_40hc','tr_40ot','tr_20dc','tr_low'];
+        const TRANSPORT_DATA={'tr_std':{L:13.60,W:2.46,H:2.70,MaxKg:24500},'tr_40hc':{L:12.00,W:2.34,H:2.68,MaxKg:26500},'tr_40ot':{L:12.00,W:2.34,H:2.35,MaxKg:26500},'tr_20dc':{L:5.90,W:2.34,H:2.39,MaxKg:28000},'tr_low':{L:13.50,W:3.00,H:3.50,MaxKg:35000}};
+
+        // --- YENİ DİRSEK (ELBOW) TABLOSU VERİSİ (image_666900.png'den aktarılmıştır) ---
+        const ELBOW_DB = [
+            {dn: 300, R: 450, 11.25: 275, 22.5: 300, 30: 325, 45: 400, 60: 500, 90: 700},
+            {dn: 350, R: 525, 11.25: 275, 22.5: 325, 30: 350, 45: 425, 60: 550, 90: 800},
+            {dn: 400, R: 600, 11.25: 300, 22.5: 325, 30: 375, 45: 475, 60: 650, 90: 850},
+            {dn: 450, R: 675, 11.25: 325, 22.5: 375, 30: 400, 45: 525, 60: 625, 90: 950},
+            {dn: 500, R: 750, 11.25: 325, 22.5: 375, 30: 400, 45: 525, 60: 625, 90: 950},
+            {dn: 600, R: 900, 11.25: 325, 22.5: 400, 30: 450, 45: 600, 60: 700, 90: 1075},
+            {dn: 700, R: 1050, 11.25: 400, 22.5: 425, 30: 475, 45: 650, 60: 775, 90: 1200},
+            {dn: 800, R: 1170, 11.25: 400, 22.5: 450, 30: 525, 45: 700, 60: 850, 90: 1350},
+            {dn: 900, R: 1200, 11.25: 400, 22.5: 475, 30: 550, 45: 725, 60: 875, 90: 1400},
+            {dn: 1000, R: 1270, 11.25: 425, 22.5: 500, 30: 575, 45: 750, 60: 925, 90: 1450},
+            {dn: 1100, R: 1320, 11.25: 475, 22.5: 525, 30: 600, 45: 800, 60: 1000, 90: 1550},
+            {dn: 1200, R: 1370, 11.25: 475, 22.5: 525, 30: 600, 45: 825, 60: 1025, 90: 1600},
+            {dn: 1300, R: 1420, 11.25: 500, 22.5: 550, 30: 650, 45: 875, 60: 1075, 90: 1650},
+            {dn: 1400, R: 1470, 11.25: 500, 22.5: 575, 30: 675, 45: 900, 60: 1100, 90: 1700},
+            {dn: 1500, R: 1570, 11.25: 550, 22.5: 650, 30: 725, 45: 1025, 60: 1250, 90: 1900},
+            {dn: 1600, R: 1670, 11.25: 600, 22.5: 675, 30: 800, 45: 1100, 60: 1300, 90: 2000},
+            {dn: 1700, R: 1770, 11.25: 675, 22.5: 775, 30: 850, 45: 1200, 60: 1400, 90: 2200},
+            {dn: 1800, R: 1870, 11.25: 675, 22.5: 775, 30: 850, 45: 1200, 60: 1400, 90: 2200},
+            {dn: 1900, R: 1970, 11.25: 700, 22.5: 800, 30: 900, 45: 1300, 60: 1500, 90: 2400},
+            {dn: 2000, R: 2070, 11.25: 700, 22.5: 800, 30: 900, 45: 1300, 60: 1500, 90: 2400},
+            {dn: 2100, R: 2170, 11.25: 775, 22.5: 875, 30: 950, 45: 1400, 60: 1600, 90: 2600},
+            {dn: 2200, R: 2270, 11.25: 775, 22.5: 875, 30: 950, 45: 1400, 60: 1600, 90: 2600},
+            {dn: 2300, R: 2370, 11.25: 800, 22.5: 900, 30: 1000, 45: 1500, 60: 1700, 90: 2800},
+            {dn: 2400, R: 2470, 11.25: 800, 22.5: 900, 30: 1000, 45: 1500, 60: 1700, 90: 2800},
+            {dn: 2500, R: 2600, 11.25: 1000, 22.5: 1100, 30: 1200, 45: 1700, 60: 1900, 90: 3000},
+            {dn: 2600, R: 2700, 11.25: 1000, 22.5: 1100, 30: 1200, 45: 1700, 60: 1900, 90: 3000},
+            {dn: 2700, R: 2800, 11.25: 1100, 22.5: 1200, 30: 1300, 45: 1800, 60: 2000, 90: 3200},
+            {dn: 2800, R: 2900, 11.25: 1100, 22.5: 1200, 30: 1300, 45: 1800, 60: 2000, 90: 3200},
+            {dn: 2900, R: 3000, 11.25: 1200, 22.5: 1300, 30: 1400, 45: 1900, 60: 2100, 90: 3400},
+            {dn: 3000, R: 3100, 11.25: 1200, 22.5: 1300, 30: 1400, 45: 1900, 60: 2100, 90: 3400},
+            {dn: 3100, R: 3200, 11.25: 1300, 22.5: 1400, 30: 1500, 45: 2000, 60: 2200, 90: 3600},
+            {dn: 3200, R: 3300, 11.25: 1300, 22.5: 1400, 30: 1500, 45: 2000, 60: 2200, 90: 3600},
+            {dn: 3300, R: 3400, 11.25: 1400, 22.5: 1500, 30: 1700, 45: 2100, 60: 2300, 90: 3800},
+            {dn: 3400, R: 3500, 11.25: 1400, 22.5: 1500, 30: 1700, 45: 2100, 60: 2300, 90: 3800},
+            {dn: 3500, R: 3600, 11.25: 1500, 22.5: 1600, 30: 1800, 45: 2200, 60: 2400, 90: 4000},
+            {dn: 3600, R: 3700, 11.25: 1600, 22.5: 1600, 30: 1800, 45: 2200, 60: 2400, 90: 4000},
+            {dn: 3700, R: 3800, 11.25: 1600, 22.5: 1700, 30: 1900, 45: 2300, 60: 2500, 90: 4200},
+            {dn: 3800, R: 3900, 11.25: 1700, 22.5: 1800, 30: 2000, 45: 2400, 60: 2600, 90: 4400},
+            {dn: 3900, R: 4000, 11.25: 1700, 22.5: 1800, 30: 2000, 45: 2400, 60: 2600, 90: 4400},
+            {dn: 4000, R: 4100, 11.25: 1700, 22.5: 1800, 30: 2000, 45: 2400, 60: 2600, 90: 4400}
+        ];
+        
+        // REDUCER DATABASE
+        const REDUCER_DB = {
+            300: {200:1050, 250:925, 150:1100}, 
+            350: {250:1050, 300:925}, 400: {300:1050, 350:925},
+            450: {350:1050, 400:925}, 500: {350:1175, 400:1050}, 600: {400:1300, 500:1050},
+            700: {500:1300, 600:1050}, 800: {600:1300, 700:1050}, 900: {700:1300, 800:1050},
+            1000: {800:1300, 900:1050}, 1100: {900:1300, 1000:1050}, 1200: {1000:1500, 1100:1250},
+            1300: {1100:1500, 1200:1250}, 1400: {1200:1500, 1300:1250}, 1500: {1300:1500, 1400:1250},
+            1600: {1500:1450, 1400:1700}, 1700: {1500:1700, 1600:1450}, 1800: {1400:2200, 1600:1700},
+            1900: {1700:1700, 1800:1450}, 2000: {1600:2200, 1800:1700}, 2100: {1900:1700, 2000:1450},
+            2200: {2000:1700, 2100:1450}, 2300: {2100:1700, 2200:1450}, 2400: {2200:1700, 2300:1450},
+            2500: {2300:2000, 2400:1750}, 2600: {2400:2000, 2500:1750}, 2700: {2500:2000, 2600:1750},
+            2800: {2600:2000, 2700:1750}, 2900: {2700:2000, 2800:1750}, 3000: {2800:2000, 2900:1750},
+            3100: {2900:2300, 3000:2050}, 3200: {3000:2300, 3100:2050}, 3300: {3100:2300, 3200:2050},
+            3400: {3200:2300, 3300:2050}, 3500: {3300:2600, 3400:2350}, 3600: {3400:2600, 3500:2350},
+            3700: {3500:2600, 3600:2350}, 3800: {3600:2600, 3700:2350}, 3900: {3700:2700, 3800:2450},
+            4000: {3800:2700, 3900:2450}
+        };
+
+        const FLANGE_WEIGHT_EST = {300: 6, 350: 8, 400: 11, 450: 14, 500: 18, 600: 25, 700: 35, 800: 45, 900: 60, 1000: 70, 1200: 95, 1400: 130, 1600: 170, 1800: 210, 2000: 250, 2400: 350, 3000: 550};
+        const COUPLING_DIMENSIONS = {
+            get: function(dn, pn) {
+                let w = 0;
+                if (dn <= 350) w = 220; else if (dn <= 600) w = 242;
+                else if (dn <= 1300) w = 260; else if (dn <= 2400) w = 275; else w = 330;
+                let de = dn + 60; 
+                const specificDe = { 2000: {10: 2100, 16: 2110, 20: 2120}, 600: {10: 670, 16: 680, 20: 690}, 1000: {10: 1070, 16: 1080, 20: 1090}, 1600: {10: 1690, 16: 1700, 20: 1710} };
+                if (specificDe[dn] && specificDe[dn][pn]) { de = specificDe[dn][pn]; } else {
+                    let factor = 60;
+                    if (dn > 1000) factor = 80; if (dn > 2000) factor = 100;
+                    if (dn > 3000) factor = 130;
+                    if (pn >= 16) factor += 10;
+                    if (pn >= 25) factor += 20;
+                    if (pn == 20) factor += 15; 
+                    de = dn + factor;
+                }
+                return { w: w, de: de };
+            }
+        };
+        const ELBOW_ANGLES = [90, 60, 45, 30, 22.5, 11.25];
+        const getNearestElbowAngle = (inputAngle) => {
+            if (inputAngle >= 90) return 90;
+            if (inputAngle <= ELBOW_ANGLES[ELBOW_ANGLES.length - 1]) return ELBOW_ANGLES[ELBOW_ANGLES.length - 1];
+            let nearest = ELBOW_ANGLES[0];
+            let minDiff = Math.abs(inputAngle - nearest);
+            for (const angle of ELBOW_ANGLES) {
+                const diff = Math.abs(inputAngle - angle);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    nearest = angle;
+                }
+            }
+            return nearest;
+        };
+        
+        // --- TEE KATALOG VERİ TABANI ---
+        const TEE_DB = {
+            300: { 100: { PN1: {L:750,H:380}, PN6: {L:750,H:380}, PN10: {L:750,H:380}, PN16: {L:750,H:400} }, 150: { PN1: {L:800,H:400}, PN6: {L:800,H:400}, PN10: {L:800,H:400}, PN16: {L:800,H:430} }, 200: { PN1: {L:900,H:430}, PN6: {L:900,H:430}, PN10: {L:900,H:430}, PN16: {L:1000,H:480} }, 250: { PN1: {L:950,H:440}, PN6: {L:950,H:440}, PN10: {L:950,H:440}, PN16: {L:1050,H:490} }, 300: { PN1: {L:1000,H:450}, PN6: {L:1000,H:450}, PN10: {L:1000,H:450}, PN16: {L:1200,H:550} } }, // DN100 ve DN250 eklendi
+            350: { 150: { PN1: {L:800,H:430}, PN6: {L:800,H:430}, PN10: {L:800,H:430}, PN16: {L:800,H:450} }, 200: { PN1: {L:900,H:450}, PN6: {L:900,H:450}, PN10: {L:900,H:450}, PN16: {L:1000,H:500} }, 250: { PN1: {L:900,H:450}, PN6: {L:900,H:450}, PN10: {L:900,H:450}, PN16: {L:1000,H:500} } },
+            400: { 400: { PN1: {L:1300,H:610}, PN6: {L:1300,H:610}, PN10: {L:1300,H:610}, PN16: {L:1500,H:690} }, 150: { PN1: {L:800,H:460}, PN6: {L:800,H:460}, PN10: {L:800,H:460}, PN16: {L:800,H:490} }, 200: { PN1: {L:900,H:490}, PN6: {L:900,H:490}, PN10: {L:900,H:490}, PN16: {L:1000,H:540} }, 250: { PN1: {L:900,H:490}, PN6: {L:900,H:490}, PN10: {L:900,H:490}, PN16: {L:1000,H:540} } },
+            450: { 150: { PN1: {L:800,H:480}, PN6: {L:800,H:480}, PN10: {L:800,H:480}, PN16: {L:800,H:510} }, 200: { PN1: {L:900,H:510}, PN6: {L:900,H:510}, PN10: {L:900,H:510}, PN16: {L:1000,H:590} }, 250: { PN1: {L:900,H:510}, PN6: {L:900,H:510}, PN10: {L:900,H:510}, PN16: {L:1100,H:590} } },
+            500: { 500: { PN1: {L:1500,H:660}, PN6: {L:1500,H:660}, PN10: {L:1500,H:660}, PN16: {L:1700,H:740} }, 150: { PN1: {L:800,H:510}, PN6: {L:800,H:510}, PN10: {L:800,H:510}, PN16: {L:800,H:540} }, 200: { PN1: {L:900,H:540}, PN6: {L:900,H:540}, PN10: {L:900,H:540}, PN16: {L:1000,H:620} }, 250: { PN1: {L:1000,H:570}, PN6: {L:1000,H:570}, PN10: {L:1000,H:570}, PN16: {L:1100,H:640} }, 300: { PN1: {L:1000,H:620}, PN6: {L:1000,H:620}, PN10: {L:1000,H:620}, PN16: {L:1200,H:720} } },
+            600: { 600: { PN1: {L:1700,H:790}, PN6: {L:1700,H:790}, PN10: {L:1700,H:790}, PN16: {L:1800,H:870} }, 400: { PN1: {L:1300,H:720}, PN6: {L:1300,H:720}, PN10: {L:1300,H:720}, PN16: {L:1500,H:790} }, 450: { PN1: {L:1400,H:740}, PN6: {L:1400,H:740}, PN10: {L:1400,H:740}, PN16: {L:1600,H:820} } },
+            700: { 700: { PN1: {L:1900,H:870}, PN6: {L:1900,H:870}, PN10: {L:1900,H:870}, PN16: {L:2100,H:990} }, 200: { PN1: {L:900,H:660}, PN6: {L:900,H:660}, PN10: {L:900,H:660}, PN16: {L:1000,H:690} }, 400: { PN1: {L:1400,H:790}, PN6: {L:1400,H:790}, PN10: {L:1400,H:790}, PN16: {L:1600,H:890} }, 600: { PN1: {L:1800,H:870}, PN6: {L:1800,H:870}, PN10: {L:1800,H:870}, PN16: {L:2000,H:970} } },
+            800: { 800: { PN1: {L:2100,H:970}, PN6: {L:2100,H:970}, PN10: {L:2100,H:970}, PN16: {L:2400,H:1120} }, 200: { PN1: {L:900,H:710}, PN6: {L:900,H:710}, PN10: {L:900,H:710}, PN16: {L:1000,H:760} }, 400: { PN1: {L:1500,H:870}, PN6: {L:1500,H:870}, PN10: {L:1500,H:870}, PN16: {L:1700,H:990} }, 600: { PN1: {L:1800,H:940}, PN6: {L:1800,H:940}, PN10: {L:1800,H:940}, PN16: {L:2100,H:1070} } },
+            900: { 900: { PN1: {L:2200,H:1050}, PN6: {L:2200,H:1050}, PN10: {L:2200,H:1050}, PN16: {L:2600,H:1250} }, 300: { PN1: {L:1300,H:870}, PN6: {L:1300,H:870}, PN10: {L:1300,H:870}, PN16: {L:1500,H:1000} }, 500: { PN1: {L:1700,H:1000}, PN6: {L:1700,H:1000}, PN10: {L:1700,H:1000}, PN16: {L:2000,H:1120} }, 800: { PN1: {L:2100,H:1050}, PN6: {L:2100,H:1050}, PN10: {L:2100,H:1050}, PN16: {L:2400,H:1200} } },
+            1000: { 1000: { PN1: {L:2400,H:1150}, PN6: {L:2400,H:1150}, PN10: {L:2400,H:1150}, PN16: {L:2800,H:1350} }, 300: { PN1: {L:1300,H:950}, PN6: {L:1300,H:950}, PN10: {L:1300,H:950}, PN16: {L:1600,H:1100} }, 500: { PN1: {L:1800,H:1070}, PN6: {L:1800,H:1070}, PN10: {L:1800,H:1070}, PN16: {L:2100,H:1220} }, 800: { PN1: {L:2200,H:1120}, PN6: {L:2200,H:1120}, PN10: {L:2200,H:1120}, PN16: {L:2500,H:1300} } },
+            1100: { 1100: { PN1: {L:2600,H:1220}, PN6: {L:2600,H:1220}, PN10: {L:2600,H:1220}, PN16: {L:3000,H:1450} }, 500: { PN1: {L:1800,H:1150}, PN6: {L:1800,H:1150}, PN10: {L:1800,H:1150}, PN16: {L:2100,H:1300} }, 800: { PN1: {L:2200,H:1200}, PN6: {L:2200,H:1200}, PN10: {L:2200,H:1200}, PN16: {L:2600,H:1370} }, 1000: { PN1: {L:2500,H:1220}, PN6: {L:2500,H:1220}, PN10: {L:2500,H:1220}, PN16: {L:2900,H:1420} } },
+            1200: { 1200: { PN1: {L:2800,H:1320}, PN6: {L:2800,H:1320}, PN10: {L:2800,H:1320}, PN16: {L:3200,H:1550} }, 500: { PN1: {L:1900,H:1220}, PN6: {L:1900,H:1220}, PN10: {L:1900,H:1220}, PN16: {L:2200,H:1370} }, 800: { PN1: {L:2300,H:1270}, PN6: {L:2300,H:1270}, PN10: {L:2300,H:1270}, PN16: {L:2600,H:1450} }, 1000: { PN1: {L:2500,H:1300}, PN6: {L:2500,H:1300}, PN10: {L:2500,H:1300}, PN16: {L:2900,H:1300} } },
+            1300: { 1300: { PN1: {L:2900,H:1400}, PN6: {L:2900,H:1400}, PN10: {L:2900,H:1400}, PN16: {L:3500,H:1680} }, 500: { PN1: {L:1900,H:1300}, PN6: {L:1900,H:1300}, PN10: {L:1900,H:1300}, PN16: {L:2300,H:1480} }, 800: { PN1: {L:2300,H:1350}, PN6: {L:2300,H:1350}, PN10: {L:2300,H:1350}, PN16: {L:2700,H:1550} }, 1000: { PN1: {L:2600,H:1380}, PN6: {L:2600,H:1380}, PN10: {L:2600,H:1380}, PN16: {L:3000,H:1600} } },
+            1400: { 1400: { PN1: {L:3100,H:1480}, PN6: {L:3100,H:1480}, PN10: {L:3100,H:1480}, PN16: {L:3700,H:1780} }, 500: { PN1: {L:1900,H:1360}, PN6: {L:1900,H:1360}, PN10: {L:1900,H:1360}, PN16: {L:2300,H:1560} }, 800: { PN1: {L:2300,H:1410}, PN6: {L:2300,H:1410}, PN10: {L:2300,H:1410}, PN16: {L:2800,H:1630} }, 1000: { PN1: {L:2600,H:1430}, PN6: {L:2600,H:1430}, PN10: {L:2600,H:1430}, PN16: {L:3100,H:1680} } },
+            1500: { 1500: { PN1: {L:3300,H:1590}, PN6: {L:3300,H:1590}, PN10: {L:3300,H:1590}, PN16: {L:3900,H:1890} }, 500: { PN1: {L:2000,H:1440}, PN6: {L:2000,H:1440}, PN10: {L:2000,H:1440}, PN16: {L:2400,H:1640} }, 800: { PN1: {L:2400,H:1490}, PN6: {L:2400,H:1490}, PN10: {L:2400,H:1490}, PN16: {L:2800,H:1710} }, 1000: { PN1: {L:2600,H:1510}, PN6: {L:2600,H:1510}, PN10: {L:2600,H:1510}, PN16: {L:3100,H:1760} } },
+            1600: { 1600: { PN1: {L:3400,H:1660}, PN6: {L:3400,H:1660}, PN10: {L:3400,H:1660}, PN16: {L:4100,H:2010} }, 500: { PN1: {L:2000,H:1510}, PN6: {L:2000,H:1510}, PN10: {L:2000,H:1510}, PN16: {L:2500,H:1740} }, 800: { PN1: {L:2400,H:1560}, PN6: {L:2400,H:1560}, PN10: {L:2400,H:1560}, PN16: {L:2900,H:1810} }, 1000: { PN1: {L:2700,H:1590}, PN6: {L:2700,H:1590}, PN10: {L:2700,H:1590}, PN16: {L:3200,H:1860} } },
+            1700: { 1700: { PN1: {L:3600,H:1740}, PN6: {L:3600,H:1740}, PN10: {L:3600,H:1740}, PN16: {L:4300,H:2110} }, 500: { PN1: {L:2000,H:1560}, PN6: {L:2000,H:1560}, PN10: {L:2000,H:1560}, PN16: {L:2500,H:1810} }, 800: { PN1: {L:2400,H:1610}, PN6: {L:2400,H:1610}, PN10: {L:2400,H:1610}, PN16: {L:3000,H:1890} }, 1000: { PN1: {L:2700,H:1640}, PN6: {L:2700,H:1640}, PN10: {L:2700,H:1640}, PN16: {L:3300,H:1940} } },
+            1800: { 1800: { PN1: {L:3700,H:1810}, PN6: {L:3700,H:1810}, PN10: {L:3700,H:1810}, PN16: {L:4500,H:2210} }, 500: { PN1: {L:2100,H:1640}, PN6: {L:2100,H:1640}, PN10: {L:2100,H:1640}, PN16: {L:2600,H:1890} }, 800: { PN1: {L:2500,H:1690}, PN6: {L:2500,H:1690}, PN10: {L:2500,H:1690}, PN16: {L:3000,H:1960} }, 1000: { PN1: {L:2700,H:1710}, PN6: {L:2700,H:1710}, PN10: {L:2700,H:1710}, PN16: {L:3300,H:2010} } },
+            1900: { 1900: { PN1: {L:3900,H:1890}, PN6: {L:3900,H:1890}, PN10: {L:3900,H:1890}, PN16: {L:4800,H:2340} }, 500: { PN1: {L:2100,H:1690}, PN6: {L:2100,H:1690}, PN10: {L:2100,H:1690}, PN16: {L:2600,H:1960} }, 800: { PN1: {L:2500,H:1740}, PN6: {L:2500,H:1740}, PN10: {L:2500,H:1740}, PN16: {L:3100,H:2040} }, 1000: { PN1: {L:2700,H:1760}, PN6: {L:2700,H:1760}, PN10: {L:2700,H:1760}, PN16: {L:3400,H:2090} } },
+            2000: { 2000: { PN1: {L:4000,H:1970}, PN6: {L:4000,H:1970}, PN10: {L:4000,H:1970}, PN16: {L:5000,H:2470} }, 500: { PN1: {L:2100,H:1770}, PN6: {L:2100,H:1770}, PN10: {L:2100,H:1770}, PN16: {L:2700,H:2040} }, 800: { PN1: {L:2500,H:1820}, PN6: {L:2500,H:1820}, PN10: {L:2500,H:1820}, PN16: {L:3100,H:2120} }, 1000: { PN1: {L:2800,H:1840}, PN6: {L:2800,H:1840}, PN10: {L:2800,H:1840}, PN16: {L:3400,H:2170} } },
+            2100: { 2100: { PN1: {L:4200,H:2040}, PN6: {L:4200,H:2040}, PN10: {L:4200,H:2040}, PN16: {L:5200,H:2540} }, 800: { PN1: {L:2500,H:1870}, PN6: {L:2500,H:1870}, PN10: {L:2500,H:1870}, PN16: {L:3100,H:2170} }, 1000: { PN1: {L:2800,H:1890}, PN6: {L:2800,H:1890}, PN10: {L:2800,H:1890}, PN16: {L:3400,H:2220} }, 1200: { PN1: {L:3000,H:1920}, PN6: {L:3000,H:1920}, PN10: {L:3000,H:1920}, PN16: {L:3700,H:2270} } },
+            2200: { 2200: { PN1: {L:4300,H:2120}, PN6: {L:4300,H:2120}, PN10: {L:4300,H:2120}, PN16: {L:5300,H:2620} }, 800: { PN1: {L:2600,H:1940}, PN6: {L:2600,H:1940}, PN10: {L:2600,H:1940}, PN16: {L:3100,H:2220} }, 1000: { PN1: {L:2800,H:1970}, PN6: {L:2800,H:1970}, PN10: {L:2800,H:1970}, PN16: {L:3400,H:2270} }, 1200: { PN1: {L:3100,H:1990}, PN6: {L:3100,H:1990}, PN10: {L:3100,H:1990}, PN16: {L:3700,H:2320} } },
+            2300: { 2300: { PN1: {L:4500,H:2190}, PN6: {L:4500,H:2190}, PN10: {L:4500,H:2190}, PN16: {L:5600,H:2740} }, 800: { PN1: {L:2600,H:1990}, PN6: {L:2600,H:1990}, PN10: {L:2600,H:1990}, PN16: {L:3200,H:2320} }, 1000: { PN1: {L:2800,H:2020}, PN6: {L:2800,H:2020}, PN10: {L:2800,H:2020}, PN16: {L:3500,H:2370} }, 1200: { PN1: {L:3100,H:2040}, PN6: {L:3100,H:2040}, PN10: {L:3100,H:2040}, PN16: {L:3800,H:2420} } },
+            2400: { 2400: { PN1: {L:4600,H:2270}, PN6: {L:4600,H:2270}, PN10: {L:4600,H:2270}, PN16: {L:5700,H:2790} }, 1200: { PN1: {L:3100,H:2120}, PN6: {L:3100,H:2120}, PN10: {L:3100,H:2120}, PN16: {L:3800,H:2470} }, 1600: { PN1: {L:3600,H:2170}, PN6: {L:3600,H:2170}, PN10: {L:3600,H:2170}, PN16: {L:4400,H:2570} }, 2000: { PN1: {L:4100,H:2220}, PN6: {L:4100,H:2220}, PN10: {L:4100,H:2220}, PN16: {L:5100,H:2720} } },
+            2500: { 2500: { PN1: {L:4800,H:2370}, PN6: {L:4800,H:2370}, PN10: {L:4800,H:2370}, PN16: {L:5900,H:2900} }, 1200: { PN1: {L:3200,H:2200}, PN6: {L:3200,H:2200}, PN10: {L:3200,H:2200}, PN16: {L:3900,H:2550} }, 1600: { PN1: {L:3700,H:2250}, PN6: {L:3700,H:2250}, PN10: {L:3700,H:2250}, PN16: {L:4500,H:2650} }, 2000: { PN1: {L:4200,H:2300}, PN6: {L:4200,H:2300}, PN10: {L:4200,H:2300}, PN16: {L:5200,H:2800} } },
+            2600: { 2600: { PN1: {L:5000,H:2450}, PN6: {L:5000,H:2450}, PN10: {L:5000,H:2450}, PN16: {L:6100,H:3000} }, 1200: { PN1: {L:3200,H:2270}, PN6: {L:3200,H:2270}, PN10: {L:3200,H:2270}, PN16: {L:4000,H:2650} }, 1600: { PN1: {L:3700,H:2320}, PN6: {L:3700,H:2320}, PN10: {L:3700,H:2320}, PN16: {L:4600,H:2750} }, 2000: { PN1: {L:4200,H:2370}, PN6: {L:4200,H:2370}, PN10: {L:4200,H:2370}, PN16: {L:5300,H:2900} } },
+            2700: { 2700: { PN1: {L:5100,H:2520}, PN6: {L:5100,H:2520}, PN10: {L:5100,H:2520}, PN16: {L:6200,H:3070} }, 1000: { PN1: {L:3000,H:2300}, PN6: {L:3000,H:2300}, PN10: {L:3000,H:2300}, PN16: {L:3700,H:2650} }, 1600: { PN1: {L:3700,H:2370}, PN6: {L:3700,H:2370}, PN10: {L:3700,H:2370}, PN16: {L:4600,H:2800} }, 2000: { PN1: {L:4200,H:2420}, PN6: {L:4200,H:2420}, PN10: {L:4200,H:2420}, PN16: {L:5300,H:2950} } },
+            2800: { 2800: { PN1: {L:5300,H:2600}, PN6: {L:5300,H:2600}, PN10: {L:5300,H:2600}, PN16: {L:6400,H:3150} }, 1000: { PN1: {L:3000,H:2430}, PN6: {L:3000,H:2430}, PN10: {L:3000,H:2430}, PN16: {L:3800,H:2800} }, 1600: { PN1: {L:3800,H:2450}, PN6: {L:3800,H:2450}, PN10: {L:3800,H:2450}, PN16: {L:4600,H:2850} }, 2000: { PN1: {L:4300,H:2500}, PN6: {L:4300,H:2500}, PN10: {L:4300,H:2500}, PN16: {L:5300,H:3000} } },
+            2900: { 2900: { PN1: {L:5400,H:2680}, PN6: {L:5400,H:2680}, PN10: {L:5400,H:2680}, PN16: {L:6600,H:3250} }, 1000: { PN1: {L:3100,H:2500}, PN6: {L:3100,H:2500}, PN10: {L:3100,H:2500}, PN16: {L:3800,H:2850} }, 1600: { PN1: {L:3800,H:2550}, PN6: {L:3800,H:2550}, PN10: {L:3800,H:2550}, PN16: {L:4700,H:2950} }, 2000: { PN1: {L:4300,H:2600}, PN6: {L:4300,H:2600}, PN10: {L:4300,H:2600}, PN16: {L:5400,H:3100} } },
+            3000: { 3000: { PN1: {L:5600,H:2750}, PN6: {L:5600,H:2750}, PN10: {L:5600,H:2750}, PN16: {L:6700,H:3300} }, 1000: { PN1: {L:3100,H:2500}, PN6: {L:3100,H:2500}, PN10: {L:3100,H:2500}, PN16: {L:3800,H:2850} }, 1600: { PN1: {L:3800,H:2580}, PN6: {L:3800,H:2580}, PN10: {L:3800,H:2580}, PN16: {L:4700,H:3000} }, 2000: { PN1: {L:4300,H:2630}, PN6: {L:4300,H:2630}, PN10: {L:4300,H:2630}, PN16: {L:5400,H:3150} } },
+            3100: { 3100: { PN1: {L:5700,H:2830}, PN6: {L:5700,H:2830}, PN10: {L:5700,H:2830}, PN16: {L:6900,H:3400} }, 1000: { PN1: {L:3100,H:2550}, PN6: {L:3100,H:2550}, PN10: {L:3100,H:2550}, PN16: {L:3800,H:2900} }, 1600: { PN1: {L:3800,H:2630}, PN6: {L:3800,H:2630}, PN10: {L:3800,H:2630}, PN16: {L:4700,H:3050} }, 2000: { PN1: {L:4300,H:2680}, PN6: {L:4300,H:2680}, PN10: {L:4300,H:2680}, PN16: {L:5400,H:3200} } },
+            3200: { 3200: { PN1: {L:5900,H:2900}, PN6: {L:5900,H:2900}, PN10: {L:5900,H:2900}, PN16: {L:7100,H:3500} }, 1000: { PN1: {L:3100,H:2630}, PN6: {L:3100,H:2630}, PN10: {L:3100,H:2630}, PN16: {L:3900,H:3000} }, 1600: { PN1: {L:3900,H:2700}, PN6: {L:3900,H:2700}, PN10: {L:3900,H:2700}, PN16: {L:4800,H:3150} }, 2000: { PN1: {L:4400,H:2750}, PN6: {L:4400,H:2750}, PN10: {L:4400,H:2750}, PN16: {L:5500,H:3300} } },
+            3300: { 3300: { PN1: {L:6100,H:3010}, PN6: {L:6100,H:3010}, PN10: {L:6100,H:3010} }, 1000: { PN1: {L:3100,H:2680}, PN6: {L:3100,H:2680}, PN10: {L:3100,H:2680} }, 1600: { PN1: {L:3900,H:2760}, PN6: {L:3900,H:2760}, PN10: {L:3900,H:2760} }, 2000: { PN1: {L:4400,H:2810}, PN6: {L:4400,H:2810}, PN10: {L:4400,H:2810} } },
+            3400: { 3400: { PN1: {L:6300,H:3130}, PN6: {L:6300,H:3130}, PN10: {L:6300,H:3130} }, 1600: { PN1: {L:3900,H:2830}, PN6: {L:3900,H:2830}, PN10: {L:3900,H:2830} }, 2400: { PN1: {L:4900,H:2930}, PN6: {L:4900,H:2930}, PN10: {L:4900,H:2930} }, 3000: { PN1: {L:5700,H:3010}, PN6: {L:5700,H:3010}, PN10: {L:5700,H:3010} } },
+            3500: { 3500: { PN1: {L:6500,H:3230}, PN6: {L:6500,H:3230}, PN10: {L:6500,H:3230} }, 1600: { PN1: {L:3900,H:2880}, PN6: {L:3900,H:2880}, PN10: {L:3900,H:2880} }, 2400: { PN1: {L:4900,H:2980}, PN6: {L:4900,H:2980}, PN10: {L:4900,H:2980} }, 3000: { PN1: {L:5700,H:3060}, PN6: {L:5700,H:3060}, PN10: {L:5700,H:3060} } },
+            3600: { 3600: { PN1: {L:6600,H:3280}, PN6: {L:6600,H:3280}, PN10: {L:6600,H:3280} }, 1600: { PN1: {L:4000,H:2960}, PN6: {L:4000,H:2960}, PN10: {L:4000,H:2960} }, 2400: { PN1: {L:5000,H:3060}, PN6: {L:5000,H:3060}, PN10: {L:5000,H:3060} }, 3000: { PN1: {L:5700,H:3130}, PN6: {L:5700,H:3130}, PN10: {L:5700,H:3130} } },
+            3700: { 3700: { PN1: {L:6800,H:3380}, PN6: {L:6800,H:3380}, PN10: {L:6800,H:3380} }, 1600: { PN1: {L:4000,H:3010}, PN6: {L:4000,H:3010}, PN10: {L:4000,H:3010} }, 2400: { PN1: {L:5000,H:3110}, PN6: {L:5000,H:3110}, PN10: {L:5000,H:3110} }, 3000: { PN1: {L:5700,H:3180}, PN6: {L:5700,H:3180}, PN10: {L:5700,H:3180} } },
+            3800: { 3800: { PN1: {L:7000,H:3460}, PN6: {L:7000,H:3460}, PN10: {L:7000,H:3460} }, 1600: { PN1: {L:4000,H:3090}, PN6: {L:4000,H:3090}, PN10: {L:4000,H:3090} }, 2400: { PN1: {L:5000,H:3190}, PN6: {L:5000,H:3190}, PN10: {L:5000,H:3190} }, 3000: { PN1: {L:5800,H:3260}, PN6: {L:5800,H:3260}, PN10: {L:5800,H:3260} } },
+            3900: { 3900: { PN1: {L:7100,H:3540}, PN6: {L:7100,H:3540}, PN10: {L:7100,H:3540} }, 1600: { PN1: {L:4000,H:3140}, PN6: {L:4000,H:3140}, PN10: {L:4000,H:3140} }, 2400: { PN1: {L:5000,H:3240}, PN6: {L:5000,H:3240}, PN10: {L:5000,H:3240} }, 3000: { PN1: {L:5800,H:3310}, PN6: {L:5800,H:3310}, PN10: {L:5800,H:3310} } },
+            4000: { 4000: { PN1: {L:7300,H:3610}, PN6: {L:7300,H:3610}, PN10: {L:7300,H:3610} }, 1600: { PN1: {L:4100,H:3210}, PN6: {L:4100,H:3210}, PN10: {L:4100,H:3210} }, 2400: { PN1: {L:5100,H:3310}, PN6: {L:5100,H:3310}, PN10: {L:5100,H:3310} }, 3000: { PN1: {L:5800,H:3390}, PN6: {L:5800,H:3390}, PN10: {L:5800,H:3390} } }
+        };
+
+        const FLANGE_WEIGHT_EST_DATA = {300: 6, 350: 8, 400: 11, 450: 14, 500: 18, 600: 25, 700: 35, 800: 45, 900: 60, 1000: 70, 1200: 95, 1400: 130, 1600: 170, 1800: 210, 2000: 250, 2400: 350, 3000: 550};
+        function getFlangeWeight(dn, pn){
+            let w = FLANGE_WEIGHT_EST_DATA[dn] || ((dn*dn)/16000 + 3);
+            if(pn <= 6) return w * 0.7; 
+            if(pn == 16) return w * 1.3;
+            if(pn == 20) return w * 1.45; 
+            if(pn == 25) return w * 1.8; 
+            if(pn >= 32) return w * 2.2; 
+            return w;
+        }
+
+        function getCouplingWeight(dn, pn) {
+            const cplData = COUPLING_DIMENSIONS.get(dn, pn);
+            return (Math.PI * dn/1000 * cplData.w/1000 * 0.03 * 1800);
+        }
+
+        function getPipeWeightPerMeter(dn, pn, sn) {
+            let baseW = GRP_WEIGHT_DB[dn];
+            if (!baseW) { baseW = dn * 0.165; }
+            let snFactor = 1.0;
+            if (sn == 2500) snFactor = 0.75;
+            if (sn == 5000) snFactor = 0.85;
+            if (sn == 15000) snFactor = 1.15;
+            if (sn >= 20000) snFactor = 1.25;
+            let pnFactor = 1.0;
+            if (pn <= 6) pnFactor = 0.8;
+            if (pn == 16) pnFactor = 1.2;
+            if (pn == 20) pnFactor = 1.3; 
+            if (pn == 25) pnFactor = 1.5;
+            if (pn >= 32) pnFactor = 1.8;
+            return baseW * snFactor * pnFactor;
+        }
+
+        // --- GLOBAL DEĞİŞKENLER VE INIT ---
+        let pipeItems=[], fittingItems=[], finalPackages=[];
+        
+        // --- SPOOL MODÜLÜ VERİ VE FONKSİYONLARI (YENİ) ---
+        let spoolComponents = []; 
+        let spoolComponentCounter = 1;
+        const SPOOL_COMP_TYPES = ['PIPE', 'BEND', 'TEE', 'RED'];
+        const SPOOL_BASE_ODS = { 100:110, 150:160, 200:210, 250:260 }; 
+
+        function openSpoolModal() {
+            document.getElementById('spoolModal').classList.remove('hidden');
+            populateSpoolDN(); 
+            populateSpoolCompTypes();
+            resetSpool();
+        }
+
+        function populateSpoolDN(){
+            const s=document.getElementById('spoolDN');s.innerHTML='';
+            let allDNs = Object.keys(REAL_ODS).map(Number).filter(x=>x>=300).sort((a,b)=>a-b);
+            let smallDNs = Object.keys(SPOOL_BASE_ODS).map(Number).sort((a,b)=>a-b);
+            
+            smallDNs.forEach(d=>{let o=document.createElement('option');o.value=d;o.text=`DN ${d}`;s.add(o)});
+            allDNs.forEach(d=>{let o=document.createElement('option');o.value=d;o.text=`DN ${d}`;s.add(o)});
+            
+            s.value="600";
+        }
+
+        function populateSpoolCompTypes() {
+            const s = document.getElementById('spoolCompType');
+            s.innerHTML = '';
+            SPOOL_COMP_TYPES.forEach(k => { 
+                let o = document.createElement('option'); 
+                o.value = k; 
+                o.text = t('type_' + k.toLowerCase()) || k; 
+                s.add(o); 
+            });
+            renderSpoolCompFields();
+        }
+        
+        function renderSpoolCompFields() {
+            const cType = document.getElementById('spoolCompType').value;
+            // İlk spool parçası ekleniyorsa, dn'i başlangıç DN'i olarak al, değilse son parçanın çıkış DN'ini al.
+            let currentDN = parseInt(document.getElementById('spoolDN').value) || 300;
+            if (spoolComponents.length > 0) {
+                const lastComp = spoolComponents[spoolComponents.length - 1];
+                currentDN = lastComp.type === 'RED' ? lastComp.small_dn : lastComp.dn;
+            }
+            const dn = currentDN; 
+
+            let h = '';
+            
+            const f=(l,i,v='')=>`<div class="w-20"><label class="compact-label text-teal-800">${t(l)}</label><input type="number" id="sc_${i}" class="input-std h-[30px] w-full text-center" value="${v}"></div>`;
+            const s=(l,i,opts)=>`<div class="w-32"><label class="compact-label text-teal-800">${t(l)}</label><select id="sc_${i}" class="input-std h-[30px] w-full py-0">${opts}</select></div>`;
+            
+            if (cType === 'PIPE') {
+                h = f('lbl_len', 'len', '3') + f('lbl_qty', 'qty', '1');
+            } else if (cType === 'BEND') {
+                const angleOptions = ELBOW_ANGLES.map(a => `<option value="${a}" ${a==90?'selected':''}>${a}°</option>`).join('');
+                h = s('dim_ang', 'ang', angleOptions) + f('dim_arm', 'len', '400') + f('dim_ang_rot', 'rot_angle', '0');
+            } else if (cType === 'TEE') {
+                let branchDNs = Object.keys(REAL_ODS).map(Number).filter(d => d < dn).sort((a,b) => b-a);
+                Object.keys(SPOOL_BASE_ODS).map(Number).filter(d => d < dn && !branchDNs.includes(d)).forEach(d => branchDNs.push(d));
+                branchDNs.sort((a,b) => b-a);
+                
+                const branchOptions = branchDNs.map(d => `<option value="${d}">DN${d}</option>`).join('');
+                h = s('dim_br', 'branch_dn', branchOptions) + f('dim_len', 'main_len', '1000') + f('dim_h', 'branch_len', '300') + f('dim_ang_rot', 'rot_angle', '0');
+            } else if (cType === 'RED') {
+                let smallDNs = [];
+                // Mevcut kural: -100mm ve -200mm
+                if(dn - 100 >= 100) smallDNs.push(dn - 100);
+                if(dn - 200 >= 100) smallDNs.push(dn - 200);
+                
+                // DN300 Özel Kuralı: 150 ve 250 eklenmeli
+                if(dn === 300) {
+                    if(!smallDNs.includes(150)) smallDNs.push(150);
+                    if(!smallDNs.includes(250)) smallDNs.push(250);
+                }
+                // İstenen 100, 150, 200, 250 çapları ekle (Ana Çaptan küçükse)
+                Object.keys(SPOOL_BASE_ODS).map(Number).filter(d => d < dn && !smallDNs.includes(d)).forEach(d => smallDNs.push(d));
+
+                smallDNs.sort((a,b) => b-a);
+                const smallOptions = smallDNs.map(d => `<option value="${d}">DN${d}</option>`).join('');
+                
+                h = s('dim_out', 'small_dn', smallOptions) + f('dim_len', 'len', '1000');
+            }
+            document.getElementById('sc_len')?.setAttribute('placeholder', `DN${dn} için`);
+            document.getElementById('spoolCompDynamic').innerHTML = h;
+        }
+
+        function addSpoolComponent() {
+            const baseDN = parseInt(document.getElementById('spoolDN').value);
+            const pN = parseInt(document.getElementById('spoolPN').value);
+            const sN = document.getElementById('spoolSN').value;
+            const cType = document.getElementById('spoolCompType').value;
+            
+            let currentDN = baseDN;
+            let lastComponent = spoolComponents[spoolComponents.length - 1];
+            if (lastComponent) {
+                currentDN = lastComponent.type === 'RED' ? lastComponent.small_dn : lastComponent.dn;
+            }
+            
+            let currentDirection = { x: 1, y: 0, z: 0 }; 
+            let lastRotation = { x: 0, y: 0, z: 0 }; 
+
+            if(lastComponent) {
+                lastRotation = { ...lastComponent.finalRotation };
+            }
+            
+            let comp = {
+                id: spoolComponentCounter++,
+                type: cType,
+                dn: currentDN, // Akış Çapı
+                base_dn: baseDN,
+                pn: pN,
+                sn: sN,
+                weight: 0,
+                desc: '',
+                startRotation: lastRotation, // Bir önceki parçadan gelen yönelim
+                finalRotation: { ...lastRotation } // Bu parçanın bitimindeki yönelim
+            };
+            
+            if (cType === 'PIPE') {
+                comp.len = parseFloat(document.getElementById('sc_len').value);
+                comp.qty = parseInt(document.getElementById('sc_qty').value);
+                comp.desc = `${comp.len}m ${t('type_pipe')}`; // Düzeltildi: type_pipe çevirisi kullanıldı
+                comp.weight = getPipeWeightPerMeter(comp.dn, comp.pn, comp.sn) * comp.len * comp.qty;
+            } else if (cType === 'BEND') {
+                comp.ang = parseFloat(document.getElementById('sc_ang').value);
+                comp.len = parseFloat(document.getElementById('sc_len').value); // Kol Boyu (Arm)
+                comp.rot_angle = parseFloat(document.getElementById('sc_rot_angle').value); // Montaj Açısı
+                comp.desc = `DN${comp.dn} ${t('type_bend')} ${comp.ang}°`;
+                comp.weight = (comp.len/1000 * Math.PI * (comp.dn/1000) * 0.025 * 1800); 
+                
+                // Rotasyon Güncellemesi (Basit Yaklaşım: Rot_angle, Bend'in 90'lık düzlemde Z ekseni etrafında döndüğünü varsayar)
+                comp.finalRotation.z = (comp.finalRotation.z + comp.ang) % 360; 
+                if(comp.rot_angle !== 0) {
+                    comp.finalRotation.y = (comp.finalRotation.y + comp.rot_angle) % 360;
+                }
+            } else if (cType === 'TEE') {
+                comp.branch_dn = parseInt(document.getElementById('sc_branch_dn').value);
+                comp.main_len = parseFloat(document.getElementById('sc_main_len').value);
+                comp.branch_len = parseFloat(document.getElementById('sc_branch_len').value);
+                comp.rot_angle = parseFloat(document.getElementById('sc_rot_angle').value); // Montaj Açısı
+                comp.branch_end = '';
+                comp.desc = `DN${comp.dn}x${comp.branch_dn} ${t('type_tee')}`;
+                comp.weight = (comp.main_len/1000 * Math.PI * (comp.dn/1000) * 0.025 * 1800); 
+
+                // Rotasyon Güncellemesi (TEE sadece branş yönünü etkiler, ana akışı değil)
+                comp.finalRotation = { ...comp.startRotation };
+            } else if (cType === 'RED') {
+                comp.small_dn = parseInt(document.getElementById('sc_small_dn').value);
+                comp.len = parseFloat(document.getElementById('sc_len').value);
+                comp.desc = `DN${comp.dn}/${comp.small_dn} ${t('type_red')}`;
+                comp.weight = (comp.len/1000 * Math.PI * (comp.dn/1000) * 0.025 * 1800); 
+            }
+            
+            comp.weight = Math.round(comp.weight * (comp.qty || 1));
+            spoolComponents.push(comp);
+            renderSpoolCompList();
+            renderSpoolCompFields(); // DN değişmiş olabilir
+        }
+
+        function renderSpoolCompList() {
+            const b = document.getElementById('tbodySpoolComp');
+            const vis = document.getElementById('spoolVisualization');
+            const endOpts = document.getElementById('spoolEndOptions');
+            
+            b.innerHTML = '';
+            vis.innerHTML = '';
+            
+            let totalWeight = 0;
+            const endOptions = [
+                { value: '', textKey: 'opt_empty', weightFactor: 0 },
+                { value: 'Cpl', textKey: 'type_cpl', weightFactor: 1 },
+                { value: 'Flg', textKey: 'type_flg', weightFactor: 1.5 }
+            ];
+            // Boş seçenek için opt_empty kullanılıyor, ancak text boş olmalı
+            const endOptHTML = endOptions.map(opt => `<option value="${opt.value}" ${opt.value === '' ? '' : ''}>${opt.value === '' ? '' : t(opt.textKey)}</option>`).join('');
+            
+            if (spoolComponents.length > 0) {
+                
+                let startDN = spoolComponents[0].dn;
+                let finalDN = spoolComponents[spoolComponents.length - 1].dn;
+                if (spoolComponents[spoolComponents.length - 1].type === 'RED') {
+                    finalDN = spoolComponents[spoolComponents.length - 1].small_dn;
+                }
+
+                let teeEndOptionsHTML = `
+                    <div class="flex-1">
+                        <label class="compact-label text-red-800">${t('dim_in')} (${startDN})</label>
+                        <select id="spoolEnd_START" class="input-std h-[30px] text-xs w-28">${endOptHTML}</select>
+                    </div>
+                    <div class="flex-1">
+                        <label class="compact-label text-red-800">${t('dim_out')} (${finalDN})</label>
+                        <select id="spoolEnd_END" class="input-std h-[30px] text-xs w-28">${endOptHTML}</select>
+                    </div>
+                `;
+
+                let teeCounter = 0;
+                let teeBranchHTML = '';
+
+                spoolComponents.forEach((c, i) => {
+                    totalWeight += c.weight;
+                    const dim = c.type === 'PIPE' ? `${c.len}m x ${c.qty} Adet` : 
+                                  c.type === 'RED' ? `DN${c.dn} / DN${c.small_dn} ${c.len}mm` : 
+                                  c.type === 'BEND' ? `${c.len}mm Kol / ${c.rot_angle}°` :
+                                  c.type === 'TEE' ? `DN${c.dn} / DN${c.branch_dn} ${c.main_len}x${c.branch_len}mm` : '';
+                    
+                    b.innerHTML += `<tr><td class="p-2 pl-3">${c.id}</td><td class="p-2 font-bold">${c.desc}</td><td class="p-2 text-slate-500">${dim}</td><td class="p-2">${Math.round(c.weight)}kg</td><td class="p-2 text-right"><button onclick="removeSpoolComponent(${i})" class="text-red-300 hover:text-red-500 transition"><i class="fas fa-trash"></i></button></td></tr>`;
+                    
+                    let icon = '';
+                    if(c.type === 'PIPE') icon = `<i class="fas fa-grip-lines-vertical text-2xl text-blue-500" style="width:${Math.min(100, c.len*20)}px; margin-right: -10px;"></i>`;
+                    else if(c.type === 'BEND') icon = `<i class="fas fa-share text-2xl text-red-600 rotate-[${c.finalRotation.z}deg]"></i>`; // Final Z açısı kullanıldı
+                    else if(c.type === 'TEE') {
+                        icon = `<i class="fas fa-project-diagram text-2xl text-teal-600 rotate-[${c.startRotation.z}deg]"></i>`; // Tee görseli sadece akış yönünü gösterir
+                        teeCounter++;
+                        teeBranchHTML += `
+                            <div class="flex-1 mt-2">
+                                <label class="compact-label text-red-800">${t('dim_br')} #${teeCounter} (DN${c.branch_dn})</label>
+                                <select id="spoolEnd_TEE_BR_${c.id}" class="input-std h-[30px] text-xs w-32">${endOptHTML}</select>
+                            </div>
+                        `;
+                    }
+                    else if(c.type === 'RED') icon = `<i class="fas fa-chevron-left text-2xl text-amber-600 rotate-[${c.startRotation.z}deg]"></i>`;
+                    
+                    vis.innerHTML += `<div class="inline-flex flex-col items-center">
+                        <div class="text-[10px] font-bold text-slate-600 leading-none">DN${c.dn}</div>
+                        <div class="text-[9px] text-slate-400 leading-none mb-1">${t('type_'+c.type.toLowerCase())}</div>
+                        ${icon}
+                    </div>`;
+                });
+                
+                document.getElementById('spoolStartEnd').innerHTML = teeEndOptionsHTML;
+                document.getElementById('spoolTeeEnds').innerHTML = teeBranchHTML;
+                
+            } else {
+                vis.innerHTML = `<span class="text-slate-400">Spool'u oluşturmaya başlayın.</span>`;
+                document.getElementById('spoolStartEnd').innerHTML = '';
+                document.getElementById('spoolTeeEnds').innerHTML = '';
+            }
+            
+            endOpts.innerHTML = `<span class="text-red-800 font-bold" data-key="spool_end_opts">${t('spool_end_opts')}</span>
+                                 <div id="spoolStartEnd" class="flex items-center gap-2">${document.getElementById('spoolStartEnd').innerHTML}</div>
+                                 <div id="spoolTeeEnds" class="flex flex-wrap gap-2 items-center">${document.getElementById('spoolTeeEnds').innerHTML}</div>
+                                 <div class="ml-auto text-red-800 font-bold">Toplam Ağırlık (Tahmini): ${Math.round(totalWeight)} kg</div>`;
+        }
+
+        function removeSpoolComponent(index) {
+            spoolComponents.splice(index, 1);
+            // Tüm rotasyonları yeniden hesaplamak için listeyi yeniden oluştur
+            let tempComponents = [...spoolComponents];
+            spoolComponents = [];
+            spoolComponentCounter = 1;
+            tempComponents.forEach(c => {
+                // Sadece temel verileri alarak yeniden ekleme
+                const componentData = { 
+                    type: c.type, 
+                    dn: c.dn, 
+                    base_dn: c.base_dn, 
+                    pn: c.pn, 
+                    sn: c.sn, 
+                    len: c.len, 
+                    qty: c.qty, 
+                    ang: c.ang, 
+                    rot_angle: c.rot_angle, 
+                    branch_dn: c.branch_dn, 
+                    main_len: c.main_len, 
+                    branch_len: c.branch_len, 
+                    small_dn: c.small_dn 
+                };
+                
+                // Bileşeni yeniden eklemek için basitleştirilmiş bir ekleme mantığı
+                const newComp = {
+                    id: spoolComponentCounter++,
+                    type: componentData.type,
+                    dn: componentData.dn, 
+                    base_dn: componentData.base_dn,
+                    pn: componentData.pn,
+                    sn: componentData.sn,
+                    weight: c.weight, // Ağırlık zaten hesaplanmış, şimdilik sabit tutalım
+                    desc: c.desc,
+                    startRotation: { x: 0, y: 0, z: 0 },
+                    finalRotation: { x: 0, y: 0, z: 0 }
+                };
+
+                let lastComp = spoolComponents[spoolComponents.length - 1];
+                let lastRotation = lastComp ? lastComp.finalRotation : { x: 0, y: 0, z: 0 };
+                newComp.startRotation = { ...lastRotation };
+                newComp.finalRotation = { ...lastRotation };
+
+                if (newComp.type === 'BEND') {
+                    newComp.finalRotation.z = (newComp.finalRotation.z + componentData.ang) % 360; 
+                    if(componentData.rot_angle !== 0) {
+                        newComp.finalRotation.y = (newComp.finalRotation.y + componentData.rot_angle) % 360;
+                    }
+                }
+
+                spoolComponents.push(newComp);
+            });
+            
+            renderSpoolCompList();
+            renderSpoolCompFields(); 
+        }
+
+        function resetSpool() {
+            spoolComponents = [];
+            spoolComponentCounter = 1;
+            document.getElementById('spoolName').value = '';
+            renderSpoolCompList();
+            renderSpoolCompFields();
+        }
+
+        function saveSpool() {
+            if (spoolComponents.length === 0 || !document.getElementById('spoolName').value) {
+                alert(t("Lütfen Spool Adını girin ve en az bir bileşen ekleyin."));
+                return;
+            }
+            
+            const name = document.getElementById('spoolName').value.trim();
+            const baseDN = parseInt(document.getElementById('spoolDN').value);
+            const pN = parseInt(document.getElementById('spoolPN').value);
+            const sN = document.getElementById('spoolSN').value;
+
+            // 1. Uç Opsiyonlarını Topla
+            const startEnd = document.getElementById('spoolEnd_START')?.value || '';
+            const endEnd = document.getElementById('spoolEnd_END')?.value || '';
+            let teeEnds = [];
+            spoolComponents.filter(c => c.type === 'TEE').forEach(c => {
+                teeEnds.push({ id: c.id, dn: c.branch_dn, type: document.getElementById(`spoolEnd_TEE_BR_${c.id}`)?.value || '' });
+            });
+            
+            // 2. Ağırlık Hesaplaması
+            let totalWeight = 0;
+            spoolComponents.forEach(c => {
+                totalWeight += c.weight;
+            });
+            
+            const FLG_WEIGHT = getFlangeWeight(baseDN, pN);
+            const CPL_WEIGHT = getCouplingWeight(baseDN, pN);
+            
+            // Uç ve Branş Ağırlıklarını Ekle
+            if(startEnd === 'Flg') totalWeight += FLG_WEIGHT;
+            if(startEnd === 'Cpl') totalWeight += CPL_WEIGHT;
+            if(endEnd === 'Flg') totalWeight += FLG_WEIGHT;
+            if(endEnd === 'Cpl') totalWeight += CPL_WEIGHT;
+            
+            teeEnds.forEach(te => {
+                const teeDN = te.dn;
+                const teePN = pN;
+                if(te.type === 'Flg') totalWeight += getFlangeWeight(teeDN, teePN);
+                if(te.type === 'Cpl') totalWeight += getCouplingWeight(teeDN, teePN);
+            });
+            totalWeight = Math.round(totalWeight);
+
+            // 3. Boyut Hesaplaması (3D Koordinat Sistemi Kullanıldı)
+            let maxOverallDim = { x: 0, y: 0, z: 0 }; 
+            let minOverallDim = { x: 0, y: 0, z: 0 };
+            let currentPosition = { x: 0, y: 0, z: 0 }; 
+            let currentRotation = { x: 0, y: 0, z: 0 }; 
+
+            const getComponentDimensions = (c) => {
+                const OD = REAL_ODS[c.dn] || c.dn;
+                const OD_br = c.type === 'TEE' ? (REAL_ODS[c.branch_dn] || c.branch_dn) : 0;
+                
+                let L = 0, W = OD, H = OD, branchL = 0, branchH = OD_br;
+
+                if (c.type === 'PIPE' || c.type === 'RED') { 
+                    L = c.len; 
+                } 
+                else if (c.type === 'BEND') { 
+                    const R = c.len / Math.tan((c.ang * Math.PI / 180) / 2); // Kol Boyu / tan(Açı/2)
+                    const angRad = c.ang * Math.PI / 180;
+                    
+                    // X-Y Düzlemindeki Hareket
+                    const deltaX = R * Math.sin(angRad) * (OD/2000); 
+                    const deltaY = R * (1 - Math.cos(angRad)) * (OD/2000);
+                    
+                    L = R; // Centerline
+                    W = R * (1 - Math.cos(angRad)) + (OD / 2); // En büyük sapma (basit)
+                    H = R * Math.sin(angRad) + (OD / 2);
+
+                    return { 
+                        delta: { 
+                            forward: R * Math.sin(angRad) + R * (1 - Math.cos(angRad)), // İleri yörünge (Basit)
+                            lateral: Math.max(W, H) 
+                        }, 
+                        L: L, W: OD, H: OD // Paketlenirkenki boyutları
+                    };
+                } 
+                else if (c.type === 'TEE') { 
+                    L = c.main_len;
+                    branchL = c.branch_len + OD_br / 2; // Branş kolunun ucu
+                    W = OD; H = OD; 
+                    
+                    return { 
+                        delta: { forward: L, lateral: 0 }, 
+                        L: L, W: OD, H: OD, branchL: branchL, branchOD: OD_br 
+                    };
+                }
+                
+                return { 
+                    delta: { forward: L, lateral: 0 }, 
+                    L: L, W: OD, H: OD, branchL: branchL, branchOD: OD_br 
+                };
+            };
+            
+            spoolComponents.forEach(c => {
+                const dims = getComponentDimensions(c);
+                const componentLength = dims.delta.forward;
+                const componentRotation = c.startRotation;
+
+                // 3D Hareket Vektörü
+                const angleZ = componentRotation.z * Math.PI / 180; // Ana Akış Yönü (Z-Rotasyon)
+                const angleY = componentRotation.y * Math.PI / 180; // Yükselme Açısı (Y-Rotasyon)
+
+                let deltaX = 0, deltaY = 0, deltaZ = 0;
+
+                if (c.type === 'PIPE' || c.type === 'RED') {
+                    deltaX = componentLength * Math.cos(angleY) * Math.cos(angleZ);
+                    deltaY = componentLength * Math.cos(angleY) * Math.sin(angleZ);
+                    deltaZ = componentLength * Math.sin(angleY);
+                } else if (c.type === 'BEND') {
+                    // Bend hesaplaması daha karmaşıktır, basitçe dönme eksenine göre konum değişimi.
+                    // XZ düzleminde 90 derece dönme (örneğin)
+                    const bendAngleRad = c.ang * Math.PI / 180;
+                    const R = c.len / Math.tan(bendAngleRad / 2); 
+                    
+                    // Basit XZ rotasyonu varsayımı
+                    const x_before = currentPosition.x;
+                    const z_before = currentPosition.z;
+                    
+                    // Rotasyon matrisi (Z ekseni etrafında)
+                    const cosZ = Math.cos(angleZ);
+                    const sinZ = Math.sin(angleZ);
+
+                    // Yeni yönelim: Z'ye 90 derece eklendi
+                    const newAngleZ = (componentRotation.z + c.ang) * Math.PI / 180;
+                    
+                    deltaX = (R * (1 - Math.cos(bendAngleRad))) * Math.cos(newAngleZ);
+                    deltaY = (R * (1 - Math.cos(bendAngleRad))) * Math.sin(newAngleZ);
+                    
+                    // Önceki pozisyondan ileriye doğru hareket (Çok basit bir yaklaşımdır!)
+                    deltaX = (R * Math.sin(bendAngleRad)) * Math.cos(angleZ);
+                    deltaY = (R * Math.sin(bendAngleRad)) * Math.sin(angleZ);
+                    
+                } else if (c.type === 'TEE') {
+                    deltaX = dims.L * Math.cos(angleY) * Math.cos(angleZ);
+                    deltaY = dims.L * Math.cos(angleY) * Math.sin(angleZ);
+                    deltaZ = dims.L * Math.sin(angleY);
+                }
+
+                currentPosition.x += deltaX;
+                currentPosition.y += deltaY;
+                currentPosition.z += deltaZ;
+
+                // Max/Min Boyutları Güncelle
+                maxOverallDim.x = Math.max(maxOverallDim.x, currentPosition.x + (dims.W / 2));
+                minOverallDim.x = Math.min(minOverallDim.x, currentPosition.x - (dims.W / 2));
+                
+                maxOverallDim.y = Math.max(maxOverallDim.y, currentPosition.y + (dims.W / 2));
+                minOverallDim.y = Math.min(minOverallDim.y, currentPosition.y - (dims.W / 2));
+                
+                maxOverallDim.z = Math.max(maxOverallDim.z, currentPosition.z + (dims.H / 2));
+                minOverallDim.z = Math.min(minOverallDim.z, currentPosition.z - (dims.H / 2));
+                
+                // TEE Branş Uzunluğunu Ekle
+                if(c.type === 'TEE' && dims.branchL > 0) {
+                     // Tee Branşının yönü (Ana akışa göre +90 derece Z-rotasyonunda)
+                     const branchAngleZ = (componentRotation.z + 90) * Math.PI / 180;
+                     const branchAngleY = componentRotation.y * Math.PI / 180;
+
+                     const branchDx = dims.branchL * Math.cos(branchAngleY) * Math.cos(branchAngleZ);
+                     const branchDy = dims.branchL * Math.cos(branchAngleY) * Math.sin(branchAngleZ);
+                     const branchDz = dims.branchL * Math.sin(branchAngleY);
+                     
+                     maxOverallDim.x = Math.max(maxOverallDim.x, currentPosition.x + branchDx + dims.branchOD/2);
+                     minOverallDim.x = Math.min(minOverallDim.x, currentPosition.x + branchDx - dims.branchOD/2);
+                     
+                     maxOverallDim.y = Math.max(maxOverallDim.y, currentPosition.y + branchDy + dims.branchOD/2);
+                     minOverallDim.y = Math.min(minOverallDim.y, currentPosition.y + branchDy - dims.branchOD/2);
+                     
+                     maxOverallDim.z = Math.max(maxOverallDim.z, currentPosition.z + branchDz + dims.branchOD/2);
+                     minOverallDim.z = Math.min(minOverallDim.z, currentPosition.z + branchDz - dims.branchOD/2);
+                }
+
+                // Bir sonraki parça için yönelim güncellemesi
+                currentRotation = c.finalRotation;
+            });
+
+            // Toplam Boyut (L, W, H)
+            const finalL_mm = Math.round(maxOverallDim.x - minOverallDim.x + 200); 
+            const finalW_mm = Math.round(maxOverallDim.y - minOverallDim.y + 200); 
+            const finalH_mm = Math.round(maxOverallDim.z - minOverallDim.z + 200); 
+
+            const L_m = finalL_mm / 1000;
+            const W_m = finalW_mm / 1000;
+            const H_m = finalH_mm / 1000;
+
+            const totalVol = L_m * W_m * H_m;
+            const footprint = L_m * W_m;
+
+            // 4. Limit Kontrolü (Ağırlık ve Boyut)
+            const lim = {
+                L: parseFloat(document.getElementById('maxL').value),
+                W: parseFloat(document.getElementById('maxW').value),
+                H: parseFloat(document.getElementById('maxH').value),
+                MaxKg: parseFloat(document.getElementById('maxWeight').value) * 1000
+            };
+            
+            let limitErrors = [];
+            if (totalWeight > lim.MaxKg) limitErrors.push(`${t('lbl_tot_weight')} (${(totalWeight / 1000).toFixed(2)} Ton) > ${t('lim_kg')} (${(lim.MaxKg / 1000).toFixed(2)} Ton)`);
+
+            let fits = (L_m <= lim.L && W_m <= lim.W && H_m <= lim.H) ||
+                       (L_m <= lim.L && H_m <= lim.W && W_m <= lim.H) ||
+                       (W_m <= lim.L && L_m <= lim.W && H_m <= lim.H) ||
+                       (W_m <= lim.L && H_m <= lim.W && L_m <= lim.H) ||
+                       (H_m <= lim.L && L_m <= lim.W && W_m <= lim.H) ||
+                       (H_m <= lim.L && W_m <= lim.W && L_m <= lim.H);
+
+            if (!fits) limitErrors.push(`${t('th_dim')} (${L_m.toFixed(2)}x${W_m.toFixed(2)}x${H_m.toFixed(2)} m) ${t('err_limits_exceeded')}.`);
+
+            if (limitErrors.length > 0) {
+                alert(`${t('err_limits_exceeded')} (${name}):\n\n${limitErrors.join('\n')}`);
+                return;
+            }
+            
+            // 5. Spool Öğesini Oluştur ve Ekle
+            const spoolItem = {
+                id: Date.now(),
+                isFitting: true,
+                type: 'SPOOL',
+                dn: baseDN,
+                pn: pN,
+                sn: sN,
+                qty: 1, 
+                pack: 'Pallet', // Spool'lar daima Paletli kabul edilir
+                w: totalWeight,
+                l: finalL_mm, 
+                wid: finalW_mm, 
+                h: finalH_mm, 
+                vol: totalVol * 1.15, // Palet hacmi artışı uygulandı
+                det: `Start:${startEnd}, End:${endEnd}, ${teeEnds.length} ${t('dim_br')}`,
+                desc: name,
+                unit: 'Adet',
+                disp_l: finalL_mm, 
+                disp_wid: finalW_mm,
+                footprint: footprint, 
+                reportDesc: `${name} (DN${baseDN} PN${pN} Spool)`,
+                subItems: spoolComponents,
+                endConnectors: { start: startEnd, end: endEnd, tees: teeEnds }
+            };
+            
+            fittingItems.push(spoolItem); 
+            renderFitList(); 
+            
+            document.getElementById('spoolModal').classList.add('hidden');
+        }
+
+        function toggleSpoolDetail(id) {
+            const el = document.getElementById(`spoolDetail_${id}`);
+            if (el) el.classList.toggle('hidden');
+        }
+        
+        // --- ANA FONKSİYONLARIN GÜNCELLENMESİ ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Initial Setup
+            changeLanguage('tr'); 
+            renderFitDynamic();
+
+            // 2. Login Enter Key Handlers (Kullanıcının talep ettiği düzeltme)
+            const loginPassInput = document.getElementById('loginPass');
+            const loginUserInput = document.getElementById('loginUser');
+            
+            const loginHandler = function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); 
+                    checkLogin();
+                }
+            };
+            if (loginPassInput) loginPassInput.addEventListener('keypress', loginHandler);
+            if (loginUserInput) loginUserInput.addEventListener('keypress', loginHandler);
+            
+            // 3. Spool Module Toggle Handler
+            const fitTypeSelect = document.getElementById('fitType');
+            if(fitTypeSelect) {
+                fitTypeSelect.addEventListener('change', function() {
+                    if (this.value === 'SPOOL') {
+                        openSpoolModal();
+                        this.value = 'BEND';
+                    }
+                });
+            }
+        });
+
+        function changeLanguage(lang){
+            currentLang=lang; document.documentElement.lang=lang; document.documentElement.dir='ltr';
+            document.querySelectorAll('[data-key]').forEach(el=>el.innerText=t(el.getAttribute('data-key')));
+            document.getElementById('langSelectMain').value = lang;
+            document.querySelector('#fitPackSelect option[value="Pallet"]').innerText = t('opt_pallet');
+            document.querySelector('#fitPackSelect option[value="Loose"]').innerText = t('opt_loose');
+            
+            populatePipeDN();
+            populateFitTypeOptions(); 
+            
+            populateVehicleOptions();
+            renderPipeList(); renderFitList(); renderFitDynamic();
+            document.getElementById('app_title').innerText = 'GPACK'; 
+            document.getElementById('app_desc').innerText = t('app_desc'); 
+            
+            document.getElementById('palLDisp').innerText = document.getElementById('palletL')?.value || '1.1';
+            document.getElementById('palWDisp').innerText = document.getElementById('palletW')?.value || '1.1';
+        }
+
+        function toggleElement(id, iconId) {
+            const el = document.getElementById(id), icon = document.getElementById(iconId);
+            if(id === 'spoolModal') { 
+                el.classList.toggle('hidden');
+            } else if(el.classList.contains('hidden')){ 
+                el.classList.remove('hidden'); icon?.classList.remove('fa-chevron-down'); icon?.classList.add('fa-chevron-up'); 
+            }
+            else { 
+                el.classList.add('hidden'); icon?.classList.remove('fa-chevron-up'); icon?.classList.add('fa-chevron-down'); 
+            }
+        }
+
+        function switchTab(type) {
+            const tPipe = document.getElementById('tabPipe'), tFit = document.getElementById('tabFit');
+            const cPipe = document.getElementById('pipeContent'), cFit = document.getElementById('fitContent');
+            if (type === 'pipe') {
+                tPipe.className = "tab-btn tab-active flex-1 flex items-center justify-center gap-2";
+                tFit.className = "tab-btn tab-inactive flex-1 flex items-center justify-center gap-2";
+                cPipe.classList.remove('hidden'); cFit.classList.add('hidden');
+            } else {
+                tPipe.className = "tab-btn tab-inactive flex-1 flex items-center justify-center gap-2";
+                tFit.className = "tab-btn tab-active flex-1 flex items-center justify-center gap-2";
+                cPipe.classList.add('hidden'); cFit.classList.remove('hidden');
+            }
+        }
+
+        function populateVehicleOptions(){const s=document.getElementById('transportType');s.innerHTML='';TRANSPORT_KEYS.forEach(k=>{let o=document.createElement('option');o.value=k;o.text=t(k);s.add(o)});loadTransportLimits();}
+        function loadTransportLimits(){
+            const d=TRANSPORT_DATA[document.getElementById('transportType').value]||TRANSPORT_DATA['tr_std'];
+            document.getElementById('maxL').value=d.L;
+            document.getElementById('maxW').value=d.W;
+            document.getElementById('maxH').value=d.H;
+            document.getElementById('maxWeight').value=d.MaxKg / 1000;
+        }
+        function populatePipeDN(){const s=document.getElementById('pipeDN');s.innerHTML='';Object.keys(REAL_ODS).map(Number).filter(x=>x>=300).sort((a,b)=>a-b).forEach(d=>{let o=document.createElement('option');o.value=d;o.text=`DN ${d}`;s.add(o)});s.value="1000";}
+        
+        function populateFitTypeOptions() {
+            const s = document.getElementById('fitType');
+            s.innerHTML = '';
+            ['tee', 'bend', 'red', 'flg', 'cpl', 'custom', 'spool'].forEach(k => { let o = document.createElement('option'); o.value = k.toUpperCase(); o.text = t('type_' + k); s.add(o); });
+            s.value = 'BEND'; 
+        }
+
+        function updateFitDNs() {
+            const type = document.getElementById('fitType').value, mainDNEl = document.getElementById('fd1'), secondaryDNEl = document.getElementById('fd2');
+            if (!mainDNEl || (type === 'TEE' && !secondaryDNEl)) return;
+            const mainDN = parseInt(mainDNEl.value);
+            const allDNs = Object.keys(REAL_ODS).map(Number).sort((a,b)=>b-a);
+            let filteredDNs = [];
+            
+            if (type === 'RED' || type === 'REDUCER') {
+                filteredDNs = allDNs.filter(dn => dn < mainDN).sort((a,b) => b-a);
+                // SPOOL yeni DN'ler eklendi
+                Object.keys(SPOOL_BASE_ODS).map(Number).filter(d => d < mainDN && !filteredDNs.includes(d)).forEach(d => filteredDNs.push(d));
+                filteredDNs = filteredDNs.filter(dn => dn <= mainDN - 100); 
+                if (mainDN === 300) { 
+                    if (!filteredDNs.includes(150)) filteredDNs.push(150);
+                    if (!filteredDNs.includes(250)) filteredDNs.push(250);
+                }
+                
+            } else if (type === 'TEE') { 
+                filteredDNs = allDNs.filter(dn => dn <= mainDN).sort((a,b) => b-a);
+                Object.keys(SPOOL_BASE_ODS).map(Number).filter(d => d <= mainDN && !filteredDNs.includes(d)).forEach(d => filteredDNs.push(d));
+            }
+            filteredDNs.sort((a,b) => b-a);
+
+            if (secondaryDNEl) {
+                if (filteredDNs.length === 0 && (type === 'RED' || type === 'TEE')) {
+                    secondaryDNEl.innerHTML = `<option value="">N/A</option>`;
+                } 
+                else if (type === 'RED' || type === 'TEE') { 
+                    secondaryDNEl.innerHTML = filteredDNs.map(dn => `<option value="${dn}">DN${dn}</option>`).join('');
+                    if (filteredDNs.length > 0) secondaryDNEl.value = filteredDNs[0].toString(); 
+                }
+            }
+            fillDim();
+        }
+        
+        const endOptions = [
+            { value: '', textKey: 'opt_empty', weightFactor: 0 },
+            { value: 'Cpl', textKey: 'type_cpl', weightFactor: 1 },
+            { value: 'Flg', textKey: 'type_flg', weightFactor: 1.5 }
+        ];
+        function getEndOptionsHTML(prefix) {
+            const labelKey = 'lbl_opt_' + prefix.toLowerCase();
+            return `<div class="w-28"><label class="compact-label">${t(labelKey)}</label><select id="o_${prefix}" class="input-std h-[30px] w-full py-0 text-[10px] font-semibold">` + 
+                   endOptions.map(opt => `<option value="${opt.value}" data-weight="${opt.weightFactor}">${opt.value === '' ? '' : t(opt.textKey)}</option>`).join('') + // Boş ise boş string göster
+                   `</select></div>`;
+        }
+        
+        function renderFitDynamic() {
+            const s = document.getElementById('fitType');
+            const c = document.getElementById('fitDynamic'), o = document.getElementById('fitOptions');
+            const snDiv = document.getElementById('divFitSN');
+            
+            if(s.value === 'SPOOL') {
+                openSpoolModal();
+                s.value = 'BEND'; 
+                return;
+            }
+
+            const previewDiv = document.getElementById('fitPreviewImg');
+            const previewLbl = document.getElementById('fitPreviewLabel');
+            let typeKey = s.value;
+            if(typeKey === 'REDUCER') typeKey = 'RED';
+            if(typeKey === 'COUPLING') typeKey = 'CPL';
+            if(typeKey === 'FLANGE') typeKey = 'FLG';
+            if(typeKey === 'CUSTOM') typeKey = 'CUSTOM'; 
+            
+            if(previewDiv) {
+                previewDiv.innerHTML = FIT_ICONS[typeKey] || FIT_ICONS['TEE'];
+                previewLbl.innerText = t('type_' + s.value.toLowerCase());
+            }
+
+            if(s.value === 'CPL' || s.value === 'COUPLING' || s.value === 'CUSTOM') snDiv.classList.add('hidden'); 
+            else snDiv.classList.remove('hidden');
+            
+            // DN listesi SPOOL DN'lerini içermez (Fittingler 300'den başlar, SPOOL DN'leri ayrı modül için)
+            const mainOpts = Object.keys(REAL_ODS).map(Number).filter(x=>x>=300).sort((a,b)=>a-b).map(d=>`<option value="${d}" ${d==600?'selected':''}>DN${d}</option>`).join('');
+            
+            const f=(l,i)=>`<div class="w-16"><label class="compact-label">${t(l)}</label><input type="number" id="${i}" class="input-std h-[30px] w-full text-center"></div>`;
+            const slMain=(l,i, func='updateFitDNs')=>`<div class="w-24"><label class="compact-label">${t(l)}</label><select id="${i}" class="input-std h-[30px] w-full py-0" onchange="${func}()">${mainOpts}</select></div>`;
+            const slSec=(l,i)=>`<div class="w-20"><label class="compact-label">${t(l)}</label><select id="${i}" class="input-std h-[30px] w-full py-0" onchange="fillDim()"></select></div>`;
+            
+            let h='', optionsHTML = ''; const v=s.value;
+            if(v==='TEE'){ 
+                h=slMain('dim_main','fd1')+slSec('dim_out','fd2')+f('dim_len','fL')+f('dim_h','fH_branch_len') + `<input type="hidden" id="fH_center" value="1070">`;
+                optionsHTML = getEndOptionsHTML('IN') + getEndOptionsHTML('OUT') + getEndOptionsHTML('BR');
+            }
+            else if(v==='BEND'){ 
+                const angleOptions = ELBOW_ANGLES.map(a => `<option value="${a}" ${a==90?'selected':''}>${a}°</option>`).join('');
+                h=slMain('dim_main','fd1', 'fillDim')+`<div class="w-16"><label class="compact-label">${t('dim_ang')}</label><select id="fangSelect" class="input-std h-[30px] w-full py-0 text-center" onchange="fillDim()">${angleOptions}</select></div>`+f('dim_arm','fL');
+                optionsHTML = getEndOptionsHTML('IN') + getEndOptionsHTML('OUT');
+            }
+            else if(v==='RED'||v==='REDUCER'){ 
+                h=slMain('dim_main','fd1')+slSec('dim_out','fd2')+f('dim_len','fL');
+                optionsHTML = getEndOptionsHTML('IN') + getEndOptionsHTML('OUT');
+            }
+            else if(v==='FLG'||v==='FLANGE'){ 
+                h=slMain('dim_main','fd1', 'fillDim')+f('dim_len','fL');
+            } 
+            else if(v==='CPL' || v==='COUPLING'){
+                h=slMain('dim_main','fd1', 'fillDim');
+                optionsHTML = ''; 
+            }
+            else if(v==='CUSTOM') {
+                h = `
+                    <div class="w-40 flex-1 min-w-[120px]">
+                        <label class="compact-label text-teal-800" data-key="lbl_custom_name">${t('lbl_custom_name')}</label>
+                        <input type="text" id="custName" class="input-std h-[30px] w-full py-0" placeholder="...">
+                    </div>
+                    <div class="w-16"><label class="compact-label text-teal-800" data-key="lbl_dim_l">${t('lbl_dim_l')}</label><input type="number" id="custL" value="1000" class="input-std h-[30px] w-full text-center"></div>
+                    <div class="w-16"><label class="compact-label text-teal-800" data-key="lbl_dim_w">${t('lbl_dim_w')}</label><input type="number" id="custW" value="1000" class="input-std h-[30px] w-full text-center"></div>
+                    <div class="w-16"><label class="compact-label text-teal-800" data-key="lbl_dim_h">${t('lbl_dim_h')}</label><input type="number" id="custH" value="1000" class="input-std h-[30px] w-full text-center"></div>
+                    <div class="w-20"><label class="compact-label text-teal-800" data-key="lbl_weight_u">${t('lbl_weight_u')}</label><input type="number" id="custKg" value="50" class="input-std h-[30px] w-full text-center font-bold text-teal-700"></div>
+                `;
+                optionsHTML = '';
+                snDiv.classList.add('hidden');
+            }
+            c.innerHTML=h; o.innerHTML=optionsHTML; 
+            
+            if(v==='TEE'||v==='RED'||v==='REDUCER'){ updateFitDNs();
+            } else { fillDim(); }
+        }
+
+        function findElbowDimension(dn, angle) {
+            const item = ELBOW_DB.find(e => e.dn === dn);
+            const angleKey = angle.toString();
+            
+            if (item && item[angleKey] !== undefined) {
+                return item[angleKey];
+            }
+
+            if (item) {
+                const availableAngles = ELBOW_ANGLES.filter(a => a > angle && item[a.toString()] !== undefined).sort((a, b) => a - b);
+                if (availableAngles.length > 0) {
+                    return item[availableAngles[0].toString()];
+                }
+            }
+
+            const fallbackR = item ? item.R : (dn * 1.5);
+            return Math.round(fallbackR * Math.tan((angle * Math.PI / 180) / 2));
+        }
+
+        function fillDim(){
+            const d1El = document.getElementById('fd1');
+            if(!d1El) return;
+            
+            const t = document.getElementById('fitType').value;
+            const d1 = parseInt(d1El.value);
+            
+            if(t === 'BEND'){
+                const angle = parseFloat(document.getElementById('fangSelect').value);
+                const kolBoyu = findElbowDimension(d1, angle);
+                document.getElementById('fL').value = kolBoyu;
+            } 
+            else if (t === 'TEE'){
+                const d2El = document.getElementById('fd2');
+                const pnEl = document.getElementById('fitPN');
+                if (!d2El || !pnEl) return;
+                
+                const d2 = parseInt(d2El.value);
+                const pn = 'PN' + pnEl.value; 
+
+                let L_val = 1800; 
+                let H_val = 1070; 
+                
+                const teeData = TEE_DB[d1];
+                const availablePNs = ['PN16', 'PN10', 'PN6', 'PN1']; 
+
+                let finalTeeData = null;
+
+                if (teeData && teeData[d2] && teeData[d2][pn]) {
+                    finalTeeData = teeData[d2][pn];
+                }
+                
+                if (!finalTeeData && teeData) {
+                    const availableBranchDNs = Object.keys(teeData).map(Number).sort((a, b) => a - b); 
+
+                    let bestMatchDN = null;
+                    let minDiff = Infinity;
+                    
+                    for (const branchDN of availableBranchDNs) {
+                        const diff = Math.abs(branchDN - d2);
+                        if (diff < minDiff || (diff === minDiff && branchDN > bestMatchDN)) {
+                            minDiff = diff;
+                            bestMatchDN = branchDN;
+                        }
+                    }
+                    
+                    if (bestMatchDN !== null) {
+                        const targetBranchData = teeData[bestMatchDN];
+                        
+                        if (targetBranchData && targetBranchData[pn]) {
+                            finalTeeData = targetBranchData[pn];
+                        } else {
+                            const currentPNVal = parseInt(pn.replace('PN', ''));
+                            for (const fallbackPN of availablePNs) {
+                                const fallbackPNVal = parseInt(fallbackPN.replace('PN', ''));
+                                if (fallbackPNVal <= currentPNVal && targetBranchData && targetBranchData[fallbackPN]) {
+                                    finalTeeData = targetBranchData[fallbackPN];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (finalTeeData) {
+                    L_val = finalTeeData.L;
+                    H_val = finalTeeData.H;
+                }
+                
+                document.getElementById('fL').value = L_val;
+                
+                const d2OD = REAL_ODS[d2] || d2 * 1.05;
+                const branchPipeLen = Math.max(100, Math.round(H_val - (d2OD / 2)));
+                
+                document.getElementById('fH_branch_len').value = branchPipeLen;
+                document.getElementById('fH_center').value = H_val; 
+            }
+            else if(t === 'RED' || t === 'REDUCER'){
+                 const d2 = parseInt(document.getElementById('fd2').value);
+                 let val = REDUCER_DB[d1] ? REDUCER_DB[d1][d2] : undefined;
+
+                 if (val === undefined) {
+                     const reducerData = REDUCER_DB[d1];
+                     if (reducerData) {
+                         const availableSmallDNs = Object.keys(reducerData).map(Number).sort((a, b) => a - b);
+                         
+                         if (availableSmallDNs.length > 0) {
+                             const smallestDN = availableSmallDNs[0];
+                             val = reducerData[smallestDN];
+                         }
+                     }
+                 }
+                 
+                 if (val === undefined) {
+                     val = d1 * 1.5 + 300; 
+                 }
+                 
+                 document.getElementById('fL').value = val;
+            }
+            else if(t === 'FLG' || t === 'FLANGE'){
+                document.getElementById('fL').value = 600;
+            }
+            
+        }
+        
+        // --- Diğer Helper Fonksiyonları (Kısaltıldı) ---
+
+        function reCalculatePipeItem(item) {
+            const d=item.dn, p=item.pn, s=item.sn, c=item.hasC, l=item.len, t=item.total;
+            let extra = 0;
+            if(c) {
+                 const cplData = COUPLING_DIMENSIONS.get(d, p);
+                 extra = (cplData.w / 1000) / 2;
+            }
+            let calcLen = l + extra;
+            let wpm = getPipeWeightPerMeter(d, p, s);
+            let unitW = (wpm * l) + (c ? (wpm * 0.5) : 0);
+            item.effectiveLen = calcLen;
+            item.unitW = unitW;
+        }
+
+        function addPipeToList(){
+            const d=parseInt(document.getElementById('pipeDN').value),p=parseInt(document.getElementById('pipePN').value),s=parseInt(document.getElementById('pipeSN').value),c=document.getElementById('pipeCpl').checked,l=parseFloat(document.getElementById('pipeLen').value),t=parseFloat(document.getElementById('pipeTotal').value);
+            if(t<=0 || l<=0)return alert(t("Total length required."));
+            
+            let item = {id:Date.now(),dn:d,pn:p,sn:s,hasCpl:c,len:l, effectiveLen: 0, total:t, unitW: 0, unit: 'm'};
+            reCalculatePipeItem(item);
+            pipeItems.push(item);
+            renderPipeList();
+        }
+
+        function updatePipeItem(index, field, value) {
+            let item = pipeItems[index];
+            if (!item) return;
+
+            if (field === 'len') {
+                item.len = parseFloat(value);
+            } else if (field === 'total') {
+                item.total = parseFloat(value);
+            } else if (field === 'unitW') {
+                item.unitW = parseFloat(value);
+            }
+            
+            reCalculatePipeItem(item);
+            renderPipeList();
+        }
+
+        function updateFitItem(index, field, value) {
+            let item = fittingItems[index];
+            if (!item) return;
+
+            if (field === 'qty') {
+                item.qty = parseInt(value);
+            } else if (field === 'w') {
+                item.w = parseFloat(value);
+            }
+            
+            item.reportDesc = generateReportDesc(item); 
+            renderFitList();
+        }
+
+        function addFitToList(){
+            const tp=document.getElementById('fitType').value;
+            if(tp==='SPOOL') return; 
+            
+            const d1=parseInt(document.getElementById('fd1')?.value || 0);
+            const d2=document.getElementById('fd2') ? parseInt(document.getElementById('fd2').value) : d1;
+            const pn=parseInt(document.getElementById('fitPN').value);
+            const snEl = document.getElementById('fitSN');
+            const sn = (tp==='CPL' || tp==='COUPLING' || tp==='CUSTOM') ? 'N/A' : snEl.value; 
+            const q=parseInt(document.getElementById('fitQty').value);
+            const pk=document.getElementById('fitPackSelect').value;
+            
+            if((tp === 'RED' || tp === 'REDUCER') && d2 > d1) return alert(`Hata: Redüksiyon çıkış çapı büyük olamaz.`);
+            if(tp === 'TEE' && d2 > d1) return alert(`Hata: Tee branş çapı büyük olamaz.`);
+            
+            const dns=0.0018,thk=d1*0.025; 
+            let endDetails = [];
+
+            const getEndData = (prefix, refDN) => {
+                const el = document.getElementById(`o_${prefix}`);
+                if (!el) return { type: '', factor: 0, text: t('opt_empty'), weight: 0, key: prefix, addedLen: 0 }; // Düzeltildi: type boş string olacak
+                const selectedOption = el.options[el.selectedIndex];
+                const endType = selectedOption.value;
+                const endText = selectedOption.text;
+                let w = 0;
+                let addedL = 0;
+                if(endType === 'Cpl') {
+                    let cData = COUPLING_DIMENSIONS.get(refDN, pn);
+                    w = getCouplingWeight(refDN, pn); 
+                    addedL = cData.w / 2; 
+                }
+                else if(endType === 'Flg') {
+                    w = getFlangeWeight(refDN, pn);
+                    addedL = 100; 
+                }
+                endDetails.push({ key: prefix, type: endType, text: endText, weight: w });
+                return { type: endType, text: endText, weight: w, addedLen: addedL };
+            };
+            let i={id:Date.now(),isFitting:true,type:tp,dn:d1,pn:pn,sn:sn,qty:q,pack:pk,w:0,l:0,wid:0,h:0,vol:0,det:'',desc:'', endDetails: [], unit: 'Adet', disp_l: 0, disp_wid: 0, footprint: 0};
+            
+            if(tp==='CUSTOM'){
+                const custName = document.getElementById('custName').value.trim();
+                const L = parseFloat(document.getElementById('custL').value);
+                const W = parseFloat(document.getElementById('custW').value);
+                const H = parseFloat(document.getElementById('custH').value);
+                const unitW = parseFloat(document.getElementById('custKg').value);
+
+                if (!custName || L <= 0 || W <= 0 || H <= 0 || unitW <= 0) {
+                    return alert(t("Tüm özel parça alanlarını doldurunuz."));
+                }
+                
+                i.desc = custName;
+                i.l = L; i.wid = W; i.h = H;
+                i.disp_l = L; i.disp_wid = W;
+                i.w = unitW;
+                i.det = t('opt_empty');
+                i.pn = 'N/A'; i.sn = 'N/A';
+            }
+            else if(tp==='TEE'){
+                let L=parseInt(document.getElementById('fL').value);
+                let CenterToFace=parseInt(document.getElementById('fH_center').value); 
+                
+                i.desc=`DN${d1}/${d2} ${t('type_tee')}`; i.disp_l = L; 
+                let inEnd=getEndData('IN', d1), outEnd=getEndData('OUT', d1), brEnd=getEndData('BR', d2);
+                i.l = L + inEnd.addedLen + outEnd.addedLen;
+                i.wid = CenterToFace + brEnd.addedLen; 
+                i.disp_wid = CenterToFace;
+                i.h = REAL_ODS[d1] || d1;
+                i.w = ((L + CenterToFace)*Math.PI*(d1/1000)*thk*dns*1000)/1000;
+                i.w += (inEnd.weight + outEnd.weight + brEnd.weight);
+                i.endDetails = endDetails;
+            }
+            else if(tp==='BEND'){
+                let L=parseInt(document.getElementById('fL').value);
+                const ang = parseFloat(document.getElementById('fangSelect').value) || 90;
+                const usedAngle = getNearestElbowAngle(ang);
+                i.desc=`DN${d1} ${t('type_bend')} (${usedAngle}°)`; 
+                let inEnd=getEndData('IN', d1), outEnd=getEndData('OUT', d1);
+                i.disp_l = L;
+                
+                let elbowCF = L; 
+                
+                i.l = elbowCF + Math.max(inEnd.addedLen, outEnd.addedLen); 
+                i.wid = i.l;
+                i.disp_wid = elbowCF;
+                i.h = REAL_ODS[d1] || d1; 
+                i.w = (elbowCF*Math.PI*(d1/1000)*thk*dns*1000)/1000; 
+                i.w += (inEnd.weight + outEnd.weight);
+                i.endDetails = endDetails;
+            }
+            else if(tp==='CPL' || tp==='COUPLING'){
+                const cplData = COUPLING_DIMENSIONS.get(d1, pn);
+                i.desc=`DN${d1} ${t('type_cpl')}`; i.l = cplData.w; i.wid = cplData.de; i.h = cplData.de;
+                i.disp_l = i.l; i.disp_wid = i.wid;
+                i.h = REAL_ODS[d1] + 60 || d1 + 60; 
+                i.w = getCouplingWeight(d1, pn);
+                i.endDetails = [];
+            }
+            else if(tp.startsWith('RED')){
+                let L=parseInt(document.getElementById('fL').value);
+                i.desc=`DN${d1}/${d2} ${t('type_red')}`; 
+                let inEnd=getEndData('IN', d1), outEnd=getEndData('OUT', d2);
+                i.disp_l = L;
+                i.l = L + inEnd.addedLen + outEnd.addedLen;
+                i.wid = REAL_ODS[d1] || d1;
+                i.h = REAL_ODS[d1] || d1; i.disp_wid = i.wid;
+                i.w = (L*Math.PI*(d1/1000)*thk*dns*1000)/1000;
+                i.w += (inEnd.weight + outEnd.weight);
+                i.endDetails = endDetails;
+            }
+            else {
+                let L=parseInt(document.getElementById('fL').value);
+                i.desc=`DN${d1} ${t('type_flg')}`; i.l=L; i.wid=d1*1.2; i.h=d1*1.2; 
+                i.disp_l = L; i.disp_wid = i.wid;
+                let pipeW = (L*Math.PI*(d1/1000)*thk*dns); i.w = pipeW;
+                i.endDetails = []; 
+            }
+            
+            i.w=Math.round(i.w);
+            let detText = i.endDetails.filter(d => d.type !== '').map(d => `${d.key}:${t('type_'+d.type.toLowerCase())||d.text}`).join(', '); // Düzeltildi: Uç tipi boş değilse çevirisi kullanıldı.
+            i.det = detText || t('opt_empty');
+            if(tp==='CPL' || tp==='COUPLING' || tp==='FLG' || tp==='FLANGE' || tp==='CUSTOM') i.det = ""; 
+
+            i.footprint = (i.l / 1000) * (i.wid / 1000); 
+            i.vol=(i.l/1000)*(i.wid/1000)*(i.h/1000); 
+            if(pk==='Pallet') { 
+                const pL = parseFloat(document.getElementById('palletL').value) || 1.1;
+                const pW = parseFloat(document.getElementById('palletW').value) || 1.1;
+                const pH = parseFloat(document.getElementById('palletH').value) || 0.14; 
+                i.vol *= 1.15; 
+                i.footprint = pL * pW;
+            }
+
+            i.reportDesc = generateReportDesc(i);
+            fittingItems.push(i); renderFitList(); 
+        }
+
+        function generateReportDesc(item) {
+             if (item.isFitting) {
+                if(item.type === 'SPOOL') {
+                    return item.reportDesc; 
+                }
+                
+                if(item.type === 'CUSTOM') {
+                    return `${item.desc} (${t('lbl_dim_l')}: ${item.l}x${item.wid}x${item.h}mm | ${t('lbl_weight_u')}: ${item.w}kg)`;
+                }
+
+                const pnSn = `(PN${item.pn}${item.sn!=='N/A'?' SN'+item.sn:''})`;
+                let desc = item.desc;
+                if(item.type === 'BEND') {
+                    desc = `DN${item.dn} ${t('type_bend')} (${item.desc.match(/\(([^)]+)\)/)?.[1] || t('dim_ang')+'?'})`;
+                } else if(item.type === 'TEE') {
+                    const dnMatch = item.desc.match(/DN(\d+)\/(\d+)/);
+                    if (dnMatch) {
+                        desc = `DN${dnMatch[1]}/${dnMatch[2]} ${t('type_tee')}`;
+                    }
+                } else if(item.type === 'RED') {
+                    const dnMatch = item.desc.match(/DN(\d+)\/(\d+)/);
+                    if (dnMatch) {
+                        desc = `DN${dnMatch[1]}/${dnMatch[2]} ${t('type_red')}`;
+                    }
+                }
+
+                // GÜNCELLENDİ: Boş uçları gösterme
+                let endInfo = item.endDetails.filter(d => d.type !== '').map(d => {
+                    let prefix = (d.key === 'IN' ? t('dim_in') : d.key === 'OUT' ? t('dim_out') : t('dim_br'));
+                    let endType = t('type_' + d.type.toLowerCase()) || d.text;
+                    return `${prefix}: ${endType}`;
+                }).join(', ');
+                
+                return `${desc} ${pnSn} [${endInfo || t('opt_empty')}]`;
+            } else {
+                const cplStatus = item.hasCpl ? t('opt_cpl') : t('opt_plain');
+                return `DN${item.dn} PN${item.pn} SN${item.sn} | ${item.len.toFixed(2)}m (${cplStatus})`;
+            }
+        }
+        
+        function renderPipeList(){
+            const b=document.getElementById('tbodyPipe');b.innerHTML='';
+            const cnt = pipeItems.length;
+            document.getElementById('cntPipe').innerText=cnt; document.getElementById('cntPipeBadge').innerText=cnt;
+            document.getElementById('pipeEmptyState').style.display = cnt > 0 ? 'none' : 'flex';
+            pipeItems.forEach((p,i)=>{b.innerHTML+=`<tr class="hover:bg-blue-50/30 border-b border-blue-50 group"><td class="p-2 pl-3"><div class="font-bold text-slate-700">DN${p.dn}</div><div class="text-[9px] text-slate-400">PN${p.pn} SN${p.sn} ${p.hasCpl?`(+${t('opt_cpl')})`:''}</div></td><td class="p-2 text-center text-slate-600"><input type="number" step="0.01" min="0.5" class="editable-input editable-input-sm text-center" value="${p.len.toFixed(2)}" onchange="updatePipeItem(${i}, 'len', this.value)">m</td><td class="p-2 text-right font-mono font-bold text-blue-700"><input type="number" step="0.1" min="0" class="editable-input editable-input-lg text-center" value="${p.total.toFixed(1)}" onchange="updatePipeItem(${i}, 'total', this.value)">m</td><td class="p-2 text-center text-[10px]"><input type="number" step="1" min="1" class="editable-input editable-input-sm text-center" value="${Math.round(p.unitW)}" onchange="updatePipeItem(${i}, 'unitW', this.value)"></td><td class="p-2 text-right"><button onclick="pipeItems.splice(${i},1);renderPipeList()" class="text-blue-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button></td></tr>`});
+        }
+        
+        function renderFitList(){
+            const b=document.getElementById('tbodyFit');b.innerHTML='';
+            const cnt = fittingItems.length;
+            document.getElementById('cntFit').innerText=cnt; document.getElementById('cntFitBadge').innerText=cnt;
+            document.getElementById('fitEmptyState').style.display = cnt > 0 ? 'none' : 'flex';
+            fittingItems.forEach((f,i)=>{
+                const isSpool = f.type === 'SPOOL';
+                
+                const dimText = isSpool 
+                    ? `${Math.round(f.disp_l)}x${Math.round(f.disp_wid)}` 
+                    : (f.type === 'CUSTOM' ? `${f.l}x${f.wid}x${f.h}` : `${f.disp_l}x${Math.round(f.disp_wid)}`);
+                    
+                const pnSnText = f.pn === 'N/A' ? '' : `PN${f.pn} ${f.sn!=='N/A'?`SN${f.sn}`:''}`;
+                const detailRow = isSpool ? `<div class="text-[9px] text-blue-500 font-bold leading-tight mt-0.5" onclick="toggleSpoolDetail(${f.id})">(${t('spool_click_detail')} ${f.subItems.length} ${t('spool_comp')})</div>` : `<div class="text-[9px] text-slate-500 leading-tight">${f.det||t('opt_empty')}</div>`;
+
+                b.innerHTML+=`<tr class="hover:bg-teal-50/30 border-b border-teal-50 group"><td class="p-2 pl-3"><div class="font-bold text-slate-700">${f.desc}</div><div class="text-[9px] text-slate-400">${pnSnText}</div>${detailRow}</td><td class="p-2 text-[9px] text-slate-500 leading-tight">${f.det||t('opt_empty')}</td><td class="p-2 text-center text-[9px] font-bold ${f.pack==='Pallet'?'text-teal-700 bg-teal-50 rounded':''}">${t(f.pack==='Pallet'?'opt_pallet':'opt_loose').toUpperCase()}</td><td class="p-2 text-center text-[10px] font-mono">${dimText}</td><td class="p-2 text-center font-bold"><input type="number" step="1" min="1" class="editable-input editable-input-sm text-center" value="${f.qty}" onchange="updateFitItem(${i}, 'qty', this.value)"></td><td class="p-2 text-center text-[10px]"><input type="number" step="1" min="1" class="editable-input editable-input-sm text-center" value="${f.w}" onchange="updateFitItem(${i}, 'w', this.value)"></td><td class="p-2 text-right"><button onclick="fittingItems.splice(${i},1);renderFitList()" class="text-teal-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button></td></tr>`;
+                
+                if(isSpool) {
+                    // GÜNCELLENDİ: Boş ise boş string göster
+                    const startEndText = f.endConnectors.start ? t('type_' + f.endConnectors.start.toLowerCase()) : '';
+                    const endEndText = f.endConnectors.end ? t('type_' + f.endConnectors.end.toLowerCase()) : '';
+                    const teeEndsText = f.endConnectors.tees.map(te => `DN${te.dn}:${te.type ? t('type_' + te.type.toLowerCase()) : ''}`).filter(s => !s.endsWith(':')).join(', '); // Boş olanları filtrele
+
+                    const endOptsDisplay = [
+                        `${t('dim_in')}:${startEndText}`,
+                        `${t('dim_out')}:${endEndText}`,
+                        teeEndsText ? `${t('dim_br')} ${t('spool_end_opts')}: ${teeEndsText}` : ''
+                    ].filter(s => !s.endsWith(':')); // Boş olanları filtrele
+
+                    b.innerHTML += `<tr id="spoolDetail_${f.id}" class="hidden bg-teal-50/20"><td colspan="7" class="p-2">
+                        <div class="font-bold text-teal-700 mb-1 pl-4" data-key="spool_detail_parts">${t('spool_detail_parts')}</div>
+                        <ul class="list-disc pl-8 text-xs text-slate-600 space-y-0.5">
+                            ${f.subItems.map(si => `<li>${t('type_'+si.type.toLowerCase())} (DN${si.dn} / PN${si.pn}): ${si.desc} (${Math.round(si.weight)}kg)</li>`).join('')}
+                            <li class="mt-1 font-bold text-red-700">${t('spool_end_opts')}: ${endOptsDisplay.join(' | ')}</li>
+                        </ul>
+                    </td></tr>`;
+                }
+            });
+        }
+        
+        function clearPipes(){pipeItems=[];renderPipeList();document.getElementById('resultArea').classList.add('hidden');}
+        function clearFits(){fittingItems=[];renderFitList();document.getElementById('resultArea').classList.add('hidden');}
+        
+        function checkPipeLimits(rP, lim) { let errs = [];
+            rP.forEach(p => { if (p.effectiveLen > lim.L) errs.push(`Pipe DN${p.dn} exceeds length (Eff:${p.effectiveLen.toFixed(2)}m).`); if (lim.W < 3 && p.realOD/1000 > lim.W-0.1) errs.push(`Pipe DN${p.dn} exceeds width.`); });
+            return errs; }
+        function checkFitLimits(fItems, lim) { 
+            let errs = [];
+            const pL = parseFloat(document.getElementById('palletL').value) || 1.1;
+            const pW = parseFloat(document.getElementById('palletW').value) || 1.1;
+            const pH = parseFloat(document.getElementById('palletH').value) || 0.14; 
+            
+            fItems.forEach(f => { 
+                let l = f.l / 1000, w = f.wid / 1000, h = f.h / 1000, fits = false; 
+                
+                if (f.pack === 'Pallet') {
+                    const palletL = pL, palletW = pW, palletH = pH;
+                    
+                    if (f.type === 'SPOOL') { // Spool'lar için kendi boyutları kontrol edilir, palet boyutu değil.
+                        l = f.l / 1000; w = f.wid / 1000; h = f.h / 1000;
+                        fits = (l <= lim.L && w <= lim.W && h <= lim.H) ||
+                               (l <= lim.L && h <= lim.W && w <= lim.H) ||
+                               (w <= lim.L && l <= lim.W && h <= lim.H) ||
+                               (w <= lim.L && h <= lim.W && l <= lim.H) ||
+                               (h <= lim.L && l <= lim.W && w <= lim.H) ||
+                               (h <= lim.L && w <= lim.W && l <= lim.H);
+                    } else {
+                        fits = (palletL <= lim.L && palletW <= lim.W && palletH <= lim.H) ||
+                               (palletL <= lim.L && palletW <= lim.H && palletH <= lim.W) ||
+                               (palletW <= lim.L && palletL <= lim.W && palletH <= lim.H) ||
+                               (palletW <= lim.L && palletL <= lim.H && palletH <= lim.W) ||
+                               (palletH <= lim.L && palletL <= lim.W && palletW <= lim.H) ||
+                               (palletH <= lim.L && pL <= lim.H && pW <= lim.W); // Hata düzeltmesi
+                        l = palletL; w = palletW; h = palletH; // Boyutları hata mesajında göstermek için
+                    }
+
+                    if (!fits) errs.push(`Fitting: ${f.desc} too big (Pallet/Spool L:${l.toFixed(2)}m, W:${w.toFixed(2)}m, H:${h.toFixed(2)}m) for truck limits.`);
+                } else { 
+                    fits = (l <= lim.L && w <= lim.W && h <= lim.H) ||
+                           (l <= lim.L && h <= lim.W && w <= lim.H) ||
+                           (w <= lim.L && l <= lim.W && h <= lim.H) ||
+                           (w <= lim.L && h <= lim.W && l <= lim.H) ||
+                           (h <= lim.L && l <= lim.W && w <= lim.H) ||
+                           (h <= lim.L && w <= lim.W && l <= lim.H);
+
+                    if (!fits) errs.push(`Fitting: ${f.desc} too big. (L:${l.toFixed(2)}m, W:${w.toFixed(2)}m, H:${h.toFixed(2)}m) for truck limits.`);
+                } 
+                
+                if (f.w > lim.MaxKg) errs.push(`Fitting: ${f.desc} too heavy. (${f.w}kg)`); 
+            }); 
+            return errs;
+        }
+
+        function groupIdenticalPackages(packages) {
+            let groups = [];
+            packages.forEach(pkg => {
+                let signature = "";
+                if (pkg.type === 'PIPE') { signature = pkg.items.map(item => getPipeSig(item)).join('|'); } 
+                else { signature = pkg.items.map(i => `${i.desc}_${i.sn}_${i.det}_${i.pack}`).sort().join('|'); }
+                let existingGroup = groups.find(g => g.sig === signature && g.type === pkg.type);
+                if (existingGroup) { existingGroup.count++; existingGroup.ids.push(pkg.id); existingGroup.totalWeight += pkg.totalWeight; existingGroup.totalVol += pkg.totalVol; existingGroup.totalFootprint += pkg.totalFootprint; } 
+                else { groups.push({ sig: signature, type: pkg.type, sample: pkg, count: 1, ids: [pkg.id], baseWeight: pkg.totalWeight, totalWeight: pkg.totalWeight, totalVol: pkg.totalVol, totalFootprint: pkg.totalFootprint }); }
+            });
+            groups.forEach(g => { g.ids.sort((a,b)=>a-b); const min = g.ids[0], max = g.ids[g.ids.length-1]; if(g.ids.length > 1 && (max - min === g.ids.length - 1)) g.labelID = `#${min} - #${max}`; else g.labelID = "#" + g.ids.join(', #'); });
+            return groups;
+        }
+
+        function getRW(p){let w=p.weight;if(p.children)p.children.forEach(c=>w+=getRW(c));return w;}
+        function getPipeSig(p){
+             let cp=p.hasC?(currentLang==='tr'?'Manşonlu':'Cpl'):(currentLang==='tr'?'Düz Uç':'Plain');
+             let me=`DN${p.dn} PN${p.pn} SN${p.sn} (${p.nominalLen.toFixed(2)}m ${cp})`;
+             if(p.children && p.children.length>0){ let kids = p.children.map(c => getPipeSig(c)).sort().join(' + ');
+             return `${me} [Contains: ${kids}]`; } return me;
+        }
+        function getRecursiveHtml(p, indent=0){
+             let cp=p.hasC?(currentLang==='tr'?'Manşonlu':'Cpl'):(currentLang==='tr'?'Düz Uç':'Plain');
+             let h=`<div style="margin-left:${indent*20}px; ${indent>0?'color:#666; font-size:10px; margin-top:1px; border-left:2px solid #ddd; padding-left:5px;':''}">`;
+             h+= `${indent>0?'↳ ':''}<b>DN${p.dn}</b> PN${p.pn} SN${p.sn} - ${p.nominalLen.toFixed(2)}m <span style="font-size:9px; color:#888;">(${cp})</span>`;
+             h+=`</div>`; if(p.children) p.children.forEach(c => h += getRecursiveHtml(c, indent+1)); return h;
+        }
+        function renderFinalPlan(l){
+            const c = document.getElementById('planContainer');
+            c.innerHTML = ''; document.getElementById('resultArea').classList.remove('hidden');
+            const groups = groupIdenticalPackages(finalPackages);
+            const pt = groups.filter(g => g.type === 'PIPE'), ft = groups.filter(g => g.type === 'FITTING');
+            const tPT = pt.reduce((s, g) => s + g.count, 0), tFT = ft.reduce((s, g) => s + g.count, 0), gT = tPT + tFT, tPW = pt.reduce((s, g) => s + g.totalWeight, 0), tFW = ft.reduce((s, g) => s + g.totalWeight, 0);
+            
+            const avgW = gT > 0 ? (tPW + tFW) / gT : 0;
+            
+            const vName = t(document.getElementById('transportType').value);
+
+            const summaryHTML = `<div class="col-span-1 md:col-span-2 bg-white rounded-lg border border-slate-300 shadow-sm overflow-hidden mb-4 break-inside-avoid"><div class="bg-slate-800 text-white px-3 py-2 flex justify-between items-center"><div class="font-bold text-xs flex items-center gap-2"><i class="fas fa-chart-pie text-yellow-400"></i> <span>${t('res_summary')}</span></div><div class="text-[10px] opacity-70 font-mono">TOTAL: ${gT} ${t('truck')}</div></div><div class="p-3 grid grid-cols-2 md:grid-cols-5 gap-2"><div class="bg-slate-50 p-2 rounded border border-slate-200 text-center"><div class="text-[9px] text-slate-500 font-bold uppercase">${t('lbl_tot_truck')}</div><div class="text-xl font-bold text-slate-800">${gT}</div></div><div class="bg-slate-50 p-2 rounded border border-slate-200 text-center"><div class="text-[9px] text-slate-500 font-bold uppercase">${t('lbl_tot_weight')}</div><div class="text-lg font-bold text-slate-800">${((tPW+tFW)/1000).toFixed(2)}</div><div class="text-[9px] text-slate-400">Ton</div></div>
+            <div class="bg-slate-50 p-2 rounded border border-slate-200 text-center"><div class="text-[9px] text-slate-500 font-bold uppercase">${t('lbl_avg_weight')}</div><div class="text-lg font-bold text-slate-800">${(avgW/1000).toFixed(2)}</div><div class="text-[9px] text-slate-400">Ton</div></div>
+            <div class="bg-blue-50 p-2 rounded border border-blue-100 text-center"><div class="text-[9px] text-blue-600 font-bold uppercase">${t('lbl_pipe_trucks')}</div><div class="text-lg font-bold text-blue-800">${tPT} <span class="text-xs font-normal">${t('truck')}</span></div></div><div class="bg-teal-50 p-2 rounded border border-teal-100 text-center"><div class="text-[9px] text-teal-600 font-bold uppercase">${t('lbl_fit_trucks')}</div><div class="text-lg font-bold text-teal-800">${tFT} <span class="text-xs font-normal">${t('truck')}</span></div></div></div></div>`;
+            c.innerHTML += summaryHTML;
+
+            if(pt.length){ c.innerHTML+=`<div class="col-span-1 md:col-span-2 text-blue-800 font-bold border-b border-blue-200 pb-1 mt-1 flex justify-between"><span>${t('sec_res_pipe')}</span><span class="text-[10px] text-slate-500">${tPT} ${t('truck')}</span></div>`;
+            pt.forEach(g => c.innerHTML += renderTruck(g, l, vName)); }
+            if(ft.length){ c.innerHTML+=`<div class="col-span-1 md:col-span-2 text-teal-800 font-bold border-b border-teal-200 pb-1 mt-4 flex justify-between"><span>${t('sec_res_fit')}</span><span class="text-[10px] text-slate-500">${tFT} ${t('truck')}</span></div>`;
+            ft.forEach(g => c.innerHTML += renderTruck(g, l, vName)); }
+            document.getElementById('resultArea').scrollIntoView({behavior:'smooth'});
+        }
+
+        function renderTruck(group, l, vehicleName) {
+            const k = group.sample, count = group.count;
+            const singleWeight = group.totalWeight / count;
+            const singleFootprint = group.totalFootprint / count; 
+            const singleVol = group.totalVol / count;
+            
+            const truckArea = l.L * l.W;
+
+            const fW = Math.min(100, (singleWeight / l.MaxKg) * 100).toFixed(1);
+            const fA = k.type === 'FITTING' ? Math.min(100, (singleFootprint / truckArea) * 100).toFixed(1) : 'N/A'; 
+            
+            const cl = k.type === 'PIPE' ? 'blue' : 'teal', ic = k.type === 'PIPE' ? 'fas fa-truck' : 'fas fa-box-open';
+            let cnt = '', sm = '';
+            
+            let statusHTML = `
+                <div class="flex flex-col gap-1 mb-2">
+                    <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-500">${currentLang==='tr'?'Araç Başı Ağırlık':'Weight per Truck'}</span><span class="text-[10px] font-bold text-${cl}-600">${(singleWeight/1000).toFixed(2)} Ton (%${fW})</span></div>
+                    <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-${cl}-500 h-1.5 rounded-full" style="width:${fW}%"></div></div>`;
+            
+            if (k.type === 'FITTING') {
+                statusHTML += `<div class="flex justify-between items-center mt-1"><span class="text-[10px] font-bold text-slate-500">${t('lbl_floor_area')}</span><span class="text-[10px] font-bold text-gray-600">${singleFootprint.toFixed(2)}m² (%${fA})</span></div>
+                               <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-gray-400 h-1.5 rounded-full" style="width:${fA}%"></div></div>`;
+            }
+
+            statusHTML += `</div>`;
+            
+            if (k.type === 'PIPE') {
+                let grp = {};
+                k.items.forEach(b => { let sig = getPipeSig(b); if (!grp[sig]) grp[sig] = { count: 0, html: getRecursiveHtml(b) }; grp[sig].count++; });
+                let rows = Object.values(grp).map(g => `<tr><td class="text-[10px] p-1 align-top border-b border-slate-50">${g.html}</td><td class="text-[10px] text-right font-bold p-1 align-top border-b border-slate-50">${g.count}</td></tr>`).join('');
+                cnt = `<table class="w-full mt-1 text-slate-600">${rows}</table>`;
+                
+                let s = {};
+                k.items.forEach(b => {
+                    const r = (p) => {
+                        let ky = `DN${p.dn} PN${p.pn}`;
+                        if (!s[ky]) s[ky] = 0;
+                        s[ky] += p.nominalLen;
+                        if (p.children) p.children.forEach(r)
+                    };
+                    r(b);
+                });
+                sm = `<div class="bg-blue-50 p-1.5 rounded mb-1 text-[9px] text-blue-900 grid grid-cols-2 gap-1">
+                        <div class="col-span-2 font-bold border-b border-blue-200 mb-0.5" data-key="lbl_pkg_content">${t('lbl_pkg_content')}</div>
+                        ${Object.entries(s).map(([k,v])=>`<div><b>${k}:</b> ${v.toFixed(1)}m</div>`).join('')}
+                      </div>`;
+            } else {
+                let g = {};
+                k.items.forEach(i => { let ky = `${i.reportDesc} ${i.pack}`; if (!g[ky]) g[ky] = { ...i, q: 0 }; g[ky].q++ });
+                cnt = `<table class="w-full mt-1 text-slate-600">${Object.values(g).map(x => `<tr><td class="text-[10px] border-b border-slate-50 py-0.5">${x.reportDesc}</td><td class="text-[10px] text-right font-bold border-b border-slate-50">${x.q}</td></tr>`).join('')}</table>`;
+                
+                const packageData = finalPackages.find(p => p.id === k.id);
+                if (packageData) {
+                    sm = `<button onclick="showFitLayout(finalPackages.find(p => p.id === ${k.id}))" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-1 rounded text-[9px] mt-1 transition">${t('fit_plan_title')}</button>`;
+                } else {
+                    sm = `<span class="text-red-500 text-[9px] font-bold">DETAY YÜKLENEMEDİ</span>`;
+                }
+            }
+            return `<div class="plan-card"><div class="p-2 flex justify-between items-center text-white bg-${cl}-800" style="${count>1?'background:linear-gradient(45deg, #1e293b, #334155)':''}"><div><i class="${ic} mr-1"></i> ${vehicleName} ${group.labelID}</div><div class="text-[10px]">${count>1?`<b>x${count}</b>`:''}</div></div><div class="p-2">${statusHTML}${sm}<div class="max-h-[180px] overflow-y-auto">${cnt}</div></div></div>`;
+        }
+        
+        function generateFittingLoadingReport(pkg, lim) {
+            
+            let uniqueItems = {};
+            pkg.items.forEach(i => {
+                const key = `${i.desc}|${i.sn}|${i.pn}|${i.pack}|${i.l}|${i.wid}|${i.h}`;
+                if (!uniqueItems[key]) {
+                    uniqueItems[key] = {
+                        item: i,
+                        qty: 0,
+                        totalWeight: 0
+                    };
+                }
+                uniqueItems[key].qty++;
+                uniqueItems[key].totalWeight += i.w;
+            });
+
+            const pL = parseFloat(document.getElementById('palletL').value) || 1.1;
+            const pW = parseFloat(document.getElementById('palletW').value) || 1.1;
+            const pH = parseFloat(document.getElementById('palletH').value) || 0.14;
+            const truckArea = lim.L * lim.W;
+            const floorAreaUsed = pkg.totalFootprint;
+            const areaUtilization = (floorAreaUsed / truckArea) * 100;
+
+            let report = [];
+            
+            report.push(`📦 YÜKLEME DETAYI (PAKET ID: #${pkg.id})`);
+            report.push(`-----------------------------------`);
+            report.push(`🚛 ${t('rep_v_type')}: ${t(document.getElementById('transportType').value)}`);
+            report.push(`⚖️ Toplam Ağırlık: ${(pkg.totalWeight / 1000).toFixed(2)} Ton`);
+            report.push(`📏 Taban Alanı Kullanımı: ${floorAreaUsed.toFixed(2)} m² (%${areaUtilization.toFixed(1)})\n`);
+
+            report.push(`**PARÇA BAZLI YERLEŞİM BİLGİSİ:**\n`);
+
+            Object.values(uniqueItems).forEach(group => {
+                const i = group.item;
+                const itemQty = group.qty;
+                const packType = t(i.pack === 'Pallet' ? 'opt_pallet' : 'opt_loose');
+                const isPallet = i.pack === 'Pallet' && i.type !== 'SPOOL'; // Spool kendi boyutlarını kullanır
+                
+                const itemL_m = isPallet ? pL : (i.l / 1000);
+                const itemW_m = isPallet ? pW : (i.wid / 1000);
+                const itemH_m = isPallet ? pH : (i.h / 1000);
+
+                let maxOrientation = {qty: 0, rows: 0, cols: 0, layers: 0};
+                
+                const permutations = [
+                    [itemL_m, itemW_m, itemH_m], [itemL_m, itemH_m, itemW_m], 
+                    [itemW_m, itemL_m, itemH_m], [itemW_m, itemH_m, itemL_m], 
+                    [itemH_m, itemL_m, itemW_m], [itemH_m, itemW_m, itemL_m]  
+                ];
+
+                permutations.forEach(([L_i, W_i, H_i]) => {
+                    const rows = Math.floor(lim.L / L_i); 
+                    const cols = Math.floor(lim.W / W_i); 
+                    const layers = Math.floor(lim.H / H_i); 
+                    const currentQty = rows * cols * layers;
+                    
+                    if (currentQty > maxOrientation.qty) {
+                        maxOrientation = {qty: currentQty, rows, cols, layers};
+                    }
+                });
+                
+                let theoreticalQty = maxOrientation.qty;
+                if (!isPallet && theoreticalQty > 0) {
+                     theoreticalQty = Math.floor(theoreticalQty * 0.90);
+                }
+
+                if (theoreticalQty > 0) {
+                    const floorQty = maxOrientation.rows * maxOrientation.cols;
+                    const layersNeeded = Math.ceil(itemQty / floorQty);
+                    const actualLayers = Math.min(layersNeeded, maxOrientation.layers);
+                    
+                    report.push(`  - ➡️ **${itemQty}x ${i.desc}** (${packType})`);
+                    report.push(`    - Boyut (${isPallet ? 'Palet' : 'Net/Spool'}): ${itemL_m.toFixed(2)} x ${itemW_m.toFixed(2)} x ${itemH_m.toFixed(2)} m`);
+                    report.push(`    - Önerilen Yerleşim: ${maxOrientation.rows} Sıra x ${maxOrientation.cols} Sütun x ${actualLayers} Katman`);
+                    report.push(`    - *Açıklama: Bu yerleşim, o araçta en verimli ${itemQty} adet parçayı taşıma şeklidir. Gerçek yükleme sırasında boşlukları doldurunuz.*`);
+                } else {
+                    report.push(`  - ⚠️ **${itemQty}x ${i.desc}** (${packType})`);
+                    report.push(`    - Boyut (${isPallet ? 'Palet' : 'Net/Spool'}): ${itemL_m.toFixed(2)} x ${itemW_m.toFixed(2)} x ${itemH_m.toFixed(2)} m`);
+                    report.push(`    - Önerilen Yerleşim: Bu parça bu araç boyutlarına teorik olarak sığmıyor veya çok düşük kapasiteye sahip.`);
+                }
+            });
+
+            return report.join('\n');
+        }
+
+        function showFitLayout(pkg) {
+            if (!pkg || !pkg.items || pkg.items.length === 0) {
+                 alert("Hata: Yükleme detayları bulunamadı veya paket boş.");
+                 return;
+            }
+            const lim = {
+                L: parseFloat(document.getElementById('maxL').value),
+                W: parseFloat(document.getElementById('maxW').value),
+                H: parseFloat(document.getElementById('maxH').value)
+            };
+            const report = generateFittingLoadingReport(pkg, lim);
+            alert(report);
+        }
+        
+        function downloadReport(format){
+            if(finalPackages.length===0)return alert(t("Hesaplama yapınız."));
+            const proj = document.getElementById('txtProject').value || t('Tanımsız Proje');
+            const user = document.getElementById('txtUser').value;
+            const date = new Date().toLocaleDateString(currentLang==='tr'?'tr-TR':'en-US');
+            const vTypeKey = document.getElementById('transportType').value;
+            const vType = t(vTypeKey);
+            const lim = TRANSPORT_DATA[vTypeKey] || TRANSPORT_DATA['tr_std'];
+            
+            const pL = parseFloat(document.getElementById('palletL').value) || 1.1;
+            const pW = parseFloat(document.getElementById('palletW').value) || 1.1;
+            const pH = parseFloat(document.getElementById('palletH').value) || 0.14; 
+            
+            const headerTitle = t('rep_title');
+            const lblBy = t('rep_by');
+            const lblDate = t('rep_date');
+            const lblVType = t('rep_v_type');
+            
+            const css = `
+                <style>
+                    body { font-family: Arial, sans-serif; font-size: 10pt; color: #333; }
+                    .header { margin-bottom: 20px; padding: 10px; border-bottom: 3px solid #2563eb; }
+                    .header h1 { font-size: 16pt; margin: 0; color: #2563eb; }
+                    .header p { font-size: 10pt; margin: 2px 0; }
+                    .summary-table th { background-color: #e6f0ff; color: #2563eb; }
+                    .section-title { font-size: 14pt; color: #1e293b; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin: 20px 0 10px 0; font-weight: bold; }
+                    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                    th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
+                    th { background-color: #f2f2f2; font-weight: bold; }
+                    .truck-card { border: 1px solid #ccc; border-radius: 6px; margin-bottom: 15px; page-break-inside: avoid; overflow: hidden; }
+                    .truck-header { background-color: #1e293b; color: white; padding: 8px 10px; font-weight: bold; font-size: 11pt; }
+                    .truck-content { padding: 10px; }
+                </style>
+            `;
+            let body = `<div class="header">
+                <h1>${headerTitle} - ${proj.toUpperCase()}</h1>
+                <p><b>${lblBy}:</b> ${user} | <b>${lblDate}:</b> ${date}</p>
+                <p><b>${lblVType}:</b> ${vType} (L:${lim.L}m, W:${lim.W}m, H:${lim.H}m, Max:${lim.MaxKg/1000} Ton)</p>
+                <p style="font-size:9pt; margin-top:5px;"><b>${t('lbl_pallet_dims')}:</b> ${pL}m x ${pW}m x ${pH}m</p>
+            </div>`;
+            
+            body += `<div class="section-title">${t('rep_gen_list')}</div>`;
+            let allItems = [...pipeItems.map(p => ({ Desc: generateReportDesc(p), Unit: 'm', Qty: p.total })), ...fittingItems.map(f => ({ Desc: generateReportDesc(f), Unit: t('unit_adet') || 'Adet', Qty: f.qty }))];
+            body += `<table class="summary-table"><thead><tr><th>${t('rep_desc')}</th><th>${t('rep_unit')}</th><th>${t('rep_qty')}</th></tr></thead><tbody>`;
+            allItems.forEach(item => { body += `<tr><td>${item.Desc}</td><td>${item.Unit}</td><td>${item.Qty.toFixed(item.Unit === 'm' ? 1 : 0)}</td></tr>`; });
+            body += `</tbody></table>`;
+
+            body += `<div class="section-title">${t('rep_load_det')}</div>`;
+            const groups = groupIdenticalPackages(finalPackages);
+            const truckArea = lim.L * lim.W;
+            groups.forEach(g => {
+                const k = g.sample, count = g.count;
+                const singleWeight = g.totalWeight / count;
+                const singleFootprint = g.totalFootprint / count;
+                
+                const fW = Math.min(100, (singleWeight / lim.MaxKg) * 100).toFixed(1);
+                const fA = k.type === 'FITTING' ? Math.min(100, (singleFootprint / truckArea) * 100).toFixed(1) : 'N/A';
+                const cl = k.type === 'PIPE' ? 'blue' : 'teal';
+
+                let content = `<p style="font-size:10pt; margin:5px 0;"><b>${currentLang==='tr'?'Araç Başı Ağırlık':'Weight per Truck'}:</b> ${(singleWeight/1000).toFixed(2)} Ton (%${fW})</p>`;
+                if (k.type === 'FITTING') {
+                    content += `<p style="font-size:10pt; margin:5px 0;"><b>${t('lbl_floor_area')}:</b> ${singleFootprint.toFixed(2)} m² (%${fA})</p>`;
+                }
+
+                if (k.type === 'PIPE') {
+                    let s = {};
+                    k.items.forEach(b => {
+                        const r = (p) => {
+                            let ky = `DN${p.dn} PN${p.pn}`;
+                            if (!s[ky]) s[ky] = 0;
+                            s[ky] += p.nominalLen;
+                            if (p.children) p.children.forEach(r)
+                        };
+                        r(b);
+                    });
+                    content += `<p style="font-size:10pt; margin-top:5px; border-bottom:1px solid #eee;"><b>${t('lbl_pkg_content')}</b> ${Object.entries(s).map(([k,v])=>`${k}: ${v.toFixed(1)}m`).join(' | ')}</p>`;
+
+                    content += `<p style="font-size:10pt; font-weight:bold; margin-top:10px;">${t('rep_nesting')}</p>`;
+                    let grp = {}; k.items.forEach(b => { let sig = getPipeSig(b); if (!grp[sig]) grp[sig] = { count: 0, html: getRecursiveHtml(b) }; grp[sig].count++; });
+                    content += `<table><thead><tr><th>${t('rep_desc')}</th><th>${t('lbl_qty')}</th></tr></thead><tbody>`;
+                    Object.values(grp).forEach(g => { content += `<tr><td>${g.html.replace(/<\/?div.*?>/g, '').replace(/margin-left:\d+px;/g, '').replace(/style="[^"]*"/g, '')}</td><td>${g.count}</td></tr>`; });
+                    content += `</tbody></table>`;
+                } else {
+                    content += `<p style="font-size:10pt; font-weight:bold; margin-top:10px;">${t('rep_part_list')}</p>`;
+                    let fGrp = {}; 
+                    k.items.forEach(i => { 
+                        let key = i.type === 'SPOOL' ? i.desc : `${i.reportDesc} ${i.pack}`;
+                        if (!fGrp[key]) fGrp[key] = { ...i, q: 0 }; fGrp[key].q++ 
+                    });
+                    content += `<table><thead><tr><th>${t('rep_desc')}</th><th>${t('rep_size')}</th><th>${t('rep_pack')}</th><th>${t('lbl_qty')}</th></tr></thead><tbody>`;
+                    Object.values(fGrp).forEach(x => { 
+                        const sizeText = x.type === 'SPOOL' ? `${Math.round(x.disp_l)}x${Math.round(x.disp_wid)}mm` : `${x.disp_l}x${Math.round(x.disp_wid)}`;
+                        content += `<tr><td>${x.reportDesc}</td><td>${sizeText}</td><td>${t(x.pack==='Pallet'?'opt_pallet':'opt_loose')}</td><td>${x.q}</td></tr>`; 
+                    });
+                    content += `</tbody></table>`;
+                }
+                body += `<div class="truck-card"><div class="truck-header" style="background-color: ${cl==='blue'?'#2563eb':'#059669'};">${vType} ${g.labelID} (${g.type}) ${count > 1 ? `x${count}` : ''}</div><div class="truck-content">${content}</div></div>`;
+            });
+
+            let fullHtml = `<html><head><meta charset='utf-8'>${css}</head><body>${body}</body></html>`;
+            if (format === 'word') {
+                const b=new Blob(['\ufeff', fullHtml], { type: 'application/msword' });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(b);
+                link.download = `GPACK_Report_${proj.replace(/\s/g, '_')}.doc`;
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            } else if (format === 'pdf') { 
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(fullHtml); 
+                printWindow.document.close();
+                setTimeout(() => printWindow.print(), 500); 
+            }
+        }
+        
+        function calculateAll(){
+            if(pipeItems.length === 0 && fittingItems.length === 0) return alert(t("Lütfen boru veya fitting ekleyin."));
+            finalPackages=[];
+            
+            let maxKgInput = parseFloat(document.getElementById('maxWeight').value);
+            let maxKgForCalc = maxKgInput * 1000; 
+
+            const lim={
+                L:parseFloat(document.getElementById('maxL').value),
+                W:parseFloat(document.getElementById('maxW').value),
+                H:parseFloat(document.getElementById('maxH').value), 
+                MaxKg: maxKgForCalc
+            };
+            
+            let rP=[]; 
+            pipeItems.forEach(r=>{
+                let rd=REAL_ODS[r.dn]||r.dn*1.05, nd=r.hasCpl?(rd+30):rd;
+                const c=Math.floor(r.total/r.len), rm=r.total%r.len;
+                const add=(l,effL)=>rP.push({
+                    id:Math.random().toString(36).substr(2,5),
+                    dn:r.dn, pn:r.pn, sn:r.sn,
+                    od:nd, realOD:rd, 
+                    len:l, effectiveLen: effL, nominalLen:l, 
+                    weight:getPipeWeightPerMeter(r.dn, r.pn, r.sn) * l, 
+                    children:[], hasC:r.hasCpl, isFitting:false, unit: 'Adet',
+                    totalBundleWeight: 0
+                });
+                for(let i=0;i<c;i++) add(r.len, r.effectiveLen);
+                if(rm>0.5) add(rm, rm + (r.effectiveLen - r.len)); 
+            });
+
+            const pipeErrors = checkPipeLimits(rP, lim);
+            const fitErrors = checkFitLimits(fittingItems, lim);
+            if(pipeErrors.length > 0 || fitErrors.length > 0) {
+                let msg = t('err_limits_exceeded') + "\n\nBORU Hataları:\n" + (pipeErrors.join('\n') || t('opt_empty')) + "\n\nFITTING Hataları:\n" + (fitErrors.join('\n') || t('opt_empty'));
+                return alert(msg);
+            }
+            
+            if(rP.length>0){
+                rP.sort((a,b)=>b.dn-a.dn);
+                let pool=[...rP]; 
+                let bundles=[]; 
+
+                const nest = (currentHost, candidatePool, rootBundle) => {
+                    const hostID = currentHost.realOD * 0.97;
+                    let spaceLeft = currentHost.nominalLen + 0.30; 
+                    while(spaceLeft > 0.5) {
+                        let bestIdx = -1;
+                        for(let i=0; i < candidatePool.length; i++){
+                            let candidate = candidatePool[i];
+                            if(hostID > candidate.realOD + 50 && candidate.nominalLen <= spaceLeft) { 
+                                let projectedWeight = rootBundle.totalBundleWeight + candidate.weight;
+                                if (projectedWeight <= lim.MaxKg) {
+                                    bestIdx = i;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(bestIdx > -1) {
+                            let inn = candidatePool.splice(bestIdx, 1)[0];
+                            currentHost.children.push(inn);
+                            rootBundle.totalBundleWeight += inn.weight;
+                            spaceLeft -= inn.nominalLen;
+                            nest(inn, candidatePool, rootBundle);
+                        } else {
+                            break; 
+                        }
+                    }
+                };
+
+                while(pool.length > 0){
+                    let outer = pool.shift(); 
+                    outer.totalBundleWeight = outer.weight; 
+                    nest(outer, pool, outer);
+                    bundles.push(outer);
+                }
+                
+                bundles.sort((a,b)=>b.dn-a.dn); 
+
+                let pkg={id:1, type:'PIPE', items:[], totalWeight:0, identifier:null, totalVol: 0};
+                
+                const calculateRealisticStacking = (W_m, H_m, OD_m) => {
+                    if (OD_m <= 0) return 0;
+                    const countW = Math.floor(lim.W / OD_m);
+                    const countH = Math.floor(lim.H / OD_m);
+                    return countW * countH;
+                }
+
+                bundles.forEach(b=>{
+                    let req=false;
+                    let ref = pkg.items.length>0 ? pkg.items[0] : b;
+                    
+                    const pipeOD_m = ref.realOD / 1000;
+                    const pipesPerCrossSection = calculateRealisticStacking(lim.W, lim.H, pipeOD_m); 
+                    const pipesLengthWise = Math.floor(lim.L / ref.effectiveLen);
+                    const cap = pipesPerCrossSection * pipesLengthWise;
+
+                    if(pkg.items.length > 0){ 
+                        const weightExceeded = (pkg.totalWeight + b.totalBundleWeight) > lim.MaxKg;
+                        const capExceeded = (pkg.items.length + 1) > cap;
+                        
+                        if(weightExceeded || capExceeded) req = true; 
+                    }
+                    
+                    if(req){ 
+                        finalPackages.push(pkg); 
+                        pkg={id:finalPackages.length+1, type:'PIPE', items:[], totalWeight:0, identifier:b.od, totalVol: 0}; 
+                    }
+                    
+                    if(pkg.items.length===0) pkg.identifier=b.od; 
+                    pkg.items.push(b);
+                    pkg.totalWeight += b.totalBundleWeight; 
+                    pkg.totalVol += Math.PI * (b.realOD/1000/2)**2 * b.effectiveLen; 
+                });
+                if(pkg.items.length>0) finalPackages.push(pkg);
+            }
+
+            // --- BÖLÜM 2: FITTING HESAPLAMA ---
+            if(fittingItems.length>0){
+                let p=[];
+                fittingItems.forEach(i=>{for(let k=0;k<i.qty;k++)p.push({...i})}); 
+                p.sort((a,b)=>b.footprint-a.footprint); 
+                
+                let sid=finalPackages.length+1, tr=[];
+                let lp=0; 
+                
+                const pL = parseFloat(document.getElementById('palletL').value) || 1.1;
+                const pW = parseFloat(document.getElementById('palletW').value) || 1.1;
+                const pH = parseFloat(document.getElementById('palletH').value) || 0.14;
+                const truckArea = lim.L * lim.W;
+                
+                while(p.length>0){
+                    if(lp++>5000) { alert(`${t("Döngü hatası: Fitting hesaplanamıyor.")}`); break; }
+                    
+                    let t={id:sid+tr.length, type:'FITTING', items:[], totalWeight:0, totalVol: 0, maxQty: Infinity, totalFootprint: 0};
+                    let rem=[], add=0;
+                    
+                    let firstItem = p[0];
+                    let maxTheoreticalQty = Infinity;
+                    let pl_max=firstItem.l/1000, pw_max=firstItem.wid/1000, ph_max=firstItem.h/1000;
+                    
+                    if(pl_max > 0 && pw_max > 0 && ph_max > 0){
+                        let permutations = [
+                            [pl_max, pw_max, ph_max], [pl_max, ph_max, pw_max], 
+                            [pw_max, pl_max, ph_max], [pw_max, ph_max, pl_max], 
+                            [ph_max, pl_max, pw_max], [ph_max, pw_max, pl_max]  
+                        ];
+                        
+                        if(firstItem.pack === 'Pallet' && firstItem.type !== 'SPOOL') {
+                            permutations = [
+                                [pL, pW, pH], [pL, pH, pW], 
+                                [pW, pL, pH], [pW, pH, pL], 
+                                [pH, pL, pW], [pH, pW, pL]  
+                            ];
+                        }
+                        
+                        maxTheoreticalQty = 0;
+                        permutations.forEach(([l, w, h]) => {
+                            let l_qty = Math.floor(lim.L / l); 
+                            let w_qty = Math.floor(lim.W / w); 
+                            let h_qty = Math.floor(lim.H / h); 
+                            let currentQty = l_qty * w_qty * h_qty;
+                            if(currentQty > maxTheoreticalQty) maxTheoreticalQty = currentQty;
+                        });
+                        
+                        if(firstItem.pack !== 'Pallet' && maxTheoreticalQty > 0) {
+                            maxTheoreticalQty = Math.floor(maxTheoreticalQty * 0.90); 
+                        }
+
+                    }
+                    t.maxQty = maxTheoreticalQty;
+
+                    p.forEach(x=>{
+                        let pl_item=x.l/1000, pw_item=x.wid/1000, ph_item=x.h/1000, fits=false;
+                        let itemFootprint = x.footprint;
+                        let itemVolume = x.vol;
+
+                        // Palet/Spool Boyutlarını Ayarla
+                        if (x.pack === 'Pallet') {
+                            if (x.type !== 'SPOOL') {
+                                pl_item = pL; pw_item = pW; ph_item = pH; 
+                                itemFootprint = pL * pW;
+                            } else {
+                                // Spool'lar için kendi boyutları kullanılır
+                                itemFootprint = (x.l/1000) * (x.wid/1000); 
+                            }
+                        }
+                        
+                        // Limit kontrolü (Boyut)
+                        fits = (pl_item <= lim.L && pw_item <= lim.W && ph_item <= lim.H) ||
+                               (pl_item <= lim.L && ph_item <= lim.W && pw_item <= lim.H) ||
+                               (pw_item <= lim.L && pl_item <= lim.W && ph_item <= lim.H) ||
+                               (pw_item <= lim.L && ph_item <= lim.W && pl_item <= lim.H) ||
+                               (ph_item <= lim.L && pl_item <= lim.W && pw_item <= lim.H) ||
+                               (ph_item <= lim.L && pw_item <= lim.W && pl_item <= lim.H); 
+
+                        if(fits && (t.totalWeight+x.w<=lim.MaxKg) && (t.items.length + 1 <= t.maxQty)){
+                            t.items.push(x);
+                            t.totalWeight+=x.w;
+                            t.totalVol+=itemVolume; 
+                            t.totalFootprint += itemFootprint;
+                            add++;
+                        } else {
+                            rem.push(x);
+                        }
+                    });
+                    
+                    if(add===0 && rem.length>0){
+                        alert(`${t("Fitting")} "${rem[0].desc}" ${t("araca sığmıyor!")} (Kg: ${rem[0].w} | Boyutlar limit dışı)`);
+                        return;
+                    } 
+                    
+                    tr.push(t);
+                    p=rem;
+                }
+                finalPackages.push(...tr);
+            }
+            renderFinalPlan(lim);
+        }
+    </script>
+</body>
+</html>
