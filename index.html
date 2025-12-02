@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gpack X - V60</title>
+    <title>Gpack X - REVİZE V6.5 - Gerçekçi Fitting Kapasitesi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -159,7 +159,7 @@
                         <option value="tr">TR</option>
                         <option value="en">EN</option>
                     </select>
-                    <button onclick="downloadReport('pdf')" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold border border-red-700"><i class="fas fa-file-pdf mr-1"></i> <span data-key="btn_pdf">PDF İNDİR</span></button>
+                    <button onclick="downloadReport('pdf')" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold border border-red-700"><i class="fas fa-file-pdf mr-1"></i> <span data-key="btn_pdf">PDF</span></button>
                     <button onclick="downloadReport('word')" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-[10px] font-bold"><i class="fas fa-file-word mr-1"></i> <span data-key="btn_word">WORD</span></button>
                 </div>
             </div>
@@ -184,18 +184,18 @@
                             <div class="flex items-center h-[30px] px-3 bg-white border border-slate-200 rounded">
                                 <label class="flex items-center gap-1.5 cursor-pointer">
                                     <input type="checkbox" id="alternatingLoad" class="w-3.5 h-3.5 accent-blue-600">
-                                    <span class="text-[11px] font-bold text-slate-700" data-key="opt_alt_load">Şaşırtmalı Yükleme (Risk Azaltma)</span>
+                                    <span class="text-[11px] font-bold text-slate-700" data-key="opt_alt_load">Şaşırtmalı Yükleme (Manşon)</span>
                                 </label>
                             </div>
 
                             <div>
                                 <button onclick="toggleElement('palletSettings', 'palletIcon')" class="w-full py-1.5 px-2 bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-600 rounded text-[10px] font-bold flex items-center justify-between transition">
-                                    <span data-key="lbl_pallet_dims">PALET ÖLÇÜLERİ (mm)</span><i id="palletIcon" class="fas fa-chevron-down"></i>
+                                    <span data-key="lbl_pallet_dims">PALET ÖLÇÜLERİ</span><i id="palletIcon" class="fas fa-chevron-down"></i>
                                 </button>
                                 <div id="palletSettings" class="hidden mt-2 bg-slate-50 p-2 rounded border border-slate-200">
-                                    <div class="limit-row"><label data-key="lim_w">EN (mm)</label><input type="number" id="palletW" class="input-std h-6 text-[10px]" value="1200"></div>
-                                    <div class="limit-row"><label data-key="lim_l">BOY (mm)</label><input type="number" id="palletL" class="input-std h-6 text-[10px]" value="800"></div>
-                                    <div class="limit-row"><label data-key="lim_h">YÜK (mm)</label><input type="number" id="palletH" class="input-std h-6 text-[10px]" value="145"></div>
+                                    <div class="limit-row"><label data-key="lim_w_m">EN (m)</label><input type="number" id="palletW" class="input-std h-6 text-[10px]" value="1.2"></div>
+                                    <div class="limit-row"><label data-key="lim_l_m">BOY (m)</label><input type="number" id="palletL" class="input-std h-6 text-[10px]" value="0.8"></div>
+                                    <div class="limit-row"><label data-key="lim_h_m">YÜK (m)</label><input type="number" id="palletH" class="input-std h-6 text-[10px]" value="0.145"></div>
                                 </div>
                             </div>
 
@@ -204,9 +204,9 @@
                                     <span data-key="lbl_limits">ARAÇ LİMİTLERİ</span><i id="limitIcon" class="fas fa-chevron-down"></i>
                                 </button>
                                 <div id="limitSettings" class="hidden mt-2 bg-slate-50 p-2 rounded border border-slate-200">
-                                    <div class="limit-row"><label data-key="lim_l">BOY (mm)</label><input type="number" id="maxL" class="input-std h-6 text-[10px]"></div>
-                                    <div class="limit-row"><label data-key="lim_w">EN (mm)</label><input type="number" id="maxW" class="input-std h-6 text-[10px]"></div>
-                                    <div class="limit-row"><label data-key="lim_h">YÜK (mm)</label><input type="number" id="maxH" class="input-std h-6 text-[10px]"></div>
+                                    <div class="limit-row"><label data-key="lim_l">BOY (m)</label><input type="number" id="maxL" class="input-std h-6 text-[10px]"></div>
+                                    <div class="limit-row"><label data-key="lim_w">EN (m)</label><input type="number" id="maxW" class="input-std h-6 text-[10px]"></div>
+                                    <div class="limit-row"><label data-key="lim_h">YÜK (m)</label><input type="number" id="maxH" class="input-std h-6 text-[10px]"></div>
                                     <div class="limit-row"><label data-key="lim_kg" id="lblMaxKg">KAPASİTE (Ton)</label><input type="number" id="maxWeight" class="input-std h-6 text-[10px] font-bold text-blue-700"></div>
                                 </div>
                             </div>
@@ -230,7 +230,7 @@
                                 <div class="flex flex-wrap gap-2 items-end">
                                     <div class="w-24"><label class="compact-label text-blue-800" data-key="lbl_dn">DN</label><select id="pipeDN" class="input-std font-bold text-blue-900"></select></div>
                                     <div class="w-20"><label class="compact-label text-blue-800" data-key="lbl_pn">PN</label><select id="pipePN" class="input-std"><option value="1">PN1</option><option value="6">PN6</option><option value="10" selected>PN10</option><option value="16">PN16</option><option value="20">PN20</option><option value="25">PN25</option><option value="32">PN32</option></select></div>
-                                    <div class="w-24"><label class="compact-label text-blue-800" data-key="lbl_sn">SN</label><select id="pipeSN" class="input-std"><option value="5000">SN5000</option><option value="10000" selected>SN10000</option><option value="15000">SN15000</option><option value="20000">SN20000</option><option value="25000">SN25000</option></select></div>
+                                    <div class="w-24"><label class="compact-label text-blue-800" data-key="lbl_sn">SN</label><select id="pipeSN" class="input-std"><option value="5000">5000</option><option value="10000" selected>10000</option><option value="15000">SN15000</option><option value="20000">SN20000</option><option value="25000">SN25000</option></select></div>
                                     <div class="w-20"><label class="compact-label text-blue-800" data-key="lbl_len">Boy(m)</label><input type="number" id="pipeLen" value="12" class="input-std text-center"></div>
                                     <div class="w-24"><label class="compact-label text-blue-800" data-key="lbl_total">Toplam(m)</label><input type="number" id="pipeTotal" value="120" class="input-std font-bold text-blue-700 text-center"></div>
                                     <div class="flex items-center h-[30px] px-3 bg-white border border-blue-200 rounded"><label class="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" id="pipeCpl" class="w-3.5 h-3.5 accent-blue-600" checked><span class="text-[11px] font-bold text-blue-700" data-key="opt_cpl">Manşonlu</span></label></div>
@@ -328,8 +328,7 @@
                 <div class="flex items-center gap-2 mb-3"><div class="h-px flex-1 bg-slate-300"></div><span class="text-xs font-bold text-slate-500 uppercase tracking-wider" data-key="res_title">Yükleme Planı Sonuçları</span><div class="h-px flex-1 bg-slate-300"></div></div>
                 <div id="planContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 print:block"></div>
             </div>
-            
-            </div>
+        </div>
         
         <div id="fixedCalcButtonArea" class="no-print">
             <div class="container mx-auto max-w-7xl p-2 md:p-4">
@@ -346,9 +345,13 @@
         // --- TRANSLATIONS (KISALTILMIŞ) ---
         const TRANSLATIONS={
             tr:{
-                app_title:"Gpack X",app_desc:"GRP Pipe & Fitting Packing Optimiser",btn_pdf:"PDF İNDİR",btn_word:"WORD İNDİR",
+                app_title:"Gpack X",app_desc:"GRP Pipe & Fitting Packing Optimiser",
+                // REVİZYON 1: Buton metinleri kısaltıldı
+                btn_pdf:"PDF",btn_word:"WORD",
                 sec_settings:"SEVKİYAT AYARLARI",lbl_user:"KULLANICI",lbl_project:"PROJE REFERANSI",lbl_vehicle:"ARAÇ TİPİ",lbl_limits:"ARAÇ LİMİTLERİ",
                 lim_l:"BOY (m)",lim_w:"EN (m)",lim_h:"YÜKSEKLİK (m)",lim_kg:"KAPASİTE (Ton)",
+                // REVİZYON 3: Palet limit çevirileri
+                lim_w_m:"EN (m)", lim_l_m:"BOY (m)", lim_h_m:"YÜK (m)",
                 tab_list_pipe:"BORU EKLE",tab_list_fit:"FITTING EKLE",
                 lbl_dn:"ÇAP (DN)",lbl_pn:"PN",lbl_sn:"SN",opt_cpl:"Manşonlu",opt_plain:"Düz Uç",lbl_len:"BORU BOYU (m)",lbl_total:"TOPLAM (m)",btn_add_pipe:"EKLE",
                 fit_plan_title:"YÜKLEME DETAYI",lbl_type:"PARÇA TİPİ",lbl_pack:"PAKETLEME",opt_loose:"Dökme",opt_pallet:"Paletli",lbl_qty:"ADET",btn_add_fit:"EKLE",
@@ -383,18 +386,27 @@
                 lbl_dim_w: "En(mm)", 
                 lbl_dim_h: "Yük(mm)", 
                 lbl_weight_u: "Birim Kg",
-                // YENİ ÇEVİRİLER
                 lbl_nest_gap: "NESTING GÜVENLİK (mm)",
                 opt_safe_50: "50 mm (Standart)",
-                opt_safe_35: "35 mm (Riskli)", // DEĞİŞTİRİLDİ
-                opt_alt_load: "Şaşırtmalı Yükleme (Risk Azaltma)",
-                lbl_pallet_dims: "PALET ÖLÇÜLERİ (mm)",
-                unit_adet: "Adet"
+                opt_safe_35: "35 mm (Riskli)", 
+                opt_alt_load: "Şaşırtmalı Yükleme (Manşon)",
+                lbl_pallet_dims: "PALET ÖLÇÜLERİ",
+                unit_adet: "Adet",
+                // REVİZYON 5: showFitLayout çevirileri
+                lbl_notes_important: "ÖNEMLİ YERLEŞİM NOTLARI",
+                note_floor_placement: "En ağır ve büyük parçaları (örn: Tee, Büyük Dirsek) TIR zeminine yerleştirin.",
+                note_pallet_use: "Paletli yükler ({pack\_type}), belirlenen palet boyutlarına (L:{L}xW:{W}m) uygun şekilde istiflenmelidir.",
+                note_loose_use: "Dökme yükler ({pack\_type}), boru veya paletli yüklerin arasındaki boşlukları doldurmak için kullanılmalıdır.",
+                note_max_h: "Maksimum yükleme yüksekliği ({H}m) aşılmamalıdır."
             },
             en:{
-                app_title:"Gpack X",app_desc:"GRP Pipe & Fitting Packing Optimiser",btn_pdf:"DOWNLOAD PDF",btn_word:"DOWNLOAD WORD",
+                app_title:"Gpack X",app_desc:"GRP Pipe & Fitting Packing Optimiser",
+                // REVİZYON 1: Buton metinleri kısaltıldı
+                btn_pdf:"PDF",btn_word:"WORD",
                 sec_settings:"SHIPMENT SETTINGS",lbl_user:"USER",lbl_project:"PROJECT REFERENCE",lbl_vehicle:"VEHICLE TYPE",lbl_limits:"VEHICLE LIMITS",
                 lim_l:"LENGTH (m)",lim_w:"WIDTH (m)",lim_h:"HEIGHT (m)",lim_kg:"CAPACITY (Ton)",
+                // REVİZYON 3: Palet limit çevirileri
+                lim_w_m:"WIDTH (m)", lim_l_m:"LENGTH (m)", lim_h_m:"HEIGHT (m)",
                 tab_list_pipe:"ADD PIPE",tab_list_fit:"ADD FITTING",
                 lbl_dn:"DIAMETER (DN)",lbl_pn:"PN",lbl_sn:"SN",opt_cpl:"Coupling",opt_plain:"Plain End",lbl_len:"PIPE LEN (m)",lbl_total:"TOTAL (m)",btn_add_pipe:"ADD",
                 fit_plan_title:"LOADING DETAILS",lbl_type:"ITEM TYPE",lbl_pack:"PACKAGING",opt_loose:"Loose",opt_pallet:"Pallet",lbl_qty:"QTY",btn_add_fit:"ADD",
@@ -429,13 +441,18 @@
                 lbl_dim_w: "Width(mm)", 
                 lbl_dim_h: "Height(mm)", 
                 lbl_weight_u: "Unit Kg",
-                // YENİ ÇEVİRİLER
                 lbl_nest_gap: "NESTING SAFETY (mm)",
                 opt_safe_50: "50 mm (Standard)",
-                opt_safe_35: "35 mm (Risky)", // DEĞİŞTİRİLDİ
-                opt_alt_load: "Alternating Load (Risk Reduction)",
-                lbl_pallet_dims: "PALLET DIMENSIONS (mm)",
-                unit_adet: "Pcs"
+                opt_safe_35: "35 mm (Risky)", 
+                opt_alt_load: "Alternating Load (Coupling)",
+                lbl_pallet_dims: "PALLET DIMENSIONS",
+                unit_adet: "Pcs",
+                // REVİZYON 5: showFitLayout çevirileri
+                lbl_notes_important: "IMPORTANT LOADING NOTES",
+                note_floor_placement: "Place the heaviest and largest items (e.g., Tee, Large Elbow) on the truck floor.",
+                note_pallet_use: "Palletized loads ({pack\_type}) must be stacked according to the defined pallet dimensions (L:{L}xW:{W}m).",
+                note_loose_use: "Loose loads ({pack\_type}) should be used to fill gaps between pipes or palletized loads.",
+                note_max_h: "Maximum loading height ({H}m) must not be exceeded."
             }
         };
         let currentLang='tr'; 
@@ -445,7 +462,7 @@
         const FIT_ICONS = {
             TEE: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M10 35 H35 V10 H65 V35 H90 V65 H10 Z" stroke="currentColor" stroke-width="2" fill="none"/></svg>`,
             BEND: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M20 90 V50 A 30 30 0 0 1 50 20 H90 V50 H60 A 10 10 0 0 0 50 60 V90 Z" stroke="currentColor" stroke-width="2" fill="none"/></svg>`,
-            RED: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M25 25 H75 L 60 75 H40 Z" stroke="currentColor" stroke-width="2" fill="none"/><line x1="25" y1="25" x2="75" y2="25" stroke="currentColor" stroke-width="2"/><line x1="40" y1="75" x2="60" y2="75" stroke="currentColor" stroke-width="2"/></svg>`,
+            RED: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M25 25 H75 L 60 75 H40 Z" stroke="currentColor" stroke-width="2" fill="none"/><line x1="25" y1="25" y2="25" stroke="currentColor" stroke-width="2"/><line x1="40" y1="75" x2="60" y2="75" stroke="currentColor" stroke-width="2"/></svg>`,
             FLG: `<svg viewBox="0 0 100 100" fill="currentColor"><circle cx="50" cy="50" r="35" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="50" cy="50" r="15" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="50" cy="25" r="3" fill="currentColor"/><circle cx="50" cy="75" r="3" fill="currentColor"/><circle cx="25" cy="50" r="3" fill="currentColor"/><circle cx="75" cy="50" r="3" fill="currentColor"/></svg>`,
             CPL: `<svg viewBox="0 0 100 100" fill="currentColor"><rect x="20" y="30" width="60" height="40" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="50" y1="30" x2="50" y2="70" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/></svg>`,
             CUSTOM: `<i class="fas fa-boxes text-5xl opacity-80"></i>`
@@ -545,6 +562,8 @@
         // --- TEE KATALOG VERİ TABANI (KISALTILMIŞ) ---
         const TEE_DB_MIN = {
             300: { 300: { PN10: {L:1000,H:450}, PN16: {L:1200,H:550} } },
+            // DN1800 varsayımsal değer (Kullanıcı senaryosu için eklendi)
+            1800: { 1800: { PN10: {L:6000,H:1500}, PN16: {L:6500,H:1700} } },
             2000: { 2000: { PN10: {L:4000,H:1970}, PN16: {L:5000,H:2470} } }
         };
         
@@ -575,6 +594,15 @@
             // YENİ ÇEVİRİLERİ GÜNCELLE
             document.querySelector('#nestingGap option[value="50"]').innerText = t('opt_safe_50');
             document.querySelector('#nestingGap option[value="35"]').innerText = t('opt_safe_35');
+            
+            // REVİZYON 4: Şaşırtmalı yükleme metnini güncelle
+            document.querySelector('#alternatingLoad').nextElementSibling.innerText = t('opt_alt_load');
+
+            // REVİZYON 2/3: Palet ölçüleri başlık ve input birimlerini güncelle
+            document.querySelector('#palletSettings .limit-row:nth-child(1) label').innerText = t('lim_w_m');
+            document.querySelector('#palletSettings .limit-row:nth-child(2) label').innerText = t('lim_l_m');
+            document.querySelector('#palletSettings .limit-row:nth-child(3) label').innerText = t('lim_h_m');
+            document.querySelector('#palletSettings').previousElementSibling.querySelector('span').innerText = t('lbl_pallet_dims');
 
             
             populatePipeDN();
@@ -591,6 +619,7 @@
             const nestGap = document.getElementById('nestingGap').value;
             const gapLabel = nestGap === '50' ? t('opt_safe_50') : t('opt_safe_35');
             const cplLenText = altLoad ? (currentLang==='tr'?'tam manşon boyu':'full coupling length') : (currentLang==='tr'?'yarım manşon boyu':'half coupling length');
+            // REVİZYON 4: Risk azaltma yerine manşon olarak değiştirildi.
             const loadType = altLoad ? (currentLang==='tr'?'Şaşırtmalı Yükleme':'Alternating Load') : (currentLang==='tr'?'Düz Yükleme':'Flat Load');
 
             document.getElementById('note_6').innerHTML = currentLang === 'tr' 
@@ -787,7 +816,7 @@
                 let L_val = 1800; 
                 let H_val = 1070; 
                 
-                const teeData = TEE_DB[d1] || TEE_DB_MIN[d1]; // TEE_DB'nin dışardan tamamlandığı varsayılır.
+                const teeData = TEE_DB_MIN[d1]; // TEE_DB'nin dışardan tamamlandığı varsayılır.
 
                 let finalTeeData = null;
 
@@ -1159,8 +1188,8 @@
         // REVİZYON 6.2: Paletli ürünler için tek palet yüzey sınırlaması kaldırıldı, sadece TIR hacim/yüksekliğine bakılır.
         function checkFitLimits(fItems, lim) { 
             let errs = [];
-            // Palet yüksekliği (metre)
-            const palH = parseFloat(document.getElementById('palletH').value) / 1000;
+            // REVİZYON 3: Palet inputları artık metre cinsinden okunur. /1000 kaldırıldı.
+            const palH = parseFloat(document.getElementById('palletH').value);
 
             fItems.forEach(f => { 
                 let w = f.wid / 1000, l = f.l / 1000, h = f.h / 1000, fits = false; 
@@ -1178,7 +1207,7 @@
                        (effectiveH <= lim.L && w <= lim.W && l <= lim.H); 
                 
                 if (!fits) {
-                     errs.push(`Fitting: ${f.desc} ${f.pack === 'Pallet' ? '(Paletli)' : '(Dökme)'} Truck'a sığmıyor. (L:${l.toFixed(2)}m, W:${w.toFixed(2)}m, H:${h.toFixed(2)}m -> Eff H:${effectiveH.toFixed(2)}m)`); 
+                     errs.push(`Fitting: ${f.desc} ${f.pack === 'Pallet' ? '('+t('opt_pallet')+')' : '('+t('opt_loose')+')'} Truck'a sığmıyor. (L:${l.toFixed(2)}m, W:${w.toFixed(2)}m, H:${h.toFixed(2)}m -> Eff H:${effectiveH.toFixed(2)}m)`); 
                 }
                 if (f.w > lim.MaxKg) errs.push(`Fitting: ${f.desc} çok ağır. (${f.w}kg)`); 
             }); 
@@ -1308,6 +1337,7 @@
                 cnt = `<table class="w-full mt-1 text-slate-600">${Object.values(g).map(x => `<tr><td class="text-[10px] border-b border-slate-50 py-0.5">${x.reportDesc}</td><td class="text-[10px] text-right font-bold border-b border-slate-50">${x.q}</td></tr>`).join('')}</table>`;
                 const packageData = finalPackages.find(p => p.id === k.id);
                 if (packageData) {
+                    // REVİZYON 5: Yükleme detayı butonu çeviri düzeltildi
                     sm = `<button onclick="showFitLayout(finalPackages.find(p => p.id === ${k.id}))" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-1 rounded text-[9px] mt-1 transition">${t('fit_plan_title')}</button>`;
                 } else {
                     sm = `<span class="text-red-500 text-[9px] font-bold">DETAY YÜKLENEMEDİ</span>`;
@@ -1334,7 +1364,7 @@
             return countW * countH;
         }
 
-        // REVİZYON 6.7: Fitting Yükleme Detayı (showFitLayout) fonksiyonu, hacim bilgisini kaldırıldı.
+        // REVİZYON 5: showFitLayout içeriği çeviri için güncellendi
         function showFitLayout(pkg) {
             if (!pkg || !pkg.items || pkg.items.length === 0) {
                  alert(t("Hata: Yükleme detayları bulunamadı veya paket boş."));
@@ -1347,10 +1377,10 @@
                 MaxKg: parseFloat(document.getElementById('maxWeight').value) * 1000
             };
             
-            // Palet boyutlarını al (mm -> m)
-            const palW = parseFloat(document.getElementById('palletW').value) / 1000;
-            const palL = parseFloat(document.getElementById('palletL').value) / 1000;
-            const palH = parseFloat(document.getElementById('palletH').value) / 1000;
+            // REVİZYON 3: Palet inputları artık metre cinsinden okunur. /1000 kaldırıldı.
+            const palW = parseFloat(document.getElementById('palletW').value);
+            const palL = parseFloat(document.getElementById('palletL').value);
+            const palH = parseFloat(document.getElementById('palletH').value);
 
             // 1. Öğeleri benzersiz tip/boyut ve paketlemeye göre grupla
             let uniqueItems = {};
@@ -1374,16 +1404,15 @@
 
             let report = [];
             
-            report.push(`📦 ${t('fit_plan_title')} - PAKET ID: #${pkg.id}`);
+            report.push(`📦 ${t('fit_plan_title')} - ${currentLang === 'tr' ? 'PAKET ID' : 'PACKAGE ID'}: #${pkg.id}`);
             report.push(`-----------------------------------`);
             report.push(`🚛 ${t('rep_v_type')}: ${t(document.getElementById('transportType').value)}`);
-            report.push(`⚖️ Toplam Ağırlık: ${(pkg.totalWeight / 1000).toFixed(2)} Ton / Max: ${(lim.MaxKg/1000).toFixed(2)} Ton`);
-            // report.push(`📏 Toplam Hacim (Tahmini): ${pkg.totalVol.toFixed(2)} m³`); // Kaldırıldı
+            // REVİZYON 5: Çeviriler eklendi
+            report.push(`⚖️ ${t('lbl_tot_weight')}: ${(pkg.totalWeight / 1000).toFixed(2)} ${currentLang === 'tr' ? 'Ton' : 'Tons'} / Max: ${(lim.MaxKg/1000).toFixed(2)} ${currentLang === 'tr' ? 'Ton' : 'Tons'}`);
             report.push(`\n`);
             
-            report.push(`**✅ PAKET İÇERİĞİ**`);
-            report.push(`Parça Tanımı | Adet | Paket | Boyut (mm, L x W x H) | Birim Kg`);
-            // Tablo başlığı çizgisi kaldırıldı.
+            report.push(`**✅ ${currentLang === 'tr' ? 'PAKET İÇERİĞİ' : 'PACKAGE CONTENT'}**`);
+            report.push(`${t('th_desc')} | ${t('th_qty')} | ${t('th_pack')} | ${t('th_dim')} (mm, L x W x H) | ${t('lbl_weight_u')}`);
 
             Object.values(uniqueItems).forEach(group => {
                 const i = group.item;
@@ -1397,7 +1426,7 @@
                 let row = `${i.reportDesc} | ${itemQty} | ${packType}`;
                 
                 if (i.pack === 'Pallet') {
-                    row += ` (${group.requiredPallets} Palet/Adet)`;
+                    row += ` (${group.requiredPallets} ${t('lbl_pallet_dims').split(' ')[0]}/${t('unit_adet')})`; // Palet/Adet çevirisi
                 }
                 
                 row += ` | ${dimText} | ${i.w} kg`;
@@ -1405,11 +1434,13 @@
                 report.push(row);
             });
 
-            report.push(`\n**⚠️ ÖNEMLİ YERLEŞİM NOTLARI**`);
-            report.push(`* En ağır ve büyük parçaları (örn: Tee, Büyük Dirsek) TIR zeminine yerleştirin.`);
-            report.push(`* Paletli yükler (${t('opt_pallet')}), belirlenen palet boyutlarına (L:${(palL*1000).toFixed(0)}xW:${(palW*1000).toFixed(0)}mm) uygun şekilde istiflenmelidir.`);
-            report.push(`* Dökme yükler (${t('opt_loose')}), boru veya paletli yüklerin arasındaki boşlukları doldurmak için kullanılmalıdır.`);
-            report.push(`* Maksimum yükleme yüksekliği (${lim.H.toFixed(2)}m) aşılmamalıdır.`);
+            report.push(`\n**⚠️ ${t('lbl_notes_important')}**`);
+            
+            // REVİZYON 5: Notlar çeviri ile eklendi
+            report.push(`* ${t('note_floor_placement')}`);
+            report.push(`* ${t('note_pallet_use').replace('{pack_type}', t('opt_pallet')).replace('{L}', palL.toFixed(3)).replace('{W}', palW.toFixed(3))}`);
+            report.push(`* ${t('note_loose_use').replace('{pack_type}', t('opt_loose'))}`);
+            report.push(`* ${t('note_max_h').replace('{H}', lim.H.toFixed(2))}`);
             
 
             // Markdown formatını düz metin/alert çıktısı için dönüştürme
@@ -1500,10 +1531,13 @@
                     Object.values(fGrp).forEach(x => { content += `<tr><td>${x.reportDesc}</td><td>${x.disp_l}x${Math.round(x.disp_wid)}</td><td>${t(x.pack==='Pallet'?'opt_pallet':'opt_loose')}</td><td>${x.q}</td></tr>`; });
                     content += `</tbody></table>`;
                     
-                    // FITTING PAKETLERİ İÇİN DETAYLI İŞ EMİRİ VE ANALİZİ
-                    const palL = parseFloat(document.getElementById('palletL').value) / 1000;
-                    const palW = parseFloat(document.getElementById('palletW').value) / 1000;
-                    const palH = parseFloat(document.getElementById('palletH').value) / 1000;
+                    // REVİZYON 2: Yükleme İş Emri bölümü tamamen kaldırıldı.
+
+                    // FITTING PAKETLERİ İÇİN DETAYLI İŞ EMİRİ VE ANALİZİ (ESKİ KISIM)
+                    /*
+                    const palL = parseFloat(document.getElementById('palletL').value);
+                    const palW = parseFloat(document.getElementById('palletW').value);
+                    const palH = parseFloat(document.getElementById('palletH').value);
                     
                     let reportLines = [];
                     reportLines.push(`📋 YÜKLEME DETAY ÖZETİ`);
@@ -1526,6 +1560,7 @@
 
                     content += `<p style="font-size:10pt; font-weight:bold; margin-top:10px;">${t('rep_work_order')}</p>`;
                     content += `<pre style="white-space: pre-wrap; font-size: 9pt; background: #fafafa; border: 1px solid #eee; padding: 5px; border-radius: 3px;">${reportLines.join('\n').replace(/(\*\*|`)/g, '')}</pre>`;
+                    */
                 }
                 body += `<div class="truck-card"><div class="truck-header" style="background-color: ${cl==='blue'?'#2563eb':'#059669'};">${vType} ${g.labelID} (${g.type}) ${count > 1 ? `x${count}` : ''}</div><div class="truck-content">${content}</div></div>`;
             });
@@ -1670,10 +1705,10 @@
                 let sid=finalPackages.length+1, tr=[];
                 let lp=0; 
                 
-                // Palet boyutları (metre)
-                const palL = parseFloat(document.getElementById('palletL').value) / 1000;
-                const palW = parseFloat(document.getElementById('palletW').value) / 1000;
-                const palH = parseFloat(document.getElementById('palletH').value) / 1000;
+                // REVİZYON 3: Palet inputları artık metre cinsinden okunur. /1000 kaldırıldı.
+                const palL = parseFloat(document.getElementById('palletL').value);
+                const palW = parseFloat(document.getElementById('palletW').value);
+                const palH = parseFloat(document.getElementById('palletH').value);
                 const maxVolume = lim.L * lim.W * lim.H * 0.90; // %90 hacim kullanım kuralı
 
                 while(p.length>0){
@@ -1684,35 +1719,51 @@
                     
                     let firstItem = p[0];
                     
-                    // YENİ: GEOMETRİK LİMİT HESAPLAMASI (t.maxQty)
+                    // REVİZYON 1: GEOMETRİK LİMİT HESAPLAMASI (t.maxQty) - Uzun parçalar için düzeltildi
                     let maxTheoreticalQty = Infinity;
-                    let pl_max=firstItem.l/1000, pw_max=firstItem.wid/1000, ph_max=firstItem.h/1000;
+                    let pl_max = firstItem.l / 1000, pw_max = firstItem.wid / 1000, ph_max = firstItem.h / 1000;
                     
-                    if(pl_max > 0 && pw_max > 0 && ph_max > 0){
-                        // Paletli veya Dökme olmasına göre efektif yüksekliği belirle
+                    if (pl_max > 0 && pw_max > 0 && ph_max > 0) {
                         let effectiveH_for_calc = (firstItem.pack === 'Pallet') ? ph_max + palH : ph_max;
                         
-                        let permutations = [
-                            [pl_max, pw_max, effectiveH_for_calc], [pl_max, effectiveH_for_calc, pw_max], 
-                            [pw_max, pl_max, effectiveH_for_calc], [pw_max, effectiveH_for_calc, pl_max], 
-                            [effectiveH_for_calc, pl_max, pw_max], [effectiveH_for_calc, pw_max, pl_max]  
-                        ];
-                        
-                        maxTheoreticalQty = 0;
-                        permutations.forEach(([l_i, w_i, h_i]) => {
-                            let l_qty = Math.floor(lim.L / l_i); 
-                            let w_qty = Math.floor(lim.W / w_i); 
-                            let h_qty = Math.floor(lim.H / h_i); 
-                            let currentQty = l_qty * w_qty * h_qty;
-                            if(currentQty > maxTheoreticalQty) maxTheoreticalQty = currentQty;
-                        });
-                        
-                        // Paletli ürünler için maxTheoreticalQty'yi 0.90 ile çarpmıyoruz.
-                        // Loose ürünler için de buraya hard-coding yapılmıyor, çünkü maxTheoreticalQty 
-                        // zaten kare istifleme ile en kötü durum fiziksel limitini temsil ediyor.
-                        // Bu limit, 123 olan hacimsel limit yerine kullanılacaktır.
+                        let pieceL = pl_max; // Parçanın L (Tee barrel) boyutu
+                        let pieceW = pw_max; // Parçanın W (Branch face) boyutu
+                        let pieceH = effectiveH_for_calc; // Parçanın efektif H boyutu (OD + Palet)
 
-                        t.maxQty = maxTheoreticalQty; // Pakete girecek maksimum adet kısıtlaması
+                        // Eğer parçanın ana uzunluğu (pieceL) TIR'ın kısa boyutlarından (W, H) büyükse,
+                        // bu uzunluk TIR'ın L (13.6m) boyutuna hizalanmak zorundadır.
+                        const isLongPiece = pieceL > Math.max(lim.W, lim.H); 
+
+                        if (isLongPiece) {
+                            // En kısıtlayıcı ve gerçekçi permütasyonu hesapla:
+                            let qty_L = Math.floor(lim.L / pieceL);
+                            
+                            // Kalan 2 boyut (W, H) TIR'ın kalan 2 boyutuna (W, H) en verimli şekilde eşleşir.
+                            // Durum 1: pieceW -> lim.W, pieceH -> lim.H
+                            let cap1 = qty_L * Math.floor(lim.W / pieceW) * Math.floor(lim.H / pieceH);
+                            
+                            // Durum 2: pieceW -> lim.H, pieceH -> lim.W (Tee 90 derece döndürülür)
+                            let cap2 = qty_L * Math.floor(lim.H / pieceW) * Math.floor(lim.W / pieceH);
+
+                            maxTheoreticalQty = Math.max(cap1, cap2);
+                            
+                        } else {
+                            // Kısa parçalar için mevcut 6 yönlü permütasyon mantığı devam eder.
+                            let permutations = [
+                                [pieceL, pieceW, pieceH], [pieceL, pieceH, pieceW], 
+                                [pieceW, pieceL, pieceH], [pieceW, pieceH, pieceL], 
+                                [pieceH, pieceL, pieceW], [pieceH, pieceW, pieceL]  
+                            ];
+                            
+                            maxTheoreticalQty = 0;
+                            permutations.forEach(([l_i, w_i, h_i]) => {
+                                let l_qty = Math.floor(lim.L / l_i); 
+                                let w_qty = Math.floor(lim.W / w_i); 
+                                let h_qty = Math.floor(lim.H / h_i); 
+                                let currentQty = l_qty * w_qty * h_qty;
+                                if(currentQty > maxTheoreticalQty) maxTheoreticalQty = currentQty;
+                            });
+                        }
                     }
                     
                     p.forEach(x=>{
@@ -1782,5 +1833,3 @@
     </script>
 </body>
 </html>
-
-
