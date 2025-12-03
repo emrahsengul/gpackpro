@@ -166,11 +166,15 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 no-print">
                 <div class="lg:col-span-3 space-y-3">
+                    
+                    <div class="card p-3 space-y-3">
+                        <div><label class="compact-label" data-key="lbl_user">KULLANICI ADI</label><input id="txtUser" type="text" class="input-std font-bold text-blue-700 bg-blue-50/50" value="" readonly></div>
+                        <div><label class="compact-label" data-key="lbl_project">PROJE REFERANSI</label><input id="txtProject" type="text" class="input-std" placeholder="..."></div>
+                    </div>
                     <div class="card sticky top-4">
                         <div class="card-header"><span data-key="sec_settings">SEVKİYAT AYARLARI</span> <i class="fas fa-truck text-slate-400"></i></div>
                         <div class="p-3 space-y-3">
-                            <div><label class="compact-label" data-key="lbl_user">KULLANICI ADI</label><input id="txtUser" type="text" class="input-std font-bold text-blue-700 bg-blue-50/50" value="" readonly></div>
-                            <div><label class="compact-label" data-key="lbl_project">PROJE REFERANSI</label><input id="txtProject" type="text" class="input-std" placeholder="..."></div>
+                            
                             <div><label class="compact-label" data-key="lbl_vehicle">ARAÇ TİPİ</label><select id="transportType" onchange="loadTransportLimits()" class="input-std font-semibold text-blue-900"></select></div>
                             
                             <div>
@@ -193,8 +197,8 @@
                                     <span data-key="lbl_pallet_dims">PALET ÖLÇÜLERİ</span><i id="palletIcon" class="fas fa-chevron-down"></i>
                                 </button>
                                 <div id="palletSettings" class="hidden mt-2 bg-slate-50 p-2 rounded border border-slate-200">
-                                    <div class="limit-row"><label data-key="lim_w_m">EN (m)</label><input type="number" id="palletW" class="input-std h-6 text-[10px]" value="1.2"></div>
-                                    <div class="limit-row"><label data-key="lim_l_m">BOY (m)</label><input type="number" id="palletL" class="input-std h-6 text-[10px]" value="0.8"></div>
+                                    <div class="limit-row"><label data-key="lim_w_m">EN (m)</label><input type="number" id="palletW" class="input-std h-6 text-[10px]" value="0.8"></div>
+                                    <div class="limit-row"><label data-key="lim_l_m">BOY (m)</label><input type="number" id="palletL" class="input-std h-6 text-[10px]" value="1.2"></div>
                                     <div class="limit-row"><label data-key="lim_h_m">YÜK (m)</label><input type="number" id="palletH" class="input-std h-6 text-[10px]" value="0.145"></div>
                                 </div>
                             </div>
@@ -245,7 +249,7 @@
                                         <thead class="bg-blue-50 text-slate-600 border-b border-blue-100 sticky top-0 z-10"><tr><th class="p-2 pl-3 font-semibold" data-key="th_desc">Tanım</th><th class="p-2 text-center font-semibold" data-key="th_len">Boy(m)</th><th class="p-2 text-right font-semibold" data-key="th_total">Miktar(m)</th><th class="p-2 text-center" data-key="lbl_weight">Birim Kg</th><th class="p-2 w-8"></th></tr></thead>
                                         <tbody id="tbodyPipe" class="divide-y divide-blue-50 bg-white"></tbody>
                                     </table>
-                                    <div id="pipeEmptyState" class="p-10 text-center text-blue-400 flex flex-col items-center justify-center h-full"><i class="fas fa-arrow-up text-3xl mb-3 opacity-50"></i><span class="text-xs font-semibold">Liste boş. Yukarıdan boru ekleyin.</span></div>
+                                    <div id="pipeEmptyState" class="p-10 text-center text-blue-400 flex flex-col items-center justify-center h-full"><i class="fas fa-arrow-up text-3xl mb-3 opacity-50"></i><span class="text-xs font-semibold" data-key="empty_pipe_list">Liste boş. Yukarıdan boru ekleyin.</span></div>
                                 </div>
                             </div>
                              <div class="p-2 bg-blue-50 border-t border-blue-100 flex justify-between items-center px-3"><span class="text-[10px] text-blue-500 font-bold"><span id="cntPipe">0</span> kayıt</span><button onclick="clearPipes()" class="text-[10px] text-red-500 hover:text-red-700 font-bold px-2 py-1">Temizle</button></div>
@@ -392,12 +396,14 @@
                 opt_alt_load: "Şaşırtmalı Yükleme (Manşon)",
                 lbl_pallet_dims: "PALET ÖLÇÜLERİ",
                 unit_adet: "Adet",
-                // REVİZYON 5: showFitLayout çevirileri
                 lbl_notes_important: "ÖNEMLİ YERLEŞİM NOTLARI",
                 note_floor_placement: "En ağır ve büyük parçaları (örn: Tee, Büyük Dirsek) TIR zeminine yerleştirin.",
                 note_pallet_use: "Paletli yükler ({pack\_type}), belirlenen palet boyutlarına (L:{L}xW:{W}m) uygun şekilde istiflenmelidir.",
                 note_loose_use: "Dökme yükler ({pack\_type}), boru veya paletli yüklerin arasındaki boşlukları doldurmak için kullanılmalıdır.",
-                note_max_h: "Maksimum yükleme yüksekliği ({H}m) aşılmamalıdır."
+                note_max_h: "Maksimum yükleme yüksekliği ({H}m) aşılmamalıdır.",
+                // REVISION 3 & 4: Yeni çeviri anahtarları
+                empty_pipe_list: "Liste boş. Yukarıdan boru ekleyin.",
+                unit_ton: "Ton"
             },
             en:{
                 app_title:"Gpack X",app_desc:"GRP Pipe & Fitting Packing Optimiser",
@@ -447,12 +453,14 @@
                 opt_alt_load: "Alternating Load (Coupling)",
                 lbl_pallet_dims: "PALLET DIMENSIONS",
                 unit_adet: "Pcs",
-                // REVİZYON 5: showFitLayout çevirileri
                 lbl_notes_important: "IMPORTANT LOADING NOTES",
                 note_floor_placement: "Place the heaviest and largest items (e.g., Tee, Large Elbow) on the truck floor.",
                 note_pallet_use: "Palletized loads ({pack\_type}) must be stacked according to the defined pallet dimensions (L:{L}xW:{W}m).",
                 note_loose_use: "Loose loads ({pack\_type}) should be used to fill gaps between pipes or palletized loads.",
-                note_max_h: "Maximum loading height ({H}m) must not be exceeded."
+                note_max_h: "Maximum loading height ({H}m) must not be exceeded.",
+                // REVISION 3 & 4: Yeni çeviri anahtarları
+                empty_pipe_list: "List is empty. Add pipe from above.",
+                unit_ton: "Tons"
             }
         };
         let currentLang='tr'; 
@@ -462,7 +470,7 @@
         const FIT_ICONS = {
             TEE: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M10 35 H35 V10 H65 V35 H90 V65 H10 Z" stroke="currentColor" stroke-width="2" fill="none"/></svg>`,
             BEND: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M20 90 V50 A 30 30 0 0 1 50 20 H90 V50 H60 A 10 10 0 0 0 50 60 V90 Z" stroke="currentColor" stroke-width="2" fill="none"/></svg>`,
-            RED: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M25 25 H75 L 60 75 H40 Z" stroke="currentColor" stroke-width="2" fill="none"/><line x1="25" y1="25" y2="25" stroke="currentColor" stroke-width="2"/><line x1="40" y1="75" x2="60" y2="75" stroke="currentColor" stroke-width="2"/></svg>`,
+            RED: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M25 25 H75 L 60 75 H40 Z" stroke="currentColor" stroke-width="2" fill="none"/><line x1="25" y1="25" x2="75" y2="25" stroke="currentColor" stroke-width="2"/><line x1="40" y1="75" x2="60" y2="75" stroke="currentColor" stroke-width="2"/></svg>`,
             FLG: `<svg viewBox="0 0 100 100" fill="currentColor"><circle cx="50" cy="50" r="35" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="50" cy="50" r="15" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="50" cy="25" r="3" fill="currentColor"/><circle cx="50" cy="75" r="3" fill="currentColor"/><circle cx="25" cy="50" r="3" fill="currentColor"/><circle cx="75" cy="50" r="3" fill="currentColor"/></svg>`,
             CPL: `<svg viewBox="0 0 100 100" fill="currentColor"><rect x="20" y="30" width="60" height="40" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="50" y1="30" x2="50" y2="70" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/></svg>`,
             CUSTOM: `<i class="fas fa-boxes text-5xl opacity-80"></i>`
@@ -574,7 +582,14 @@
             renderFitDynamic();
             document.getElementById('alternatingLoad').addEventListener('change', (e) => updateAssumptionNotes(e.target.checked));
             document.getElementById('nestingGap').addEventListener('change', (e) => updateAssumptionNotes(document.getElementById('alternatingLoad').checked));
+            // REVİZYON 3: Başlangıçta boş liste uyarısını çevirmek için çağrı
+            updateEmptyPipeState();
         };
+
+        function updateEmptyPipeState() {
+             const span = document.querySelector('#pipeEmptyState span');
+             if(span) span.innerText = t('empty_pipe_list');
+        }
 
         function changeLanguage(lang){
             currentLang=lang; document.documentElement.lang=lang; document.documentElement.dir='ltr';
@@ -613,6 +628,8 @@
             document.getElementById('app_title').innerText = t('app_title');
             
             updateAssumptionNotes(document.getElementById('alternatingLoad').checked);
+            // REVİZYON 3: Boş liste uyarısını çevir
+            updateEmptyPipeState();
         }
 
         function updateAssumptionNotes(altLoad){
@@ -1279,8 +1296,8 @@
             updateAssumptionNotes(altLoad);
 
 
-            const summaryHTML = `<div class="col-span-1 md:col-span-2 bg-white rounded-lg border border-slate-300 shadow-sm overflow-hidden mb-4 break-inside-avoid"><div class="bg-slate-800 text-white px-3 py-2 flex justify-between items-center"><div class="font-bold text-xs flex items-center gap-2"><i class="fas fa-chart-pie text-yellow-400"></i> <span>${t('res_summary')}</span></div><div class="text-[10px] opacity-70 font-mono">TOTAL: ${gT} ${t('truck')}</div></div><div class="p-3 grid grid-cols-2 md:grid-cols-5 gap-2"><div class="bg-slate-50 p-2 rounded border border-slate-200 text-center"><div class="text-[9px] text-slate-500 font-bold uppercase">${t('lbl_tot_truck')}</div><div class="text-xl font-bold text-slate-800">${gT}</div></div><div class="bg-slate-50 p-2 rounded border border-slate-200 text-center"><div class="text-[9px] text-slate-500 font-bold uppercase">${t('lbl_tot_weight')}</div><div class="text-lg font-bold text-slate-800">${((tPW+tFW)/1000).toFixed(2)}</div><div class="text-[9px] text-slate-400">Ton</div></div>
-            <div class="bg-slate-50 p-2 rounded border border-slate-200 text-center"><div class="text-[9px] text-slate-500 font-bold uppercase">${t('lbl_avg_weight')}</div><div class="text-lg font-bold text-slate-800">${(avgW/1000).toFixed(2)}</div><div class="text-[9px] text-slate-400">Ton</div></div>
+            const summaryHTML = `<div class="col-span-1 md:col-span-2 bg-white rounded-lg border border-slate-300 shadow-sm overflow-hidden mb-4 break-inside-avoid"><div class="bg-slate-800 text-white px-3 py-2 flex justify-between items-center"><div class="font-bold text-xs flex items-center gap-2"><i class="fas fa-chart-pie text-yellow-400"></i> <span>${t('res_summary')}</span></div><div class="text-[10px] opacity-70 font-mono">TOTAL: ${gT} ${t('truck')}</div></div><div class="p-3 grid grid-cols-2 md:grid-cols-5 gap-2"><div class="bg-slate-50 p-2 rounded border border-slate-200 text-center"><div class="text-[9px] text-slate-500 font-bold uppercase">${t('lbl_tot_truck')}</div><div class="text-xl font-bold text-slate-800">${gT}</div></div><div class="bg-slate-50 p-2 rounded border border-slate-200 text-center"><div class="text-[9px] text-slate-500 font-bold uppercase">${t('lbl_tot_weight')}</div><div class="text-lg font-bold text-slate-800">${((tPW+tFW)/1000).toFixed(2)}</div><div class="text-[9px] text-slate-400">${t('unit_ton')}</div></div>
+            <div class="bg-slate-50 p-2 rounded border border-slate-200 text-center"><div class="text-[9px] text-slate-500 font-bold uppercase">${t('lbl_avg_weight')}</div><div class="text-lg font-bold text-slate-800">${(avgW/1000).toFixed(2)}</div><div class="text-[9px] text-slate-400">${t('unit_ton')}</div></div>
             <div class="bg-blue-50 p-2 rounded border border-blue-100 text-center"><div class="text-[9px] text-blue-600 font-bold uppercase">${t('lbl_pipe_trucks')}</div><div class="text-lg font-bold text-blue-800">${tPT} <span class="text-xs font-normal">${t('truck')}</span></div></div><div class="bg-teal-50 p-2 rounded border border-teal-100 text-center"><div class="text-[9px] text-teal-600 font-bold uppercase">${t('lbl_fit_trucks')}</div><div class="text-lg font-bold text-teal-800">${tFT} <span class="text-xs font-normal">${t('truck')}</span></div></div></div></div>`;
             c.innerHTML += summaryHTML;
 
@@ -1304,12 +1321,10 @@
             
             let statusHTML = `
                 <div class="flex flex-col gap-1 mb-2">
-                    <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-500">${currentLang==='tr'?'Araç Başı Ağırlık':'Weight per Truck'}</span><span class="text-[10px] font-bold text-${cl}-600">${(singleWeight/1000).toFixed(2)} Ton (%${fW})</span></div>
+                    <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-500">${currentLang==='tr'?'Araç Başı Ağırlık':'Weight per Truck'}</span><span class="text-[10px] font-bold text-${cl}-600">${(singleWeight/1000).toFixed(2)} ${t('unit_ton')} (%${fW})</span></div>
                     <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-${cl}-500 h-1.5 rounded-full" style="width:${fW}%"></div></div>
                 </div>
             `;
-            
-            // İstenen Değişiklik: Hacim bilgisi kaldırıldı.
             
             if (k.type === 'PIPE') {
                 let grp = {};
@@ -1337,7 +1352,6 @@
                 cnt = `<table class="w-full mt-1 text-slate-600">${Object.values(g).map(x => `<tr><td class="text-[10px] border-b border-slate-50 py-0.5">${x.reportDesc}</td><td class="text-[10px] text-right font-bold border-b border-slate-50">${x.q}</td></tr>`).join('')}</table>`;
                 const packageData = finalPackages.find(p => p.id === k.id);
                 if (packageData) {
-                    // REVİZYON 5: Yükleme detayı butonu çeviri düzeltildi
                     sm = `<button onclick="showFitLayout(finalPackages.find(p => p.id === ${k.id}))" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-1 rounded text-[9px] mt-1 transition">${t('fit_plan_title')}</button>`;
                 } else {
                     sm = `<span class="text-red-500 text-[9px] font-bold">DETAY YÜKLENEMEDİ</span>`;
@@ -1364,7 +1378,7 @@
             return countW * countH;
         }
 
-        // REVİZYON 5: showFitLayout içeriği çeviri için güncellendi
+        // REVİZYON 4: showFitLayout içeriği basitleştirildi
         function showFitLayout(pkg) {
             if (!pkg || !pkg.items || pkg.items.length === 0) {
                  alert(t("Hata: Yükleme detayları bulunamadı veya paket boş."));
@@ -1402,49 +1416,43 @@
                 uniqueItems[key].totalWeight += i.w;
             });
 
-            let report = [];
-            
-            report.push(`📦 ${t('fit_plan_title')} - ${currentLang === 'tr' ? 'PAKET ID' : 'PACKAGE ID'}: #${pkg.id}`);
-            report.push(`-----------------------------------`);
-            report.push(`🚛 ${t('rep_v_type')}: ${t(document.getElementById('transportType').value)}`);
-            // REVİZYON 5: Çeviriler eklendi
-            report.push(`⚖️ ${t('lbl_tot_weight')}: ${(pkg.totalWeight / 1000).toFixed(2)} ${currentLang === 'tr' ? 'Ton' : 'Tons'} / Max: ${(lim.MaxKg/1000).toFixed(2)} ${currentLang === 'tr' ? 'Ton' : 'Tons'}`);
-            report.push(`\n`);
-            
-            report.push(`**✅ ${currentLang === 'tr' ? 'PAKET İÇERİĞİ' : 'PACKAGE CONTENT'}**`);
-            report.push(`${t('th_desc')} | ${t('th_qty')} | ${t('th_pack')} | ${t('th_dim')} (mm, L x W x H) | ${t('lbl_weight_u')}`);
+            // REVİZYON 4: Daha toparlanmış bir çıktı formatı
+            let header = `${t('fit_plan_title')} - ${t('truck')} #${pkg.id}\n`;
+            header += `----------------------------------------------------\n`;
+            header += `${t('rep_v_type')}: ${t(document.getElementById('transportType').value)}\n`;
+            header += `${t('lbl_tot_weight')}: ${(pkg.totalWeight / 1000).toFixed(2)} ${t('unit_ton')} / ${t('lim_kg')}: ${(lim.MaxKg/1000).toFixed(2)} ${t('unit_ton')}\n\n`;
+
+            let itemList = `✅ ${t('rep_part_list').toUpperCase()}\n`;
+            itemList += `----------------------------------------------------\n`;
+            itemList += `${t('th_qty').padEnd(5, ' ')}\t${t('th_desc').padEnd(30, ' ')}\t${t('th_pack').padEnd(10, ' ')}\t${t('th_dim').padEnd(15, ' ')}\t${t('lbl_weight_u')}\n`;
+            itemList += `----------------------------------------------------\n`;
 
             Object.values(uniqueItems).forEach(group => {
                 const i = group.item;
                 const itemQty = group.qty;
                 const packType = t(i.pack === 'Pallet' ? 'opt_pallet' : 'opt_loose');
-                
-                const dimText = i.type === 'CUSTOM' 
-                    ? `${i.l} x ${i.wid} x ${i.h}` 
-                    : `${i.disp_l} x ${Math.round(i.disp_wid)} x ${Math.round(i.h)}`; 
-                
-                let row = `${i.reportDesc} | ${itemQty} | ${packType}`;
-                
+                const dimText = i.type === 'CUSTOM'
+                    ? `${i.l}x${i.wid}x${i.h}`
+                    : `${i.disp_l}x${Math.round(i.disp_wid)}x${Math.round(i.h)}`;
+
+                let packInfo = packType;
                 if (i.pack === 'Pallet') {
-                    row += ` (${group.requiredPallets} ${t('lbl_pallet_dims').split(' ')[0]}/${t('unit_adet')})`; // Palet/Adet çevirisi
+                    // Palet/Adet bilgisini parantez içinde daha net yaz
+                    packInfo += ` (${group.requiredPallets} ${t('opt_pallet').split(' ')[0]}/${t('unit_adet')})`;
                 }
-                
-                row += ` | ${dimText} | ${i.w} kg`;
-                
-                report.push(row);
+
+                // Basit tab hizalama ile temiz çıktı (substring kullanılarak alert uyumluluğu artırıldı)
+                itemList += `${itemQty.toString().padEnd(5, ' ')}\t${i.reportDesc.substring(0, 30).padEnd(30, ' ')}\t${packInfo.substring(0, 10).padEnd(10, ' ')}\t${dimText.padEnd(15, ' ')}\t${i.w} kg\n`;
             });
 
-            report.push(`\n**⚠️ ${t('lbl_notes_important')}**`);
-            
-            // REVİZYON 5: Notlar çeviri ile eklendi
-            report.push(`* ${t('note_floor_placement')}`);
-            report.push(`* ${t('note_pallet_use').replace('{pack_type}', t('opt_pallet')).replace('{L}', palL.toFixed(3)).replace('{W}', palW.toFixed(3))}`);
-            report.push(`* ${t('note_loose_use').replace('{pack_type}', t('opt_loose'))}`);
-            report.push(`* ${t('note_max_h').replace('{H}', lim.H.toFixed(2))}`);
-            
+            let notes = `\n⚠️ ${t('lbl_notes_important')}\n`;
+            notes += `----------------------------------------------------\n`;
+            notes += `* ${t('note_floor_placement')}\n`;
+            notes += `* ${t('note_pallet_use').replace('{pack_type}', t('opt_pallet')).replace('{L}', palL.toFixed(3)).replace('{W}', palW.toFixed(3))}\n`;
+            notes += `* ${t('note_loose_use').replace('{pack_type}', t('opt_loose'))}\n`;
+            notes += `* ${t('note_max_h').replace('{H}', lim.H.toFixed(2))}\n`;
 
-            // Markdown formatını düz metin/alert çıktısı için dönüştürme
-            const finalReport = report.join('\n').replace(/(\*\*|`)/g, '');
+            const finalReport = header + itemList + notes;
 
             // Alert ile göster
             alert(finalReport);
@@ -1504,7 +1512,7 @@
                 const cl = k.type === 'PIPE' ? 'blue' : 'teal';
 
                 // REVİZYON 6.7: Hacim bilgisi kaldırıldı
-                let content = `<p style="font-size:10pt; margin:5px 0;"><b>${currentLang==='tr'?'Araç Başı Ağırlık':'Weight per Truck'}:</b> ${(singleWeight/1000).toFixed(2)} Ton (%${fW})</p>`;
+                let content = `<p style="font-size:10pt; margin:5px 0;"><b>${currentLang==='tr'?'Araç Başı Ağırlık':'Weight per Truck'}:</b> ${(singleWeight/1000).toFixed(2)} ${t('unit_ton')} (%${fW})</p>`;
                 
                 if (k.type === 'PIPE') {
                     let s = {};
@@ -1531,10 +1539,9 @@
                     Object.values(fGrp).forEach(x => { content += `<tr><td>${x.reportDesc}</td><td>${x.disp_l}x${Math.round(x.disp_wid)}</td><td>${t(x.pack==='Pallet'?'opt_pallet':'opt_loose')}</td><td>${x.q}</td></tr>`; });
                     content += `</tbody></table>`;
                     
-                    // REVİZYON 2: Yükleme İş Emri bölümü tamamen kaldırıldı.
-
-                    // FITTING PAKETLERİ İÇİN DETAYLI İŞ EMİRİ VE ANALİZİ (ESKİ KISIM)
+                    // REVİZYON 2: Yükleme İş Emri bölümü kaldırıldı, bu nedenle eski kısım yorumlandı.
                     /*
+                    // FITTING PAKETLERİ İÇİN DETAYLI İŞ EMİRİ VE ANALİZİ (ESKİ KISIM)
                     const palL = parseFloat(document.getElementById('palletL').value);
                     const palW = parseFloat(document.getElementById('palletW').value);
                     const palH = parseFloat(document.getElementById('palletH').value);
@@ -1764,6 +1771,7 @@
                                 if(currentQty > maxTheoreticalQty) maxTheoreticalQty = currentQty;
                             });
                         }
+                        t.maxQty = maxTheoreticalQty; // Pakete girecek maksimum adet kısıtlaması
                     }
                     
                     p.forEach(x=>{
